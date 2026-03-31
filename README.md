@@ -40,10 +40,25 @@ To enable real AI:
 After `npm run db:seed`, log in with any of these (password: `password123`):
 - CivilSam, DebateDana, ReasonRick, EmpathyElla, BridgeBot
 
+## Deploy to Vercel
+
+The repo is set up for [Vercel](https://vercel.com): connect your GitHub repo, then add these **Environment Variables** in the project settings (Production and Preview):
+
+| Variable | Description |
+|----------|-------------|
+| `DATABASE_URL` | Neon Postgres connection string for the Gobbl branch (include `?sslmode=require` if required by Neon) |
+| `GROK_API_KEY` | xAI API key (`xai-...`) |
+| `NEXTAUTH_SECRET` | Random secret (32+ chars), e.g. `openssl rand -base64 32` — use a new value for production |
+| `NEXTAUTH_URL` | Your site URL, e.g. `https://your-project.vercel.app` |
+
+The build runs `prisma generate`, `prisma db push`, then `next build`, so the schema is applied on each deploy. Do not commit `.env` or `.env.local`.
+
+Repository: [github.com/bostonjsharp/gobbl-app](https://github.com/bostonjsharp/gobbl-app)
+
 ## Tech Stack
 
 - Next.js 14 (App Router, TypeScript)
 - Tailwind CSS with custom turkey-themed palette
-- Prisma + SQLite
+- Prisma + PostgreSQL ([Neon](https://neon.tech))
 - Grok API (xAI) with SAIL Lab prompt architecture
 - NextAuth.js
