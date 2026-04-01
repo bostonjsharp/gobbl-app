@@ -8,6 +8,9 @@ const MOCK_MODE = !process.env.GROK_API_KEY;
 /** Grok 4 fast reasoning — see https://docs.x.ai/docs/models */
 const GROK_MODEL = process.env.GROK_MODEL ?? "grok-4-1-fast-reasoning";
 
+/** Lighter model for JSON civility scoring (lower latency than reasoning). */
+const GROK_CIVILITY_MODEL = process.env.GROK_CIVILITY_MODEL ?? "grok-3-fast";
+
 let grokClient: OpenAI | null = null;
 function getClient() {
   if (!grokClient && !MOCK_MODE) {
@@ -54,7 +57,7 @@ export async function getAIOpening(
       { role: "system", content: systemPrompt },
       {
         role: "user",
-        content: `The topic for today's discussion is: ${topic}\n\nIntroduce yourself briefly and share your initial take on this topic to get the conversation started.`,
+        content: `The issue on the table is: ${topic}\n\nThis is your first message; the challenger has not said where they stand yet.\n\nOpen by asking what they think about this issue (or where they land). You may add a brief hint of your own angle from your fixed beliefs — keep it short and conversational, not a long opening argument. Do not respond as if you are rebutting a position they already stated. Stay consistent with your fixed beliefs; do not adopt the opposing political ideology.`,
       },
     ],
     max_tokens: 400,
@@ -101,7 +104,7 @@ export async function scoreCivility(
     .join("\n");
 
   const completion = await client.chat.completions.create({
-    model: GROK_MODEL,
+    model: GROK_CIVILITY_MODEL,
     messages: [
       { role: "system", content: SCORING_PROMPT },
       {
