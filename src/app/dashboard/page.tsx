@@ -142,32 +142,25 @@ export default function DashboardPage() {
           </h3>
           <div className="space-y-3">
             {userData.recentDebates.map((debate) => (
-              <div
+              <Link
                 key={debate.id}
+                href={`/arena/${debate.id}`}
                 className="flex items-center justify-between rounded-xl bg-roost-50 px-4 py-3 dark:bg-roost-800/50 transition-colors hover:bg-roost-100 dark:hover:bg-roost-800"
               >
-                <div>
-                  <div className="font-medium text-roost-800 dark:text-roost-100">{debate.topic}</div>
-                  <div className="text-xs text-roost-500 flex items-center gap-1.5">
-                    <span>{debate.category}</span>
-                    <span>·</span>
-                    <span>{debate.difficulty}</span>
-                    <span>·</span>
-                    <span>{debate.completedAt ? new Date(debate.completedAt).toLocaleDateString() : "In progress"}</span>
-                  </div>
+                <div className="min-w-0 flex-1 pr-3">
+                  <div className="font-medium text-roost-800 dark:text-roost-100 truncate">{debate.topic}</div>
                 </div>
-                <div className="text-right">
-                  {debate.score != null && (
-                    <div className={`text-lg font-bold ${debate.score >= 7 ? "text-emerald-500" : debate.score >= 5 ? "text-golden-600" : "text-plume-500"}`}>
-                      {debate.score.toFixed(1)}
-                    </div>
-                  )}
-                  <div className="text-xs text-roost-600 dark:text-roost-400 flex flex-col items-end gap-0.5">
-                    <span>+{debate.xpEarned} XP</span>
-                    <span className="text-gobbl-600 dark:text-gobbl-400">🪶 +{debate.feathersEarned}</span>
+                {debate.score != null && (
+                  <div
+                    className={`shrink-0 text-lg font-bold tabular-nums ${debate.score >= 7 ? "text-emerald-500" : debate.score >= 5 ? "text-golden-600" : "text-plume-500"}`}
+                  >
+                    {debate.score.toFixed(1)}
                   </div>
-                </div>
-              </div>
+                )}
+                {debate.score == null && (
+                  <span className="shrink-0 text-xs text-roost-500">In progress</span>
+                )}
+              </Link>
             ))}
           </div>
         </Card>
