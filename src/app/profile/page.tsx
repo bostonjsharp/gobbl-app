@@ -8,11 +8,14 @@ import { XPBar } from "@/components/gamification/XPBar";
 import { BadgeGrid } from "@/components/gamification/BadgeGrid";
 import { StreakCounter } from "@/components/gamification/StreakCounter";
 import { TurkeyAvatarWithLabel } from "@/components/gamification/TurkeyAvatar";
+import type { EquippedCosmetics } from "@/lib/shop";
 
 interface UserData {
   username: string;
   xp: number;
+  featherBalance: number;
   level: number;
+  equippedCosmetics: EquippedCosmetics;
   levelInfo: {
     level: number;
     name: string;
@@ -29,6 +32,7 @@ interface UserData {
     topic: string;
     score: number | null;
     xpEarned: number;
+    feathersEarned: number;
     completedAt: string;
     difficulty: string;
   }[];
@@ -70,7 +74,7 @@ export default function ProfilePage() {
     <div className="mx-auto max-w-3xl px-4 py-8">
       <Card className="mb-6 bg-gradient-to-br from-white to-gobbl-50/30 dark:from-roost-900 dark:to-gobbl-950/20">
         <div className="flex flex-col sm:flex-row items-center gap-5">
-          <TurkeyAvatarWithLabel level={userData.level} size="lg" />
+          <TurkeyAvatarWithLabel level={userData.level} size="lg" equipped={userData.equippedCosmetics} />
           <div className="flex-1 w-full text-center sm:text-left">
             <h1 className="text-2xl font-bold text-roost-900 dark:text-roost-50">
               {userData.username}
@@ -88,11 +92,19 @@ export default function ProfilePage() {
         </div>
       </Card>
 
-      <div className="mb-6 grid gap-4 sm:grid-cols-4">
+      <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         <Card>
           <div className="text-center">
             <div className="text-2xl font-bold text-gobbl-600">{userData.xp.toLocaleString()}</div>
-            <div className="text-xs text-roost-500 flex items-center justify-center gap-1">🪶 Total Feathers</div>
+            <div className="text-xs text-roost-500 flex items-center justify-center gap-1">⭐ Total XP</div>
+          </div>
+        </Card>
+        <Card>
+          <div className="text-center">
+            <div className="text-2xl font-bold text-golden-600 dark:text-golden-400">
+              {userData.featherBalance.toLocaleString()}
+            </div>
+            <div className="text-xs text-roost-500 flex items-center justify-center gap-1">🪶 Feathers (spend)</div>
           </div>
         </Card>
         <Card>

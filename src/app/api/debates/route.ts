@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { getAIOpening } from "@/lib/ai";
+import { parseBeliefKey } from "@/lib/prompts/beliefs";
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
@@ -11,13 +12,16 @@ export async function POST(req: Request) {
   }
 
   const userId = (session.user as { id: string }).id;
-  const { topic, category, difficulty, isDaily } = await req.json();
+  const { topic, category, difficulty, isDaily, beliefKey: beliefKeyRaw } = await req.json();
+
+  const beliefKey = parseBeliefKey(beliefKeyRaw) ?? "lean-right";
 
   const debate = await prisma.debate.create({
     data: {
       userId,
       topic,
       category: category || "General",
+      beliefKey,
       difficulty: difficulty || "Friendly",
       isDaily: isDaily || false,
     },
@@ -26,7 +30,7 @@ export async function POST(req: Request) {
   const aiOpening = await getAIOpening(
     topic,
     difficulty || "Friendly",
-    category || "General"
+    beliefKey
   );
 
   await prisma.message.create({

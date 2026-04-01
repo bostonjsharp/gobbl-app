@@ -5,12 +5,14 @@ import { useSession } from "next-auth/react";
 import { useRouter, useParams } from "next/navigation";
 import { ChatInterface, FinishResult, ChatMsg } from "@/components/chat/ChatInterface";
 import { ScoreSummary } from "@/components/chat/ScoreSummary";
+import { IDEOLOGY_OPTIONS } from "@/lib/prompts/beliefs";
 
 interface DebateData {
   id: string;
   topic: string;
   difficulty: string;
   category: string;
+  beliefKey: string;
   completed: boolean;
   messages: {
     id: string;
@@ -72,6 +74,9 @@ export default function DebatePage() {
     civilityScore: m.civilityScore,
   }));
 
+  const ideologyLabel =
+    IDEOLOGY_OPTIONS.find((o) => o.key === debate.beliefKey)?.label ?? debate.beliefKey;
+
   return (
     <div className="mx-auto flex h-[calc(100vh-64px)] max-w-4xl flex-col">
       <div className="border-b border-roost-200 px-4 py-3 dark:border-roost-800 bg-gradient-to-r from-gobbl-50/50 to-transparent dark:from-gobbl-950/20">
@@ -79,7 +84,7 @@ export default function DebatePage() {
           <span className="text-lg">🦃</span>
           <div>
             <h2 className="text-sm font-bold text-roost-800 dark:text-roost-100">
-              {debate.category} · {debate.difficulty}
+              {debate.category} · {debate.difficulty} · {ideologyLabel}
             </h2>
             <p className="text-xs text-roost-500 truncate max-w-md">{debate.topic}</p>
           </div>

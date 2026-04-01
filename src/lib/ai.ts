@@ -1,8 +1,12 @@
 import OpenAI from "openai";
 import { CivilityDimensions, CivilityResult, averageDimensions } from "./civility";
 import { buildSystemPrompt } from "./prompts/builder";
+import type { BeliefKey } from "./prompts/beliefs";
 
 const MOCK_MODE = !process.env.GROK_API_KEY;
+
+/** Grok 4 fast reasoning — see https://docs.x.ai/docs/models */
+const GROK_MODEL = process.env.GROK_MODEL ?? "grok-4-1-fast-reasoning";
 
 let grokClient: OpenAI | null = null;
 function getClient() {
@@ -31,18 +35,21 @@ export interface ChatMessage {
   content: string;
 }
 
+const NO_GROK_KEY =
+  "Robert is offline — add GROK_API_KEY to your environment to run conversations.";
+
 export async function getAIOpening(
   topic: string,
   difficulty: string,
-  category: string
+  beliefKey: BeliefKey
 ): Promise<string> {
-  if (MOCK_MODE) return getMockOpening(topic);
+  if (MOCK_MODE) return NO_GROK_KEY;
 
   const client = getClient()!;
-  const systemPrompt = buildSystemPrompt(difficulty, category);
+  const systemPrompt = buildSystemPrompt(difficulty, beliefKey);
 
   const completion = await client.chat.completions.create({
-    model: "grok-3-fast",
+    model: GROK_MODEL,
     messages: [
       { role: "system", content: systemPrompt },
       {
@@ -53,22 +60,23 @@ export async function getAIOpening(
     max_tokens: 400,
     temperature: 0.8,
   });
-  return completion.choices[0]?.message?.content || getMockOpening(topic);
+  const text = completion.choices[0]?.message?.content?.trim();
+  return text || "Hmm, I blanked — say that again?";
 }
 
 export async function getAIResponse(
   messages: ChatMessage[],
   topic: string,
   difficulty: string,
-  category: string
+  beliefKey: BeliefKey
 ): Promise<string> {
-  if (MOCK_MODE) return getMockResponse(messages, topic);
+  if (MOCK_MODE) return NO_GROK_KEY;
 
   const client = getClient()!;
-  const systemPrompt = buildSystemPrompt(difficulty, category);
+  const systemPrompt = buildSystemPrompt(difficulty, beliefKey);
 
   const completion = await client.chat.completions.create({
-    model: "grok-3-fast",
+    model: GROK_MODEL,
     messages: [
       { role: "system", content: systemPrompt },
       ...messages,
@@ -76,7 +84,8 @@ export async function getAIResponse(
     max_tokens: 400,
     temperature: 0.8,
   });
-  return completion.choices[0]?.message?.content || "That's a thoughtful point. Could you tell me more about what led you to that view?";
+  const text = completion.choices[0]?.message?.content?.trim();
+  return text || "Lost my train of thought — what were you saying?";
 }
 
 export async function scoreCivility(
@@ -92,7 +101,7 @@ export async function scoreCivility(
     .join("\n");
 
   const completion = await client.chat.completions.create({
-    model: "grok-3-fast",
+    model: GROK_MODEL,
     messages: [
       { role: "system", content: SCORING_PROMPT },
       {
@@ -128,31 +137,6 @@ export async function scoreCivility(
 
 function clamp(val: number): number {
   return Math.max(1, Math.min(10, Math.round(val)));
-}
-
-function getMockOpening(topic: string): string {
-  const openers = [
-    `Hey, I'm Robert. So, ${topic.toLowerCase()} — I've got some thoughts on this. Where do you stand? I'm curious what side you're coming from before I jump in.`,
-    `Robert here. Look, when it comes to ${topic.toLowerCase()}, I think a lot of people have it wrong. But I want to hear what you think first — what's your take?`,
-    `Hey, name's Robert. ${topic} is something I feel pretty strongly about, but I know not everyone sees it my way. What's your position on this? Let's get into it.`,
-    `I'm Robert. So we're talking about ${topic.toLowerCase()} today — good, because this is one of those things that really matters. Tell me where you're at on this and I'll share where I'm coming from.`,
-    `Robert. Nice to meet you. So, ${topic.toLowerCase()} — everyone's got an opinion on this one. What's yours? I want to know what I'm working with here before I give you mine.`,
-  ];
-  const idx = Math.floor(Math.random() * openers.length);
-  return openers[idx];
-}
-
-function getMockResponse(messages: ChatMessage[], topic: string): string {
-  const responses = [
-    `That's a really interesting take on ${topic}. I see where you're coming from, but have you considered the counterargument that there might be unintended consequences? I'd love to hear your reasoning.`,
-    `I appreciate you sharing that perspective. While I understand the appeal, I think we should also consider how this affects different communities. What would you say to someone who disagrees?`,
-    `You raise a fair point, and I think there's real merit there. But let me push back a bit — the situation might be more nuanced than it first appears. How would you address concerns from the other side?`,
-    `That's a thoughtful take, and I respect the reasoning behind it. I'd challenge you to think about the economic implications though. Sometimes well-intentioned policies have surprising outcomes. What's your response?`,
-    `I can see the heart behind your argument, and that matters. But what about people who'd be negatively affected? How do we balance these competing interests in a way that's fair to everyone?`,
-    `Good point — I think there's real common ground to find here. The devil is in the details though. What specific approach would you propose that addresses concerns from both sides?`,
-  ];
-  const idx = messages.length % responses.length;
-  return responses[idx];
 }
 
 function getMockScore(message: string): CivilityResult {
