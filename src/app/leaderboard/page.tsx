@@ -7,7 +7,7 @@ import { Card } from "@/components/ui/Card";
 import { RankingTable, RankEntry } from "@/components/leaderboard/RankingTable";
 
 const SORT_OPTIONS = [
-  { key: "xp", label: "Feathers", icon: "🪶" },
+  { key: "xp", label: "XP", icon: "⭐" },
   { key: "civility", label: "Civility", icon: "🎯" },
   { key: "streak", label: "Migration", icon: "🦅" },
 ];

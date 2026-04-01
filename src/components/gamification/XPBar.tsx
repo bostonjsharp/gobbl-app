@@ -19,8 +19,8 @@ export function XPBar({ current, max, level, levelName, showLabel = true }: XPBa
             Lv.{level} {levelName}
           </span>
           <span className="text-roost-500 flex items-center gap-1">
-            <span>🪶</span>
-            {current} / {max > 0 ? max : "MAX"} feathers
+            <span>⭐</span>
+            {current} / {max > 0 ? max : "MAX"} XP
           </span>
         </div>
       )}

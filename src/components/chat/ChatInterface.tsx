@@ -21,6 +21,7 @@ export interface FinishResult {
   overallScore: number;
   dimensions: Record<string, number> | null;
   xp: { base: number; difficultyBonus: number; dailyBonus: number; streakMultiplier: number; total: number };
+  feathers: { base: number; difficultyBonus: number; dailyBonus: number; total: number };
   previousLevel: number;
   newLevel: number;
   newBadges: string[];
@@ -143,7 +144,7 @@ export function ChatInterface({ debateId, initialMessages, maxTurns, onFinish }:
               All rounds complete! Let&apos;s see how you did.
             </p>
             <Button onClick={handleFinish} disabled={loading}>
-              🪶 See Your Feathers
+              See results
             </Button>
           </div>
         ) : (

@@ -1,5 +1,6 @@
 "use client";
 
+import type { EquippedCosmetics } from "@/lib/shop";
 import { TurkeyAvatar } from "../gamification/TurkeyAvatar";
 
 export interface RankEntry {
@@ -13,6 +14,7 @@ export interface RankEntry {
   longestStreak: number;
   totalDebates: number;
   isCurrentUser: boolean;
+  equippedCosmetics?: EquippedCosmetics;
 }
 
 interface RankingTableProps {
@@ -34,7 +36,7 @@ export function RankingTable({ data, sortBy }: RankingTableProps) {
       case "streak":
         return `${entry.longestStreak} days`;
       default:
-        return `${entry.xp.toLocaleString()} 🪶`;
+        return `${entry.xp.toLocaleString()} XP`;
     }
   };
 
@@ -46,7 +48,7 @@ export function RankingTable({ data, sortBy }: RankingTableProps) {
             <th className="px-3 py-3 font-medium">#</th>
             <th className="px-3 py-3 font-medium">Turkey</th>
             <th className="px-3 py-3 font-medium text-right">
-              {sortBy === "civility" ? "Civility" : sortBy === "streak" ? "Migration" : "Feathers"}
+              {sortBy === "civility" ? "Civility" : sortBy === "streak" ? "Migration" : "XP"}
             </th>
             <th className="hidden px-3 py-3 font-medium text-right sm:table-cell">Level</th>
             <th className="hidden px-3 py-3 font-medium text-right md:table-cell">Debates</th>
@@ -68,7 +70,12 @@ export function RankingTable({ data, sortBy }: RankingTableProps) {
               </td>
               <td className="px-3 py-3">
                 <div className="flex items-center gap-2">
-                  <TurkeyAvatar level={entry.level} size="xs" animate={false} />
+                  <TurkeyAvatar
+                    level={entry.level}
+                    size="xs"
+                    animate={false}
+                    equipped={entry.equippedCosmetics}
+                  />
                   <span className={`font-medium ${entry.isCurrentUser ? "text-gobbl-600 dark:text-gobbl-400" : ""}`}>
                     {entry.username}
                     {entry.isCurrentUser && " (you)"}

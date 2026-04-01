@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { parseEquippedCosmetics } from "@/lib/shop";
 
 export async function GET(req: Request) {
   const session = await getServerSession(authOptions);
@@ -36,6 +37,7 @@ export async function GET(req: Request) {
       civilityScore: true,
       currentStreak: true,
       longestStreak: true,
+      equippedCosmetics: true,
       _count: { select: { debates: { where: { completed: true } } } },
     },
   });
@@ -54,6 +56,7 @@ export async function GET(req: Request) {
       longestStreak: u.longestStreak,
       totalDebates: u._count.debates,
       isCurrentUser: u.id === currentUserId,
+      equippedCosmetics: parseEquippedCosmetics(u.equippedCosmetics),
     }))
   );
 }

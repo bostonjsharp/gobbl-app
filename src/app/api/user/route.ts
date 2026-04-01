@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { getLevelInfo } from "@/lib/gamification";
+import { parseEquippedCosmetics } from "@/lib/shop";
 
 export async function GET() {
   const session = await getServerSession(authOptions);
@@ -15,6 +16,7 @@ export async function GET() {
     where: { id: userId },
     include: {
       badges: true,
+      inventory: true,
       debates: {
         where: { completed: true },
         orderBy: { completedAt: "desc" },
@@ -42,12 +44,17 @@ export async function GET() {
     },
   });
 
+  const equippedCosmetics = parseEquippedCosmetics(user.equippedCosmetics);
+
   return NextResponse.json({
     id: user.id,
     username: user.username,
     xp: user.xp,
+    featherBalance: user.featherBalance,
     level: user.level,
     levelInfo,
+    equippedCosmetics,
+    ownedItemIds: user.inventory.map((i) => i.itemId),
     civilityScore: user.civilityScore,
     currentStreak: user.currentStreak,
     longestStreak: user.longestStreak,
@@ -60,6 +67,7 @@ export async function GET() {
       difficulty: d.difficulty,
       score: d.overallScore,
       xpEarned: d.xpEarned,
+      feathersEarned: d.feathersEarned,
       completedAt: d.completedAt,
     })),
     createdAt: user.createdAt,

@@ -99,7 +99,7 @@ function LevelUpOverlay({
               Your turkey evolved from <strong>{oldStage?.name}</strong> to <strong>{newStage?.name}</strong>!
             </p>
             <Button onClick={onDismiss}>
-              🪶 See Your Feathers
+              Continue
             </Button>
           </div>
         )}
@@ -173,7 +173,7 @@ export function ScoreSummary({ result }: ScoreSummaryProps) {
       {result.dimensions && (
         <div className="rounded-2xl border border-roost-200 bg-white p-5 dark:border-roost-800 dark:bg-roost-900">
           <h3 className="mb-4 font-bold text-roost-700 dark:text-roost-300">
-            Feather Breakdown
+            Civility breakdown
           </h3>
           <div className="space-y-3">
             {Object.entries(result.dimensions).map(([key, value]) => {
@@ -202,11 +202,14 @@ export function ScoreSummary({ result }: ScoreSummaryProps) {
 
       <div className="rounded-2xl border border-roost-200 bg-white p-5 dark:border-roost-800 dark:bg-roost-900">
         <h3 className="mb-3 font-bold text-roost-700 dark:text-roost-300 flex items-center gap-2">
-          <span>🪶</span> Feathers Earned
+          <span>⭐</span> XP earned
         </h3>
+        <p className="mb-3 text-xs text-roost-500">
+          Based on civility, difficulty, daily challenge, and streak — levels up your turkey.
+        </p>
         <div className="grid grid-cols-2 gap-3 text-sm">
           <div className="flex justify-between">
-            <span className="text-roost-500">Base feathers</span>
+            <span className="text-roost-500">Base XP</span>
             <span className="font-medium">+{result.xp.base}</span>
           </div>
           {result.xp.difficultyBonus > 0 && (
@@ -229,8 +232,41 @@ export function ScoreSummary({ result }: ScoreSummaryProps) {
           )}
           <div className="col-span-2 border-t border-roost-200 pt-2 dark:border-roost-700">
             <div className="flex justify-between text-base font-bold">
+              <span>Total XP</span>
+              <span className="text-gobbl-600 flex items-center gap-1">+{result.xp.total}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="rounded-2xl border border-roost-200 bg-white p-5 dark:border-roost-800 dark:bg-roost-900">
+        <h3 className="mb-3 font-bold text-roost-700 dark:text-roost-300 flex items-center gap-2">
+          <span>🪶</span> Feathers earned
+        </h3>
+        <p className="mb-3 text-xs text-roost-500">
+          Based on how much you participated (messages), difficulty, and daily — spend in the Bazaar.
+        </p>
+        <div className="grid grid-cols-2 gap-3 text-sm">
+          <div className="flex justify-between">
+            <span className="text-roost-500">Engagement (messages)</span>
+            <span className="font-medium">+{result.feathers.base}</span>
+          </div>
+          {result.feathers.difficultyBonus !== 0 && (
+            <div className="flex justify-between">
+              <span className="text-roost-500">Difficulty</span>
+              <span className="font-medium text-plume-500">+{result.feathers.difficultyBonus}</span>
+            </div>
+          )}
+          {result.feathers.dailyBonus > 0 && (
+            <div className="flex justify-between">
+              <span className="text-roost-500">Daily Gobble</span>
+              <span className="font-medium text-golden-600">+{result.feathers.dailyBonus}</span>
+            </div>
+          )}
+          <div className="col-span-2 border-t border-roost-200 pt-2 dark:border-roost-700">
+            <div className="flex justify-between text-base font-bold">
               <span>Total feathers</span>
-              <span className="text-gobbl-600 flex items-center gap-1">🪶 +{result.xp.total}</span>
+              <span className="text-gobbl-600 flex items-center gap-1">🪶 +{result.feathers.total}</span>
             </div>
           </div>
         </div>

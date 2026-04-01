@@ -3,7 +3,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { getAIResponse, scoreCivility, ChatMessage } from "@/lib/ai";
-import { calculateXP, getLevelInfo, checkNewBadges } from "@/lib/gamification";
+import { parseBeliefKey } from "@/lib/prompts/beliefs";
+import { calculateXP, calculateFeathers, getLevelInfo, checkNewBadges } from "@/lib/gamification";
 import { averageDimensions } from "@/lib/civility";
 
 export async function POST(req: Request) {
@@ -47,7 +48,8 @@ export async function POST(req: Request) {
     return await finishDebate(userId, debateId, civilityResult.overall);
   }
 
-  const aiResponse = await getAIResponse(conversationHistory, debate.topic, debate.difficulty, debate.category);
+  const beliefKey = parseBeliefKey(debate.beliefKey) ?? "lean-right";
+  const aiResponse = await getAIResponse(conversationHistory, debate.topic, debate.difficulty, beliefKey);
 
   await prisma.message.create({
     data: {
@@ -94,12 +96,16 @@ async function finishDebate(userId: string, debateId: string, lastScore: number)
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
 
+  const userMessageCount = userMessages.length;
+
   const xpResult = calculateXP(
     overallScore,
     debate.difficulty,
     debate.isDaily,
     user.currentStreak
   );
+
+  const featherResult = calculateFeathers(userMessageCount, debate.difficulty, debate.isDaily);
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -114,6 +120,7 @@ async function finishDebate(userId: string, debateId: string, lastScore: number)
   }
 
   const newXp = user.xp + xpResult.total;
+  const newFeatherBalance = user.featherBalance + featherResult.total;
   const newLevel = getLevelInfo(newXp).level;
 
   const completedDebates = user.debates.filter((d) => d.completed);
@@ -155,6 +162,7 @@ async function finishDebate(userId: string, debateId: string, lastScore: number)
         completed: true,
         overallScore: overallScore,
         xpEarned: xpResult.total,
+        feathersEarned: featherResult.total,
         completedAt: new Date(),
       },
     }),
@@ -162,6 +170,7 @@ async function finishDebate(userId: string, debateId: string, lastScore: number)
       where: { id: userId },
       data: {
         xp: newXp,
+        featherBalance: newFeatherBalance,
         level: newLevel,
         civilityScore: newCivility,
         currentStreak: newStreak,
@@ -191,6 +200,7 @@ async function finishDebate(userId: string, debateId: string, lastScore: number)
     overallScore,
     dimensions: dimensionAverages,
     xp: xpResult,
+    feathers: featherResult,
     previousLevel: user.level,
     newLevel,
     newBadges,

@@ -12,11 +12,14 @@ import { StatsCard } from "@/components/dashboard/StatsCard";
 import { DailyChallenge } from "@/components/dashboard/DailyChallenge";
 import { TurkeyAvatarWithLabel } from "@/components/gamification/TurkeyAvatar";
 import { getDailyTopic } from "@/lib/topics";
+import type { EquippedCosmetics } from "@/lib/shop";
 
 interface UserData {
   username: string;
   xp: number;
+  featherBalance: number;
   level: number;
+  equippedCosmetics: EquippedCosmetics;
   levelInfo: {
     level: number;
     name: string;
@@ -36,6 +39,7 @@ interface UserData {
     difficulty: string;
     score: number | null;
     xpEarned: number;
+    feathersEarned: number;
     completedAt: string;
   }[];
 }
@@ -76,7 +80,13 @@ export default function DashboardPage() {
           <h1 className="text-2xl font-bold text-roost-900 dark:text-roost-50">
             Ready to talk turkey, {userData.username}?
           </h1>
-          <p className="text-roost-500">Your flock is waiting. Let&apos;s practice some civil discourse.</p>
+          <p className="text-roost-500">
+            Your flock is waiting. Let&apos;s practice some civil discourse.{" "}
+            <Link href="/shop" className="font-medium text-gobbl-600 underline-offset-2 hover:underline dark:text-gobbl-400">
+              Visit the Bazaar
+            </Link>{" "}
+            to dress your turkey.
+          </p>
         </div>
         <Link href="/arena">
           <Button size="lg">🦃 Let&apos;s Talk Turkey</Button>
@@ -84,7 +94,7 @@ export default function DashboardPage() {
       </div>
 
       <div className="mb-8 flex flex-col sm:flex-row items-center gap-6 rounded-2xl border border-roost-200 bg-gradient-to-r from-white to-gobbl-50/50 p-6 dark:border-roost-800 dark:from-roost-900 dark:to-gobbl-950/30">
-        <TurkeyAvatarWithLabel level={userData.level} size="lg" />
+        <TurkeyAvatarWithLabel level={userData.level} size="lg" equipped={userData.equippedCosmetics} />
         <div className="flex-1 w-full">
           <XPBar
             current={userData.levelInfo.xpProgress}
@@ -94,15 +104,15 @@ export default function DashboardPage() {
           />
           <p className="mt-2 text-xs text-roost-500">
             {userData.levelInfo.xpForNext > 0
-              ? `${userData.levelInfo.xpForNext - userData.levelInfo.xpProgress} feathers until next evolution`
+              ? `${userData.levelInfo.xpForNext - userData.levelInfo.xpProgress} XP until next evolution`
               : "Maximum evolution reached! You are a Thunderbird!"
             }
           </p>
         </div>
       </div>
 
-      <div className="mb-6 grid gap-4 sm:grid-cols-4">
-        <StatsCard icon="🪶" label="Total Feathers" value={userData.xp.toLocaleString()} />
+      <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <StatsCard icon="🪶" label="Feathers (spend)" value={userData.featherBalance.toLocaleString()} />
         <StatsCard
           icon="🎯"
           label="Civility Score"
@@ -152,8 +162,9 @@ export default function DashboardPage() {
                       {debate.score.toFixed(1)}
                     </div>
                   )}
-                  <div className="text-xs text-gobbl-600 flex items-center gap-0.5 justify-end">
-                    <span>🪶</span>+{debate.xpEarned}
+                  <div className="text-xs text-roost-600 dark:text-roost-400 flex flex-col items-end gap-0.5">
+                    <span>+{debate.xpEarned} XP</span>
+                    <span className="text-gobbl-600 dark:text-gobbl-400">🪶 +{debate.feathersEarned}</span>
                   </div>
                 </div>
               </div>
