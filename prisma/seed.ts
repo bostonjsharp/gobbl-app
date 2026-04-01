@@ -22,6 +22,7 @@ async function main() {
         username: u.username,
         passwordHash: hash,
         xp: u.xp,
+        featherBalance: u.xp,
         level: u.level,
         civilityScore: u.civilityScore,
         currentStreak: u.currentStreak,

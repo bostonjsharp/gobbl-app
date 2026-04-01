@@ -1,5 +1,4 @@
 import { ParameterName, ParameterLevel } from "./parameters";
-import { BeliefKey } from "./beliefs";
 
 export type DifficultyPreset = Record<ParameterName, ParameterLevel>;
 
@@ -31,31 +30,10 @@ export const DIFFICULTY_PRESETS: Record<string, DifficultyPreset> = {
     listening: 2,
     self_interrogation: 1,
     disagreement: 5,
-    abrasiveness: 4,
+    abrasiveness: 5,
     persuadability: 1,
   },
 };
-
-/**
- * Maps topic categories to the belief set that opposes the topic's
- * typical framing. Most Gobbl topics lean progressive, so the AI
- * defaults to a right-leaning stance to create productive friction.
- */
-const CATEGORY_TO_BELIEF: Record<string, BeliefKey> = {
-  Economy: "lean-right",
-  Healthcare: "right",
-  Immigration: "right",
-  Climate: "right",
-  Education: "lean-left",   // school-choice topic leans conservative
-  Technology: "center",
-  Justice: "lean-right",
-};
-
-const DEFAULT_BELIEF: BeliefKey = "lean-right";
-
-export function getBeliefForCategory(category: string): BeliefKey {
-  return CATEGORY_TO_BELIEF[category] ?? DEFAULT_BELIEF;
-}
 
 export function getPresetForDifficulty(difficulty: string): DifficultyPreset {
   return DIFFICULTY_PRESETS[difficulty] ?? DIFFICULTY_PRESETS["Spirited Strut"];

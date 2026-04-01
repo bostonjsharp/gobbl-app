@@ -94,7 +94,7 @@ export function getLevelInfo(xp: number) {
 export const DIFFICULTIES = [
   { key: "Friendly Cluck", label: "Friendly Cluck", multiplier: 1.0, description: "Warm and encouraging" },
   { key: "Spirited Strut", label: "Spirited Strut", multiplier: 1.25, description: "Pushes back firmly" },
-  { key: "Full Gobble", label: "Full Gobble", multiplier: 1.5, description: "Maximum challenge (1.5x feathers)" },
+  { key: "Full Gobble", label: "Full Gobble", multiplier: 1.5, description: "Maximum challenge (1.5× XP & feathers)" },
 ] as const;
 
 const DIFFICULTY_MULTIPLIER: Record<string, number> = {
@@ -106,6 +106,10 @@ const DIFFICULTY_MULTIPLIER: Record<string, number> = {
   "Devil's Advocate": 1.5,
 };
 
+/**
+ * Progression XP — driven by civility, difficulty, daily challenge, and streak.
+ * Used only for leveling (never spent).
+ */
 export function calculateXP(
   civilityScore: number,
   difficulty: string,
@@ -119,6 +123,25 @@ export function calculateXP(
   const streakMultiplier = Math.min(2.0, 1 + streakDays * 0.1);
   const total = Math.round((base + difficultyBonus + dailyBonus) * streakMultiplier);
   return { base, difficultyBonus, dailyBonus, streakMultiplier, total };
+}
+
+/**
+ * Spendable feathers — driven by how much you engaged (user messages), difficulty, and daily.
+ * No streak multiplier; streak rewards are XP-only.
+ */
+export function calculateFeathers(
+  userMessageCount: number,
+  difficulty: string,
+  isDaily: boolean
+): { base: number; difficultyBonus: number; dailyBonus: number; total: number } {
+  const msgs = Math.max(1, userMessageCount);
+  const base = 10 * msgs;
+  const diffMult = DIFFICULTY_MULTIPLIER[difficulty] || 1.0;
+  const afterDifficulty = Math.round(base * diffMult);
+  const difficultyBonus = afterDifficulty - base;
+  const dailyBonus = isDaily ? 30 : 0;
+  const total = afterDifficulty + dailyBonus;
+  return { base, difficultyBonus, dailyBonus, total };
 }
 
 export interface UserStats {

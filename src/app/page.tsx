@@ -110,8 +110,8 @@ export default function LandingPage() {
               />
               <FeatureCard
                 icon="🪶"
-                title="Earn Feathers"
-                description="Get scored on civility and earn feathers for respectful, evidence-based debate"
+                title="XP & feathers"
+                description="Earn XP from civility and streaks to evolve; earn feathers by participating and spend them in the Bazaar"
               />
               <FeatureCard
                 icon="👑"

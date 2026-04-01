@@ -5,7 +5,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Gobbl - Talk Turkey. Build Bridges.",
-  description: "Gamified civil discourse training powered by AI. Grow your turkey, earn feathers, and reduce polarization through practice.",
+  description: "Gamified civil discourse training powered by AI. Grow your turkey with XP, spend feathers in the Bazaar, and reduce polarization through practice.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -23,15 +23,17 @@ npm run dev         # http://localhost:3000
 ## AI System — SAIL Lab Integration
 
 Gobbl uses the SAIL Lab behavioral AI system powered by the Grok API. The AI character ("Robert") has:
-- **Political belief presets** that auto-oppose based on topic category
-- **8 behavioral parameters** (Participation, Expression, Reason-Giving, Listening, Self-Interrogation, Disagreement, Abrasiveness, Persuadability) — automatically configured per difficulty level
+- **Political belief presets** you choose per debate (left through right) on the arena setup screen
+- **8 behavioral parameters** (Participation, Expression, Reason-Giving, Listening, Self-Interrogation, Disagreement, Abrasiveness, Persuadability) — configured per difficulty level
 - **Difficulty-to-preset mapping**: Friendly Cluck (warm, listens well), Spirited Strut (engaged, direct), Full Gobble (confrontational, immovable)
 
-## Mock Mode
+Conversations always use Grok with the full SAIL prompt (beliefs + sliders). **Robert requires `GROK_API_KEY`** — without it, the chat shows a configuration message instead of debate text.
 
-Works without a Grok API key! The app uses mock AI responses and scoring when `GROK_API_KEY` is not set.
+## Civility scoring without an API key
 
-To enable real AI:
+If `GROK_API_KEY` is not set, civility scores still use a simple heuristic so you can click through the UI; for real scoring, add a key as below.
+
+To enable Robert and Grok-based civility scoring:
 1. Get an API key from [console.x.ai](https://console.x.ai)
 2. Add it to `.env.local`: `GROK_API_KEY=xai-...`
 
@@ -48,6 +50,7 @@ The repo is set up for [Vercel](https://vercel.com): connect your GitHub repo, t
 |----------|-------------|
 | `DATABASE_URL` | Neon Postgres connection string for the Gobbl branch (include `?sslmode=require` if required by Neon) |
 | `GROK_API_KEY` | xAI API key (`xai-...`) |
+| `GROK_MODEL` | Optional. Defaults to `grok-4-1-fast-reasoning` (Grok 4 fast reasoning). Override if xAI renames models. |
 | `NEXTAUTH_SECRET` | Random secret (32+ chars), e.g. `openssl rand -base64 32` — use a new value for production |
 | `NEXTAUTH_URL` | Your site URL, e.g. `https://your-project.vercel.app` |
 

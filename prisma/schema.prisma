@@ -8,18 +8,31 @@ datasource db {
 }
 
 model User {
-  id            String      @id @default(cuid())
-  username      String      @unique
-  passwordHash  String
-  xp            Int         @default(0)
-  level         Int         @default(1)
-  civilityScore Float       @default(0)
-  currentStreak Int         @default(0)
-  longestStreak Int         @default(0)
-  lastActiveDate DateTime?
-  createdAt     DateTime    @default(now())
-  debates       Debate[]
-  badges        UserBadge[]
+  id                 String          @id @default(cuid())
+  username           String          @unique
+  passwordHash       String
+  xp                 Int             @default(0)
+  featherBalance     Int             @default(0)
+  level              Int             @default(1)
+  civilityScore      Float           @default(0)
+  currentStreak      Int             @default(0)
+  longestStreak      Int             @default(0)
+  lastActiveDate     DateTime?
+  equippedCosmetics  Json?
+  createdAt          DateTime        @default(now())
+  debates            Debate[]
+  badges             UserBadge[]
+  inventory          UserInventory[]
+}
+
+model UserInventory {
+  id          String   @id @default(cuid())
+  userId      String
+  itemId      String
+  purchasedAt DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, itemId])
 }
 
 model Debate {
@@ -27,9 +40,11 @@ model Debate {
   userId       String
   topic        String
   category     String    @default("General")
+  beliefKey    String    @default("lean-right")
   difficulty   String    @default("Friendly")
   overallScore Float?
   xpEarned     Int       @default(0)
+  feathersEarned Int     @default(0)
   isDaily      Boolean   @default(false)
   completed    Boolean   @default(false)
   createdAt    DateTime  @default(now())

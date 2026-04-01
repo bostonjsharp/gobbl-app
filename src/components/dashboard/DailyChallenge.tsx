@@ -38,9 +38,9 @@ export function DailyChallenge({ topic, completed = false }: DailyChallengeProps
           </span>
         </div>
       ) : (
-        <Link href={`/arena?daily=true&topic=${topic.id}`}>
+        <Link href="/arena/setup?daily=true">
           <Button size="sm">
-            Accept Challenge (+25 bonus 🪶)
+            Accept Challenge (+25 XP & +30 🪶)
           </Button>
         </Link>
       )}

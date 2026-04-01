@@ -1,5 +1,21 @@
 export type BeliefKey = "left" | "lean-left" | "center" | "lean-right" | "right";
 
+export const BELIEF_KEYS: BeliefKey[] = ["left", "lean-left", "center", "lean-right", "right"];
+
+/** Short labels for arena setup UI */
+export const IDEOLOGY_OPTIONS: { key: BeliefKey; label: string; description: string }[] = [
+  { key: "left", label: "Left", description: "Firm liberal positions" },
+  { key: "lean-left", label: "Lean Left", description: "Moderate liberal" },
+  { key: "center", label: "Center", description: "Moderate / mixed" },
+  { key: "lean-right", label: "Lean Right", description: "Moderate conservative" },
+  { key: "right", label: "Right", description: "Strong conservative" },
+];
+
+export function parseBeliefKey(value: unknown): BeliefKey | null {
+  if (typeof value !== "string") return null;
+  return BELIEF_KEYS.includes(value as BeliefKey) ? (value as BeliefKey) : null;
+}
+
 export const BELIEFS: Record<BeliefKey, string> = {
   left: `You hold firm libral political beliefs, including:
 - Pro to gun control; belief that firearms are a danger and will get the normal population killed
