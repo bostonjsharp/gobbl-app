@@ -41,6 +41,24 @@ export interface ChatMessage {
 const NO_GROK_KEY =
   "Robert is offline — add GROK_API_KEY to your environment to run conversations.";
 
+/** Rotating instructions so openings don't all sound the same; same rules, different phrasing hooks. */
+const OPENING_USER_TEMPLATES = [
+  `The issue on the table is: {topic}\n\nFirst message — they haven't said where they stand. Ask what they make of it (or where they land). Optional: one short line from your own angle per your fixed beliefs. Stay in character; don't rebut a position they haven't taken; don't flip to the opposite ideology. Avoid canned phrases you've used in other chats — sound like a real opener.`,
+
+  `Topic: {topic}\n\nYou're up first. They haven't weighed in yet. Draw them out: what do they think? You can drop a quick, casual hint of how you see it from your beliefs — nothing essay-length. No debating a straw man. Match your ideology in the system prompt. Vary your tone (warm, blunt, curious — pick what fits) so this doesn't read like a template.`,
+
+  `{topic} — that's what we're chewing on.\n\nNobody's stated a side yet. Lead with curiosity about their view; you can thread in a sentence of yours from your fixed beliefs if it feels natural. Short. Conversational. Not a speech. Don't mirror a generic "debate bot" opener.`,
+
+  `We're discussing: {topic}\n\nOpening beat: invite their take before you argue anything. A brief aside showing where you're coming from (your belief block) is fine. They have not spoken yet — don't argue against them. Stay on-ideology. Make the greeting and question feel specific to *this* topic, not copy-paste.`,
+
+  `Issue for today: {topic}\n\nYour first reply should pull their perspective out of them — question-first. Sprinkle a little of your own stance if you want, but keep it tight. First message only; no fake debate with an imaginary opponent. Fresh wording each time; skip stock openers like "I'm curious" or "I'd love to hear" if you used those last time.`,
+];
+
+function buildOpeningUserContent(topic: string): string {
+  const template = OPENING_USER_TEMPLATES[Math.floor(Math.random() * OPENING_USER_TEMPLATES.length)];
+  return template.replace("{topic}", topic);
+}
+
 export async function getAIOpening(
   topic: string,
   difficulty: string,
@@ -57,11 +75,11 @@ export async function getAIOpening(
       { role: "system", content: systemPrompt },
       {
         role: "user",
-        content: `The issue on the table is: ${topic}\n\nThis is your first message; the challenger has not said where they stand yet.\n\nOpen by asking what they think about this issue (or where they land). You may add a brief hint of your own angle from your fixed beliefs — keep it short and conversational, not a long opening argument. Do not respond as if you are rebutting a position they already stated. Stay consistent with your fixed beliefs; do not adopt the opposing political ideology.`,
+        content: buildOpeningUserContent(topic),
       },
     ],
     max_tokens: 400,
-    temperature: 0.8,
+    temperature: 0.92,
   });
   const text = completion.choices[0]?.message?.content?.trim();
   return text || "Hmm, I blanked — say that again?";
