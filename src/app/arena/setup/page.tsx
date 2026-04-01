@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/Button";
-import { TOPICS, getDailyTopic, type Topic } from "@/lib/topics";
+import { TOPICS, getDailyTopic, formatTopicForDebate, type Topic } from "@/lib/topics";
 import { DIFFICULTIES } from "@/lib/gamification";
 import { IDEOLOGY_OPTIONS, type BeliefKey } from "@/lib/prompts/beliefs";
 import { TurkeyAvatar } from "@/components/gamification/TurkeyAvatar";
@@ -117,7 +117,7 @@ function SetupContent() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          topic: topic.prompt,
+          topic: formatTopicForDebate(topic),
           category: topic.category,
           difficulty: selectedDifficulty,
           beliefKey: selectedBeliefKey,

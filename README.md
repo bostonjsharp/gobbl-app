@@ -51,6 +51,7 @@ The repo is set up for [Vercel](https://vercel.com): connect your GitHub repo, t
 | `DATABASE_URL` | Neon Postgres connection string for the Gobbl branch (include `?sslmode=require` if required by Neon) |
 | `GROK_API_KEY` | xAI API key (`xai-...`) |
 | `GROK_MODEL` | Optional. Defaults to `grok-4-1-fast-reasoning` (Grok 4 fast reasoning). Override if xAI renames models. |
+| `GROK_CIVILITY_MODEL` | Optional. Defaults to `grok-3-fast`. Used only for civility JSON scoring (faster than the main reasoning model). |
 | `NEXTAUTH_SECRET` | Random secret (32+ chars), e.g. `openssl rand -base64 32` — use a new value for production |
 | `NEXTAUTH_URL` | Your site URL, e.g. `https://your-project.vercel.app` |
 

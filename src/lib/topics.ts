@@ -118,6 +118,11 @@ export const TOPICS: Topic[] = [
   },
 ];
 
+/** Neutral label for storage and AI — not the one-sided `prompt` paragraph. */
+export function formatTopicForDebate(t: Topic): string {
+  return `${t.title} — ${t.description}`;
+}
+
 export function getDailyTopic(): Topic {
   const dayOfYear = Math.floor(
     (Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000
