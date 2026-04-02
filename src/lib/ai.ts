@@ -1,5 +1,6 @@
 import OpenAI from "openai";
 import { CivilityDimensions, CivilityResult, averageDimensions } from "./civility";
+import { CIVILITY_HOLISTIC_SYSTEM, CIVILITY_MESSAGE_SYSTEM } from "./prompts/civility-rubric";
 import { buildSystemPrompt } from "./prompts/builder";
 import type { BeliefKey } from "./prompts/beliefs";
 
@@ -22,17 +23,6 @@ function getClient() {
   return grokClient;
 }
 
-const SCORING_PROMPT = `You are the civility scorer for Gobbl, a discourse training app. Evaluate the user's message on these dimensions (1-10 scale):
-
-1. respectfulTone: Does the user avoid insults, sarcasm, and dismissiveness? (10=perfectly respectful)
-2. evidenceBased: Does the user use facts, logic, and reasoning? (10=strong evidence use)
-3. empathy: Does the user acknowledge the other perspective? (10=deeply empathetic)
-4. constructiveFraming: Does the user propose solutions rather than just criticize? (10=very constructive)
-5. activeListening: Does the user reference what was previously said? (10=excellent listening)
-
-Respond ONLY with valid JSON in this exact format:
-{"respectfulTone":N,"evidenceBased":N,"empathy":N,"constructiveFraming":N,"activeListening":N,"feedback":"One brief sentence of encouraging, constructive feedback"}`;
-
 export interface ChatMessage {
   role: "user" | "assistant" | "system";
   content: string;
@@ -54,9 +44,11 @@ const OPENING_USER_TEMPLATES = [
   `Issue for today: {topic}\n\nYour first reply should pull their perspective out of them — question-first. Sprinkle a little of your own stance if you want, but keep it tight. First message only; no fake debate with an imaginary opponent. Fresh wording each time; skip stock openers like "I'm curious" or "I'd love to hear" if you used those last time.`,
 ];
 
+const OPENING_BANNED_PHRASING = `Do not use "Spill it," "spill the beans," or similar pushy/casual clichés when asking for their view — vary your wording naturally.`;
+
 function buildOpeningUserContent(topic: string): string {
   const template = OPENING_USER_TEMPLATES[Math.floor(Math.random() * OPENING_USER_TEMPLATES.length)];
-  return template.replace("{topic}", topic);
+  return `${template.replace("{topic}", topic)}\n\n${OPENING_BANNED_PHRASING}`;
 }
 
 export async function getAIOpening(
@@ -124,13 +116,13 @@ export async function scoreCivility(
   const completion = await client.chat.completions.create({
     model: GROK_CIVILITY_MODEL,
     messages: [
-      { role: "system", content: SCORING_PROMPT },
+      { role: "system", content: CIVILITY_MESSAGE_SYSTEM },
       {
         role: "user",
         content: `Conversation context:\n${contextStr}\n\nUser message to score:\n"${userMessage}"`,
       },
     ],
-    max_tokens: 200,
+    max_tokens: 220,
     temperature: 0.3,
   });
 
@@ -140,11 +132,10 @@ export async function scoreCivility(
     if (!jsonMatch) throw new Error("No JSON found");
     const parsed = JSON.parse(jsonMatch[0]);
     const dimensions: CivilityDimensions = {
-      respectfulTone: clamp(parsed.respectfulTone),
-      evidenceBased: clamp(parsed.evidenceBased),
-      empathy: clamp(parsed.empathy),
-      constructiveFraming: clamp(parsed.constructiveFraming),
-      activeListening: clamp(parsed.activeListening),
+      participation: clamp(parsed.participation),
+      selfExpressionReason: clamp(parsed.selfExpressionReason),
+      mutualExchange: clamp(parsed.mutualExchange),
+      interrogation: clamp(parsed.interrogation),
     };
     return {
       dimensions,
@@ -156,7 +147,48 @@ export async function scoreCivility(
   }
 }
 
+function dimensionsFromParsed(parsed: Record<string, unknown>): CivilityDimensions {
+  return {
+    participation: clamp(Number(parsed.participation)),
+    selfExpressionReason: clamp(Number(parsed.selfExpressionReason)),
+    mutualExchange: clamp(Number(parsed.mutualExchange)),
+    interrogation: clamp(Number(parsed.interrogation)),
+  };
+}
+
+/** Full transcript of user + assistant roles, chronological. Used at wrap-up for holistic civility. */
+export async function scoreConversationHolistic(transcript: string): Promise<CivilityResult | null> {
+  if (MOCK_MODE) return null;
+
+  const client = getClient()!;
+  const completion = await client.chat.completions.create({
+    model: GROK_CIVILITY_MODEL,
+    messages: [
+      { role: "system", content: CIVILITY_HOLISTIC_SYSTEM },
+      { role: "user", content: `Full conversation:\n\n${transcript}` },
+    ],
+    max_tokens: 400,
+    temperature: 0.25,
+  });
+
+  try {
+    const raw = completion.choices[0]?.message?.content || "";
+    const jsonMatch = raw.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) throw new Error("No JSON found");
+    const parsed = JSON.parse(jsonMatch[0]) as Record<string, unknown>;
+    const dimensions = dimensionsFromParsed(parsed);
+    return {
+      dimensions,
+      overall: averageDimensions(dimensions),
+      feedback: typeof parsed.feedback === "string" ? parsed.feedback : "Solid conversation.",
+    };
+  } catch {
+    return null;
+  }
+}
+
 function clamp(val: number): number {
+  if (!Number.isFinite(val)) return 5;
   return Math.max(1, Math.min(10, Math.round(val)));
 }
 
@@ -166,11 +198,10 @@ function getMockScore(message: string): CivilityResult {
   const base = 5 + Math.min(3, length / 100);
 
   const dimensions: CivilityDimensions = {
-    respectfulTone: clamp(base + (Math.random() * 2 - 0.5)),
-    evidenceBased: clamp(base - 1 + Math.random() * 2),
-    empathy: clamp(base - 0.5 + (hasQuestion ? 1 : 0) + Math.random()),
-    constructiveFraming: clamp(base - 0.5 + Math.random() * 2),
-    activeListening: clamp(base - 1 + (hasQuestion ? 1.5 : 0) + Math.random()),
+    participation: clamp(base + (Math.random() * 2 - 0.5)),
+    selfExpressionReason: clamp(base - 1 + Math.random() * 2),
+    mutualExchange: clamp(base - 0.5 + (hasQuestion ? 1 : 0) + Math.random()),
+    interrogation: clamp(base - 0.5 + Math.random() * 2),
   };
 
   return {

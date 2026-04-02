@@ -2,10 +2,10 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
-import { getAIResponse, scoreCivility, ChatMessage } from "@/lib/ai";
+import { getAIResponse, scoreCivility, scoreConversationHolistic, ChatMessage } from "@/lib/ai";
 import { parseBeliefKey } from "@/lib/prompts/beliefs";
 import { calculateXP, calculateFeathers, getLevelInfo, checkNewBadges } from "@/lib/gamification";
-import { averageDimensions } from "@/lib/civility";
+import { fallbackHolisticFromUserMessages, parseStoredDimensions } from "@/lib/civility";
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
@@ -72,20 +72,29 @@ export async function POST(req: Request) {
 async function finishDebate(userId: string, debateId: string, lastScore: number) {
   const debate = await prisma.debate.findUnique({
     where: { id: debateId },
-    include: { messages: { where: { role: "user" } } },
+    include: { messages: { orderBy: { createdAt: "asc" } } },
   });
 
   if (!debate) {
     return NextResponse.json({ error: "Debate not found" }, { status: 404 });
   }
 
-  const userMessages = debate.messages;
-  const scores = userMessages
-    .map((m) => m.civilityScore)
-    .filter((s): s is number => s !== null);
+  const userMessages = debate.messages.filter((m) => m.role === "user");
+  const transcript = debate.messages.map((m) => `${m.role}: ${m.content}`).join("\n\n");
 
-  if (scores.length === 0) scores.push(lastScore);
-  const overallScore = scores.reduce((a, b) => a + b, 0) / scores.length;
+  let holisticResult = await scoreConversationHolistic(transcript);
+  if (!holisticResult) {
+    holisticResult = fallbackHolisticFromUserMessages(
+      userMessages.map((m) => ({ civilityScore: m.civilityScore, dimensions: m.dimensions }))
+    );
+  }
+  if (userMessages.length === 0) {
+    holisticResult = fallbackHolisticFromUserMessages([
+      { civilityScore: lastScore, dimensions: null },
+    ]);
+  }
+
+  const overallScore = holisticResult.overall;
 
   const user = await prisma.user.findUnique({
     where: { id: userId },
@@ -131,14 +140,14 @@ async function finishDebate(userId: string, debateId: string, lastScore: number)
   recentScores.push(overallScore);
   const newCivility = recentScores.reduce((a, b) => a + b, 0) / recentScores.length;
 
-  const allDimensions = userMessages
-    .map((m) => {
-      try { return m.dimensions ? JSON.parse(m.dimensions) : null; } catch { return null; }
-    })
-    .filter(Boolean);
+  const parsedPerMessage = userMessages
+    .map((m) => parseStoredDimensions(m.dimensions))
+    .filter((d): d is NonNullable<typeof d> => d !== null);
 
-  const maxEmpathy = Math.max(...allDimensions.map((d: Record<string, number>) => d.empathy || 0), 0);
-  const maxEvidence = Math.max(...allDimensions.map((d: Record<string, number>) => d.evidenceBased || 0), 0);
+  const maxMutualExchange =
+    parsedPerMessage.length > 0 ? Math.max(...parsedPerMessage.map((d) => d.mutualExchange)) : 0;
+  const maxSelfExpressionReason =
+    parsedPerMessage.length > 0 ? Math.max(...parsedPerMessage.map((d) => d.selfExpressionReason)) : 0;
 
   const stats = {
     totalDebates: completedDebates.length + 1,
@@ -146,8 +155,8 @@ async function finishDebate(userId: string, debateId: string, lastScore: number)
     devilsAdvocateCount: completedDebates.filter((d) => d.difficulty === "Devil's Advocate").length +
       (debate.difficulty === "Devil's Advocate" ? 1 : 0),
     dailyChallengeCount: completedDebates.filter((d) => d.isDaily).length + (debate.isDaily ? 1 : 0),
-    maxEmpathy,
-    maxEvidence,
+    maxMutualExchange,
+    maxSelfExpressionReason,
     currentStreak: newStreak,
     level: newLevel,
   };
@@ -185,20 +194,17 @@ async function finishDebate(userId: string, debateId: string, lastScore: number)
     ),
   ]);
 
-  const dimensionAverages = allDimensions.length > 0
-    ? {
-        respectfulTone: avg(allDimensions.map((d: Record<string, number>) => d.respectfulTone)),
-        evidenceBased: avg(allDimensions.map((d: Record<string, number>) => d.evidenceBased)),
-        empathy: avg(allDimensions.map((d: Record<string, number>) => d.empathy)),
-        constructiveFraming: avg(allDimensions.map((d: Record<string, number>) => d.constructiveFraming)),
-        activeListening: avg(allDimensions.map((d: Record<string, number>) => d.activeListening)),
-      }
-    : null;
+  const dimensionsOut = {
+    participation: holisticResult.dimensions.participation,
+    selfExpressionReason: holisticResult.dimensions.selfExpressionReason,
+    mutualExchange: holisticResult.dimensions.mutualExchange,
+    interrogation: holisticResult.dimensions.interrogation,
+  };
 
   return NextResponse.json({
     finished: true,
     overallScore,
-    dimensions: dimensionAverages,
+    dimensions: dimensionsOut,
     xp: xpResult,
     feathers: featherResult,
     previousLevel: user.level,
@@ -207,9 +213,4 @@ async function finishDebate(userId: string, debateId: string, lastScore: number)
     streak: newStreak,
     civilityScore: newCivility,
   });
-}
-
-function avg(arr: number[]): number {
-  if (arr.length === 0) return 0;
-  return arr.reduce((a, b) => a + b, 0) / arr.length;
 }
