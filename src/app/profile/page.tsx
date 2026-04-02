@@ -92,37 +92,31 @@ export default function ProfilePage() {
         </div>
       </Card>
 
-      <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-        <Card>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-gobbl-600">{userData.xp.toLocaleString()}</div>
-            <div className="text-xs text-roost-500 flex items-center justify-center gap-1">⭐ Total XP</div>
-          </div>
-        </Card>
-        <Card>
-          <div className="text-center">
+      <div className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <Card className="min-h-[5.5rem] flex flex-col justify-center">
+          <div className="text-center px-1">
             <div className="text-2xl font-bold text-golden-600 dark:text-golden-400">
               {userData.featherBalance.toLocaleString()}
             </div>
-            <div className="text-xs text-roost-500 flex items-center justify-center gap-1">🪶 Feathers (spend)</div>
+            <div className="text-xs text-roost-500 flex items-center justify-center gap-1">🪶 Feathers </div>
           </div>
         </Card>
-        <Card>
-          <div className="text-center">
+        <Card className="min-h-[5.5rem] flex flex-col justify-center">
+          <div className="text-center px-1">
             <div className="text-2xl font-bold text-roost-800 dark:text-roost-100">{totalDebates}</div>
             <div className="text-xs text-roost-500">Total Debates</div>
           </div>
         </Card>
-        <Card>
-          <div className="text-center">
+        <Card className="min-h-[5.5rem] flex flex-col justify-center">
+          <div className="text-center px-1">
             <div className={`text-2xl font-bold ${winRate >= 70 ? "text-emerald-500" : "text-golden-600"}`}>
               {winRate}%
             </div>
             <div className="text-xs text-roost-500">Civil Rate (7+)</div>
           </div>
         </Card>
-        <Card>
-          <div className="flex items-center justify-center py-1">
+        <Card className="min-h-[5.5rem] flex flex-col justify-center">
+          <div className="flex h-full min-h-[4.5rem] items-center justify-center px-1">
             <StreakCounter current={userData.currentStreak} longest={userData.longestStreak} />
           </div>
         </Card>

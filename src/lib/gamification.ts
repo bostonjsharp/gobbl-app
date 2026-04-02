@@ -39,7 +39,7 @@ export const BADGES: BadgeDefinition[] = [
   {
     key: "warm-nest",
     name: "Warm Nest",
-    description: "Score 9+ on the empathy dimension",
+    description: "Score 9+ on mutual exchange & listening (in a debate)",
     icon: "🪺",
   },
   {
@@ -63,7 +63,7 @@ export const BADGES: BadgeDefinition[] = [
   {
     key: "sharp-beak",
     name: "Sharp Beak",
-    description: "Score 9+ on evidence-based reasoning",
+    description: "Score 9+ on reason & expression (in a debate)",
     icon: "🎯",
   },
   {
@@ -149,8 +149,8 @@ export interface UserStats {
   civilDebates: number;
   devilsAdvocateCount: number;
   dailyChallengeCount: number;
-  maxEmpathy: number;
-  maxEvidence: number;
+  maxMutualExchange: number;
+  maxSelfExpressionReason: number;
   currentStreak: number;
   level: number;
 }
@@ -161,11 +161,11 @@ export function checkNewBadges(stats: UserStats, existingBadges: string[]): stri
   const checks: [string, boolean][] = [
     ["first-gobble", stats.totalDebates >= 1],
     ["free-range", stats.civilDebates >= 3],
-    ["warm-nest", stats.maxEmpathy >= 9],
+    ["warm-nest", stats.maxMutualExchange >= 9],
     ["migration-streak", stats.currentStreak >= 7],
     ["flock-leader", stats.devilsAdvocateCount >= 10],
     ["golden-drumstick", stats.level >= 5],
-    ["sharp-beak", stats.maxEvidence >= 9],
+    ["sharp-beak", stats.maxSelfExpressionReason >= 9],
     ["roosting-ritual", stats.dailyChallengeCount >= 30],
   ];
 
