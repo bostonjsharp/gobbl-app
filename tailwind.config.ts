@@ -78,6 +78,10 @@ const config: Config = {
         xl: "3rem",
         full: "9999px",
       },
+      fontFamily: {
+        display: ["var(--font-quicksand)", "ui-sans-serif", "system-ui", "sans-serif"],
+        body: ["var(--font-nunito-sans)", "ui-sans-serif", "system-ui", "sans-serif"],
+      },
       animation: {
         "feather-fall": "featherFall 2s ease-in-out infinite",
         "hatch": "hatch 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards",
