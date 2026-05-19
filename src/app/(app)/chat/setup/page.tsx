@@ -16,7 +16,8 @@ function SetupContent() {
   const isDaily = searchParams.get("daily") === "true";
   const topicId = searchParams.get("topic");
 
-  const [selectedDifficulty, setSelectedDifficulty] = useState("Friendly Cluck");
+  const initialDifficulty = searchParams.get("difficulty") ?? "Friendly Cluck";
+  const [selectedDifficulty, setSelectedDifficulty] = useState(initialDifficulty);
   const [selectedBeliefKey, setSelectedBeliefKey] = useState<BeliefKey>("center");
   const [loading, setLoading] = useState(false);
   const [dailyCompleted, setDailyCompleted] = useState(false);
