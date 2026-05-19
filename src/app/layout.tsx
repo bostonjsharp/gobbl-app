@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Quicksand, Nunito_Sans } from "next/font/google";
 import { Providers } from "@/components/ui/Providers";
-import { NavBar } from "@/components/ui/NavBar";
 import "./globals.css";
 
 const quicksand = Quicksand({
@@ -31,10 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="min-h-screen antialiased font-body">
-        <Providers>
-          <NavBar />
-          <main>{children}</main>
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
