@@ -88,7 +88,7 @@ export default function DashboardPage() {
             to dress your turkey.
           </p>
         </div>
-        <Link href="/arena">
+        <Link href="/chat">
           <Button size="lg">🦃 Let&apos;s Talk Turkey</Button>
         </Link>
       </div>
@@ -144,7 +144,7 @@ export default function DashboardPage() {
             {userData.recentDebates.map((debate) => (
               <Link
                 key={debate.id}
-                href={`/arena/${debate.id}`}
+                href={`/chat/${debate.id}`}
                 className="flex items-center justify-between rounded-xl bg-roost-50 px-4 py-3 dark:bg-roost-800/50 transition-colors hover:bg-roost-100 dark:hover:bg-roost-800"
               >
                 <div className="min-w-0 flex-1 pr-3">

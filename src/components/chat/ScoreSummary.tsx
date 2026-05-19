@@ -293,7 +293,7 @@ export function ScoreSummary({ result }: ScoreSummaryProps) {
       )}
 
       <div className="flex justify-center gap-3 pt-2">
-        <Link href="/arena">
+        <Link href="/chat">
           <Button>Let&apos;s Talk Turkey Again</Button>
         </Link>
         <Link href="/dashboard">

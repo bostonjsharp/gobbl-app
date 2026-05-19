@@ -53,7 +53,7 @@ function SetupContent() {
     if (status !== "authenticated") return;
     if (isDaily) return;
     if (!topicId || !TOPICS.some((t) => t.id === topicId)) {
-      router.replace("/arena");
+      router.replace("/chat");
     }
   }, [status, isDaily, topicId, router]);
 
@@ -101,7 +101,7 @@ function SetupContent() {
           Come back tomorrow for a fresh topic and bonus feathers.
         </p>
         <div className="flex justify-center gap-3">
-          <Button onClick={() => router.push("/arena")}>Browse topics</Button>
+          <Button onClick={() => router.push("/chat")}>Browse topics</Button>
           <Button variant="secondary" onClick={() => router.push("/dashboard")}>
             Back to Roost
           </Button>
@@ -126,7 +126,7 @@ function SetupContent() {
       });
       if (!res.ok) throw new Error("Failed to start");
       const data = await res.json();
-      router.push(`/arena/${data.id}`);
+      router.push(`/chat/${data.id}`);
     } catch {
       setLoading(false);
     }
