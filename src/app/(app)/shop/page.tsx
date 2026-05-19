@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { Card } from "@/components/ui/Card";
+
 import { Button } from "@/components/ui/Button";
 import { TurkeyAvatar } from "@/components/gamification/TurkeyAvatar";
 import type { EquippedCosmetics, ShopSlot } from "@/lib/shop";
@@ -119,67 +119,54 @@ export default function ShopPage() {
   }));
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-8">
-      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-roost-900 dark:text-roost-50">The Bazaar</h1>
-          <p className="text-roost-500">
-            Spend feathers on flair. XP drives your level; feathers are only for the shop.
-          </p>
-        </div>
-        <div className="rounded-2xl border border-gobbl-200 bg-gobbl-50 px-4 py-3 dark:border-gobbl-800 dark:bg-gobbl-950/40">
-          <div className="text-xs font-medium uppercase tracking-wide text-gobbl-700 dark:text-gobbl-400">
-            Spendable feathers
-          </div>
-          <div className="text-2xl font-bold text-gobbl-700 dark:text-gobbl-300">
-            {data.featherBalance.toLocaleString()} <span className="text-lg">🪶</span>
+    <div className="flex flex-col gap-lg">
+      <div>
+        <h2 className="font-display text-2xl font-bold text-roost-700">The Bazaar</h2>
+        <p className="text-sm text-roost-500">
+          Spend feathers on flair. XP drives your level; feathers are only for the shop.
+        </p>
+      </div>
+
+      <div className="relative overflow-hidden rounded-2xl bg-roost-100 p-lg">
+        <div className="absolute -right-6 -top-6 text-7xl opacity-10 select-none rotate-12">🪶</div>
+        <h2 className="mb-3 font-display text-xs font-bold uppercase tracking-wider text-roost-500">
+          Preview
+        </h2>
+        <div className="flex items-center gap-md">
+          <TurkeyAvatar level={data.level} size="xl" equipped={data.equipped} />
+          <div className="text-sm text-roost-500">
+            <p className="font-medium text-roost-700">Your turkey right now</p>
+            <p className="mt-1 text-xs">Equip one item per category.</p>
           </div>
         </div>
       </div>
 
-      <Card className="mb-10 p-6">
-        <h2 className="mb-4 text-sm font-bold uppercase tracking-wide text-roost-500">Preview</h2>
-        <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-start sm:gap-10">
-          <TurkeyAvatar level={data.level} size="xl" equipped={data.equipped} />
-          <div className="text-center text-sm text-roost-600 dark:text-roost-400 sm:text-left">
-            <p className="font-medium text-roost-800 dark:text-roost-200">Your turkey right now</p>
-            <p className="mt-1 text-xs">
-              Equip one item per category. Unequip with the clear button on an owned slot.
-            </p>
-          </div>
-        </div>
-      </Card>
-
       {error && (
-        <div className="mb-6 rounded-xl border border-plume-300 bg-plume-50 px-4 py-3 text-sm text-plume-800 dark:border-plume-700 dark:bg-plume-950/40 dark:text-plume-200">
-          {error}
-        </div>
+        <div className="rounded-xl bg-plume-100 px-4 py-3 text-sm text-plume-700">{error}</div>
       )}
 
-      <div className="space-y-10">
+      <div className="flex flex-col gap-xl">
         {itemsBySlot.map(({ slot, label, items }) => (
           <section key={slot}>
-            <h2 className="mb-4 flex items-center gap-2 text-lg font-bold text-roost-800 dark:text-roost-100">
-              <span>{label}</span>
-            </h2>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <h2 className="mb-md font-display font-bold text-roost-700">{label}</h2>
+            <div className="grid grid-cols-2 gap-md">
               {items.map((item) => {
                 const isEquipped = data.equipped[slot] === item.id;
                 const disabledBuy = busyId === item.id || (!item.canAfford && !item.owned);
                 return (
-                  <Card
+                  <div
                     key={item.id}
-                    className={`flex flex-col gap-3 p-4 transition-shadow ${
-                      item.owned ? "ring-2 ring-gobbl-300/60 dark:ring-gobbl-700/50" : ""
+                    className={`flex flex-col gap-2 rounded-2xl bg-roost-100 p-md ${
+                      item.owned ? "ring-2 ring-gobbl-500/40" : ""
                     }`}
                   >
                     <div className="flex items-start justify-between gap-2">
-                      <div className="text-4xl" aria-hidden>
+                      <div className="text-3xl" aria-hidden>
                         {item.emoji}
                       </div>
                       <div className="text-right text-sm">
-                        <div className="font-bold text-roost-800 dark:text-roost-100">{item.name}</div>
-                        <div className="text-gobbl-600 dark:text-gobbl-400">{item.price.toLocaleString()} 🪶</div>
+                        <div className="font-display font-bold text-roost-700">{item.name}</div>
+                        <div className="text-xs text-gobbl-500">{item.price.toLocaleString()} 🪶</div>
                       </div>
                     </div>
                     <div className="mt-auto flex flex-wrap gap-2">
@@ -196,20 +183,30 @@ export default function ShopPage() {
                       {item.owned && (
                         <>
                           {!isEquipped && (
-                            <Button size="sm" variant="secondary" disabled={busyId === `eq-${slot}`} onClick={() => equip(slot, item.id)}>
+                            <Button
+                              size="sm"
+                              variant="secondary"
+                              disabled={busyId === `eq-${slot}`}
+                              onClick={() => equip(slot, item.id)}
+                            >
                               Equip
                             </Button>
                           )}
                           {isEquipped && (
-                            <Button size="sm" variant="secondary" disabled={busyId === `eq-${slot}`} onClick={() => equip(slot, null)}>
+                            <Button
+                              size="sm"
+                              variant="secondary"
+                              disabled={busyId === `eq-${slot}`}
+                              onClick={() => equip(slot, null)}
+                            >
                               Unequip
                             </Button>
                           )}
-                          <span className="self-center text-xs font-medium text-emerald-600 dark:text-emerald-400">Owned</span>
+                          <span className="self-center text-xs font-medium text-gobbl-500">Owned</span>
                         </>
                       )}
                     </div>
-                  </Card>
+                  </div>
                 );
               })}
             </div>
