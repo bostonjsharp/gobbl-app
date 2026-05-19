@@ -1,20 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { TurkeyAvatar } from "@/components/gamification/TurkeyAvatar";
 import type { EquippedCosmetics } from "@/lib/shop";
-
-const TITLES: Record<string, string> = {
-  "/dashboard": "Gobbl",
-  "/chat": "Chat",
-  "/skills": "Skills",
-  "/shop": "Shop",
-  "/profile": "Profile",
-  "/leaderboard": "The Flock",
-};
 
 interface UserSummary {
   level: number;
@@ -22,16 +12,7 @@ interface UserSummary {
   equippedCosmetics: EquippedCosmetics;
 }
 
-function titleFor(pathname: string): string {
-  if (TITLES[pathname]) return TITLES[pathname];
-  for (const key of Object.keys(TITLES)) {
-    if (pathname.startsWith(key + "/")) return TITLES[key];
-  }
-  return "Gobbl";
-}
-
 export function TopAppBar() {
-  const pathname = usePathname();
   const { status } = useSession();
   const [user, setUser] = useState<UserSummary | null>(null);
 
@@ -59,7 +40,7 @@ export function TopAppBar() {
         )}
       </Link>
       <h1 className="font-display text-2xl font-bold tracking-tight text-gobbl-500">
-        {titleFor(pathname)}
+        Gobbl
       </h1>
       <Link
         href="/shop"
