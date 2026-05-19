@@ -47,7 +47,7 @@ export default function DebatePage() {
           setLoading(false);
         })
         .catch(() => {
-          router.push("/arena");
+          router.push("/chat");
         });
     }
   }, [status, debateId, router]);

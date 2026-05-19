@@ -17,7 +17,7 @@ function ArenaContent() {
 
   useEffect(() => {
     if (isDaily) {
-      router.replace("/arena/setup?daily=true");
+      router.replace("/chat/setup?daily=true");
     }
   }, [isDaily, router]);
 
@@ -84,7 +84,7 @@ function ArenaContent() {
             key={topic.id}
             hover
             className="group"
-            onClick={() => router.push(`/arena/setup?topic=${topic.id}`)}
+            onClick={() => router.push(`/chat/setup?topic=${topic.id}`)}
           >
             <div className="mb-2 text-xs font-bold uppercase tracking-wide text-gobbl-600">
               {topic.category}
