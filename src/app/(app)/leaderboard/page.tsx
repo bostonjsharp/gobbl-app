@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { Card } from "@/components/ui/Card";
 import { RankingTable, RankEntry } from "@/components/leaderboard/RankingTable";
 
 const SORT_OPTIONS = [
@@ -42,40 +41,36 @@ export default function LeaderboardPage() {
   }
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-8">
-      <div className="mb-8 text-center">
-        <h1 className="mb-2 text-3xl font-bold text-roost-900 dark:text-roost-50">
-          🏆 The Flock
-        </h1>
-        <p className="text-roost-500">See who&apos;s strutting their stuff in civil discourse</p>
+    <div className="flex flex-col gap-lg">
+      <div>
+        <h2 className="font-display text-2xl font-bold text-roost-700">🏆 The Flock</h2>
+        <p className="text-sm text-roost-500">See who&apos;s strutting their stuff in civil discourse</p>
       </div>
 
-      <div className="mb-6 flex justify-center gap-2">
+      <div className="flex justify-center gap-2">
         {SORT_OPTIONS.map((opt) => (
           <button
             key={opt.key}
             onClick={() => setSortBy(opt.key)}
-            className={`flex items-center gap-1.5 rounded-xl px-4 py-2 text-sm font-medium transition-all
-              ${sortBy === opt.key
-                ? "bg-gradient-to-r from-gobbl-500 to-gobbl-600 text-white shadow-md"
-                : "bg-roost-100 text-roost-600 hover:bg-roost-200 dark:bg-roost-800 dark:text-roost-300"
-              }`}
+            className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-semibold transition-all ${
+              sortBy === opt.key
+                ? "bg-gobbl-500 text-white"
+                : "bg-roost-100 text-roost-500 hover:bg-roost-200"
+            }`}
           >
             <span>{opt.icon}</span>
-            {opt.label}
+            <span>{opt.label}</span>
           </button>
         ))}
       </div>
 
-      <Card>
-        {loading ? (
-          <div className="flex justify-center py-12">
-            <span className="text-4xl animate-wiggle inline-block">🥚</span>
-          </div>
-        ) : (
-          <RankingTable data={data} sortBy={sortBy} />
-        )}
-      </Card>
+      {loading ? (
+        <div className="flex items-center justify-center py-8">
+          <span className="text-3xl animate-wiggle inline-block">🥚</span>
+        </div>
+      ) : (
+        <RankingTable data={data} sortBy={sortBy} />
+      )}
     </div>
   );
 }
