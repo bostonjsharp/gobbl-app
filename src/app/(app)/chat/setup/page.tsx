@@ -88,14 +88,14 @@ function SetupContent() {
 
   if (isDaily && dailyCompleted) {
     return (
-      <div className="mx-auto max-w-2xl px-4 py-12 text-center">
+      <div className="flex flex-col gap-md text-center">
         <div className="mb-6">
           <TurkeyAvatar level={5} size="lg" />
         </div>
         <div className="inline-block rounded-full bg-emerald-200 px-4 py-1 text-sm font-bold text-emerald-800 mb-4">
           Daily Gobble complete
         </div>
-        <h2 className="mb-2 text-2xl font-bold text-roost-800 dark:text-roost-100">
+        <h2 className="mb-2 font-display text-2xl font-bold text-roost-700">
           You&apos;ve already gobbled today!
         </h2>
         <p className="mb-6 text-roost-500">
@@ -134,7 +134,7 @@ function SetupContent() {
   };
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-8">
+    <div className="flex flex-col gap-lg">
       <button
         type="button"
         onClick={() => router.back()}
@@ -149,13 +149,13 @@ function SetupContent() {
             Daily Gobble
           </div>
         )}
-        <h1 className="text-2xl font-bold text-roost-900 dark:text-roost-50 mb-2">{topic.title}</h1>
+        <h1 className="font-display text-2xl font-bold text-roost-700 mb-2">{topic.title}</h1>
         <p className="text-roost-500">{topic.description}</p>
-        <p className="mt-2 text-xs text-roost-400">{topic.category}</p>
+        <p className="mt-2 text-xs text-roost-500">{topic.category}</p>
       </div>
 
       <div className="mb-8">
-        <label className="mb-3 block text-sm font-semibold text-roost-700 dark:text-roost-300">
+        <label className="mb-3 block text-sm font-semibold text-roost-700">
           Challenge level
         </label>
         <div className="flex flex-wrap gap-2">
@@ -167,8 +167,8 @@ function SetupContent() {
               className={`rounded-xl px-4 py-2.5 text-left text-sm font-medium transition-all flex-1 min-w-[140px]
                 ${
                   selectedDifficulty === d.key
-                    ? "bg-gradient-to-r from-gobbl-500 to-gobbl-600 text-white shadow-md"
-                    : "bg-roost-100 text-roost-600 hover:bg-roost-200 dark:bg-roost-800 dark:text-roost-300"
+                    ? "bg-gobbl-500 text-white shadow-md"
+                    : "bg-roost-100 text-roost-500 hover:bg-roost-200"
                 }`}
             >
               <div>{d.label}</div>
@@ -179,7 +179,7 @@ function SetupContent() {
       </div>
 
       <div className="mb-8">
-        <label className="mb-3 block text-sm font-semibold text-roost-700 dark:text-roost-300">
+        <label className="mb-3 block text-sm font-semibold text-roost-700">
           Robert&apos;s ideology
         </label>
         <p className="text-xs text-roost-500 mb-3">
@@ -194,11 +194,11 @@ function SetupContent() {
               className={`rounded-xl px-4 py-3 text-left text-sm transition-all border-2
                 ${
                   selectedBeliefKey === opt.key
-                    ? "border-gobbl-500 bg-gobbl-50 dark:bg-gobbl-950/40"
-                    : "border-roost-200 bg-white dark:bg-roost-900 dark:border-roost-700 hover:border-roost-300"
+                    ? "border-gobbl-500 bg-gobbl-500/10"
+                    : "border-roost-200 bg-roost-100 hover:border-roost-300"
                 }`}
             >
-              <div className="font-bold text-roost-800 dark:text-roost-100">{opt.label}</div>
+              <div className="font-bold text-roost-700">{opt.label}</div>
               <div className="text-xs text-roost-500">{opt.description}</div>
             </button>
           ))}
