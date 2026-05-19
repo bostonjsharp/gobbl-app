@@ -19,6 +19,8 @@ model User {
   longestStreak      Int             @default(0)
   lastActiveDate     DateTime?
   equippedCosmetics  Json?
+  surveyResponses    Json?
+  onboardingCompletedAt DateTime?
   createdAt          DateTime        @default(now())
   debates            Debate[]
   badges             UserBadge[]
