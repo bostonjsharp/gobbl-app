@@ -116,11 +116,11 @@ export function ChatInterface({ debateId, initialMessages, maxTurns, onFinish }:
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex items-center justify-between border-b border-roost-200 px-4 py-2 dark:border-roost-800">
+      <div className="flex items-center justify-between border-b border-roost-200 px-4 py-2">
         <span className="text-sm text-roost-500 flex items-center gap-1">
           Round {turnNumber}/{maxTurns}
         </span>
-        <div className="h-2.5 flex-1 mx-4 rounded-full bg-roost-200 dark:bg-roost-700 overflow-hidden">
+        <div className="h-2.5 flex-1 mx-4 rounded-full bg-roost-200 overflow-hidden">
           <div
             className="h-full rounded-full bg-gradient-to-r from-gobbl-400 to-golden-500 transition-all duration-500"
             style={{ width: `${(turnNumber / maxTurns) * 100}%` }}
@@ -140,7 +140,7 @@ export function ChatInterface({ debateId, initialMessages, maxTurns, onFinish }:
         {loading && (
           <div className="flex justify-start">
             <div className="flex items-center gap-2 ml-10">
-              <div className="rounded-2xl bg-roost-100 px-5 py-3 dark:bg-roost-800">
+              <div className="rounded-2xl bg-roost-100 px-5 py-3">
                 <div className="flex items-center gap-2">
                   <span className="text-lg animate-wiggle inline-block">🥚</span>
                   <span className="text-xs text-roost-500">Gobbl is thinking...</span>
@@ -151,10 +151,10 @@ export function ChatInterface({ debateId, initialMessages, maxTurns, onFinish }:
         )}
       </div>
 
-      <div className="border-t border-roost-200 p-4 dark:border-roost-800">
+      <div className="border-t border-roost-200 p-4">
         {atMaxTurns ? (
           <div className="text-center">
-            <p className="mb-3 text-sm text-roost-600 dark:text-roost-400">
+            <p className="mb-3 text-sm text-roost-500">
               All rounds complete! Let&apos;s see how you did.
             </p>
             <Button onClick={handleFinish} disabled={loading}>
@@ -181,7 +181,7 @@ export function ChatInterface({ debateId, initialMessages, maxTurns, onFinish }:
               }}
               rows={1}
               placeholder="Strut your stuff... share your perspective"
-              className="min-h-[2.5rem] max-h-[200px] flex-1 resize-none overflow-x-hidden rounded-xl border border-roost-300 bg-white px-4 py-2.5 text-sm text-roost-900 placeholder:text-roost-400 focus:border-gobbl-500 focus:outline-none focus:ring-2 focus:ring-gobbl-500/20 dark:border-roost-700 dark:bg-roost-800 dark:text-roost-100 transition-all"
+              className="min-h-[2.5rem] max-h-[200px] flex-1 resize-none overflow-x-hidden rounded-xl border border-roost-300 bg-white px-4 py-2.5 text-sm text-roost-700 placeholder:text-roost-500 focus:border-gobbl-500 focus:outline-none focus:ring-2 focus:ring-gobbl-500/20 transition-all"
               disabled={loading}
               aria-label="Your message"
             />
