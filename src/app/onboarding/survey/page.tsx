@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/Button";
 import {
@@ -11,7 +10,6 @@ import {
 } from "@/lib/survey/questions";
 
 export default function OnboardingSurveyPage() {
-  const router = useRouter();
   const { update } = useSession();
   const [step, setStep] = useState(0);
   const [responses, setResponses] = useState<Record<string, string>>({});
@@ -47,7 +45,7 @@ export default function OnboardingSurveyPage() {
         return;
       }
       await update({ onboardingCompletedAt: data.onboardingCompletedAt });
-      router.push("/dashboard");
+      window.location.href = "/dashboard";
     } catch {
       setError("Network error");
       setSubmitting(false);
