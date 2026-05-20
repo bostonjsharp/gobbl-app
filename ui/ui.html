@@ -1,0 +1,1681 @@
+<!-- Design System -->
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700&amp;family=Nunito+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary": "#ffffff",
+                    "on-error": "#ffffff",
+                    "primary-fixed-dim": "#ffb59a",
+                    "on-background": "#1c1c17",
+                    "on-tertiary-fixed-variant": "#5b4137",
+                    "on-primary-container": "#fffbff",
+                    "on-secondary-container": "#6a4800",
+                    "surface-container": "#f1eee5",
+                    "surface-tint": "#a83900",
+                    "surface-variant": "#e6e2d9",
+                    "surface-container-low": "#f7f3ea",
+                    "on-primary-fixed": "#380d00",
+                    "secondary-container": "#feb300",
+                    "on-tertiary-fixed": "#2b160f",
+                    "error-container": "#ffdad6",
+                    "on-primary-fixed-variant": "#802a00",
+                    "surface-container-high": "#ece8df",
+                    "primary-container": "#cd4700",
+                    "on-tertiary-container": "#fffbff",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-fixed": "#ffdeac",
+                    "primary-fixed": "#ffdbcf",
+                    "inverse-surface": "#31312b",
+                    "on-secondary-fixed-variant": "#604100",
+                    "on-tertiary": "#ffffff",
+                    "tertiary-fixed": "#ffdbce",
+                    "primary": "#a43700",
+                    "inverse-primary": "#ffb59a",
+                    "tertiary": "#72554b",
+                    "background": "#fdf9f0",
+                    "surface-dim": "#dddad1",
+                    "on-secondary-fixed": "#281900",
+                    "outline-variant": "#e3bfb2",
+                    "surface-bright": "#fdf9f0",
+                    "on-primary": "#ffffff",
+                    "tertiary-fixed-dim": "#e4beb2",
+                    "on-error-container": "#93000a",
+                    "outline": "#8f7066",
+                    "error": "#ba1a1a",
+                    "tertiary-container": "#8d6e63",
+                    "surface": "#fdf9f0",
+                    "on-surface-variant": "#5a4138",
+                    "secondary": "#7e5700",
+                    "on-surface": "#1c1c17",
+                    "surface-container-highest": "#e6e2d9",
+                    "inverse-on-surface": "#f4f0e8",
+                    "secondary-fixed-dim": "#ffba38"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "sm": "8px",
+                    "gutter-mobile": "12px",
+                    "unit": "4px",
+                    "md": "16px",
+                    "lg": "24px",
+                    "xl": "40px",
+                    "margin-mobile": "20px",
+                    "xs": "4px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Quicksand"],
+                    "headline-lg": ["Quicksand"],
+                    "body-lg": ["Nunito Sans"],
+                    "display-lg": ["Quicksand"],
+                    "label-md": ["Nunito Sans"],
+                    "body-md": ["Nunito Sans"],
+                    "headline-lg-mobile": ["Quicksand"],
+                    "label-sm": ["Nunito Sans"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "display-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .warmth-glow {
+            filter: drop-shadow(0 0 8px rgba(254, 179, 0, 0.4));
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e3bfb2;
+            border-radius: 10px;
+        }
+        .feather-mask {
+            mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M21,3C21,3 15.8,3.5 12,7.3C10.2,9.1 8.8,11.4 8,14C7.2,16.6 7,19.4 7,22H9C9,19.4 9.2,16.8 10,14.4C10.8,12 12,9.8 13.4,8.4C16.4,5.4 20.2,4.8 20.2,4.8L21,3M3,22H5C5,18 7,14 10,11L8.6,9.6C5.6,12.6 3,17 3,22Z'/%3E%3C/svg%3E");
+            mask-size: contain;
+            mask-repeat: no-repeat;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md text-body-md overflow-x-hidden">
+<!-- TopAppBar -->
+<header class="bg-background fixed top-0 w-full z-50 flex justify-between items-center px-margin-mobile py-sm shadow-[0px_4px_12px_rgba(141,110,99,0.12)]">
+<div class="flex items-center gap-sm active:scale-95 transition-transform duration-200">
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary/20">
+<img alt="User" data-alt="A warm, charming close-up portrait of a friendly community member wearing a tiny, stylized turkey-themed knitted hat. The background is a soft-focus autumn park with golden leaves and warm afternoon sun. The image uses a vibrant but earthy color palette of oranges, creams, and deep browns, matching the whimsical harvest brand aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuARHK0l24O_euHKHliC3eAz-tCwXJMn2fBXyrn-0QV2a3OwlVUIvcs_dM31aqFbopjSl5G_hOWWL1UH2zpRlOrByDHK5N4CRW1ErElqRe4PVIeu2p7q9PyDguLe44zeoa4shPdLnsdNqdZB3aca2vlfh91MIc7a-SsJpsQYLpIGneLJCUHYazHEQ93bawDczyNcn21RjInxI3JjVbtyrs3OHHZRpFsdUkJEXn0QbDe1XO5DSQwC5sqbuFHRIXG5JIySo9QVe_Ttyw8"/>
+</div>
+</div>
+<h1 class="font-display-lg text-headline-lg-mobile md:text-headline-lg text-primary tracking-tight">GobbleGrounds</h1>
+<button class="flex items-center gap-xs text-primary font-label-md text-label-md px-md py-xs bg-surface-container-low rounded-full hover:bg-surface-variant/50 transition-colors active:scale-95 duration-200">
+<span>1,250 Feathers</span>
+<span class="material-symbols-outlined" data-icon="eco">eco</span>
+</button>
+</header>
+<!-- Main Canvas -->
+<main class="flex-1 mt-[72px] mb-[80px] px-margin-mobile pt-lg">
+<!-- Welcome & Search -->
+<section class="mb-xl">
+<div class="flex flex-col gap-xs mb-lg">
+<h2 class="font-headline-md text-headline-md text-on-surface">Messages</h2>
+<p class="text-on-surface-variant">Gather 'round and start a conversation.</p>
+</div>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full pl-xl pr-md py-md bg-surface-container-low border-2 border-transparent focus:border-tertiary-container focus:ring-0 rounded-xl transition-all outline-none text-body-md" placeholder="Search nests or pecks..." type="text"/>
+</div>
+</section>
+<!-- Horizontal Quick Access (Direct Pecks) -->
+<section class="mb-xl">
+<div class="flex justify-between items-center mb-md">
+<h3 class="font-label-md text-label-md text-tertiary uppercase tracking-wider">Direct Pecks</h3>
+<button class="text-primary font-label-sm text-label-sm hover:underline transition-all">View All</button>
+</div>
+<div class="flex gap-lg overflow-x-auto pb-sm scrollbar-hide">
+<!-- User 1 -->
+<div class="flex flex-col items-center gap-xs min-w-[72px] cursor-pointer group">
+<div class="relative">
+<div class="w-16 h-16 rounded-full border-2 border-secondary p-1 active:scale-90 transition-transform">
+<img class="rounded-full w-full h-full object-cover" data-alt="A high-quality, professional avatar of a cheerful person in a cozy orange turtleneck sweater. The lighting is warm and golden, as if from a sunset. The background is a soft beige tone with subtle leaf textures. Digital art style with clean lines and approachable expression." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4-Ca8Hg8KMB_oigFr_Tl01gXsplKdEreIchv4LbpjMCoYpdwy20wjG_ME7RLEswXa5v3Z_iCsvXQaLXxjf_NcZMWXhREY-3K4qzUqNvyE7pl0QxLtfWHJDilas_av484GChA9Nk15VpeLK5D9OSuFCpHOgOnX3gC-QASqsSbB_bv6vZABWzQwcGHD2lGRm3xHUhe71gC1WjJgO4IaCSXybdc_n07mHnMBjISj-BhtQcpuXbxTsHWEb_a5LnraavRlmppzxpqM6vE"/>
+</div>
+<div class="absolute bottom-0 right-0 w-4 h-4 bg-green-500 border-2 border-background rounded-full"></div>
+</div>
+<span class="font-label-sm text-label-sm text-center truncate w-full">Cranberry</span>
+</div>
+<!-- User 2 -->
+<div class="flex flex-col items-center gap-xs min-w-[72px] cursor-pointer group">
+<div class="relative">
+<div class="w-16 h-16 rounded-full border-2 border-transparent hover:border-outline-variant p-1 active:scale-90 transition-transform">
+<img class="rounded-full w-full h-full object-cover" data-alt="A friendly male avatar wearing a brown knit beanie and glasses. He has a warm, welcoming smile. The background is a crisp autumn forest with blurred pine trees and golden light. The overall mood is comfortable, friendly, and community-oriented." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqLfhF6UkQAnMR4QIzMlOl1OyuiVMSCLM_5ijQToD1GllA6-7mSejRbUwFWeHw7SoK2G93ECSMdW_k-i2qIWf13lHQ-YNXXMk9idcjeF4Rz3QUUduYl8mi3ergrBNU8jpEK5mEwAcPCVcwxIKuHCBIeOXrDMI5s8wmYRDH_azVptnLctFEjYG-uWnhw8-t3hBHP5ypvU0bfja7VrbBf9-9OmuihjtTpGFdqv9rmx8EbKnF-7UKv8YQbTqN6rAQ1ZOqzGNyR234zEg"/>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-center truncate w-full">Oakley</span>
+</div>
+<!-- User 3 -->
+<div class="flex flex-col items-center gap-xs min-w-[72px] cursor-pointer group">
+<div class="relative">
+<div class="w-16 h-16 rounded-full border-2 border-transparent hover:border-outline-variant p-1 active:scale-90 transition-transform">
+<img class="rounded-full w-full h-full object-cover" data-alt="A warm illustration of an elderly person with a kind face, wearing a scarf with a maple leaf pattern. The lighting is soft and flattering. The color palette is composed of muted harvest tones like burgundy, cream, and sage green." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXGiVC4M71_UrTsZBaQ69aa91SRNHJ3CJlYZ0RRFdZL5g30KOw04kM6xkQ0ka5fdyVfb8Hn5b5zD8GVOqjownw29TwMWRxmAqDp5i0TjO9_yqR2r4AClRPUfLhHyJGn3q7kqsLJuGdXX6OUu1GtHvU58Ifm-Smc6vzY-Ggfmv-G_pMhhuGoY3YkIdjESThFSdFWCb1HnXOXq9fX-Ur8pJQDpHNDsAF9NOlbiOIolaUoEpnWNJ1B1nNlV5ZjPnCjuwV6BXB-Pv9RcA"/>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-center truncate w-full">GrannyP</span>
+</div>
+<!-- Add New -->
+<div class="flex flex-col items-center gap-xs min-w-[72px] cursor-pointer">
+<div class="w-16 h-16 rounded-full border-2 border-dashed border-outline-variant flex items-center justify-center text-outline hover:bg-surface-variant/30 transition-colors">
+<span class="material-symbols-outlined">add</span>
+</div>
+<span class="font-label-sm text-label-sm text-center">New</span>
+</div>
+</div>
+</section>
+<!-- Discussion Nests (Active Channels) -->
+<section class="flex flex-col gap-md">
+<h3 class="font-label-md text-label-md text-tertiary uppercase tracking-wider mb-xs">Discussion Nests</h3>
+<!-- Nest Card 1 (Hot) -->
+<div class="relative bg-surface-container rounded-xl p-md shadow-[0px_4px_12px_rgba(141,110,99,0.08)] hover:shadow-[0px_8px_16px_rgba(141,110,99,0.12)] transition-all cursor-pointer group overflow-hidden">
+<div class="flex justify-between items-start mb-sm">
+<div class="flex items-center gap-sm">
+<div class="w-12 h-12 bg-secondary-container rounded-lg flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">fireplace</span>
+</div>
+<div>
+<h4 class="font-headline-md text-label-md text-on-surface">The Roast Room</h4>
+<p class="text-label-sm text-on-surface-variant">9 active gobblers</p>
+</div>
+</div>
+<div class="flex flex-col items-end gap-xs">
+<div class="flex items-center gap-1 warmth-glow">
+<span class="material-symbols-outlined text-secondary text-[16px]" style="font-variation-settings: 'FILL' 1;">bolt</span>
+<span class="font-label-sm text-secondary">High Warmth</span>
+</div>
+<span class="text-label-sm text-outline">2m ago</span>
+</div>
+</div>
+<p class="text-body-md text-on-surface-variant line-clamp-1 italic">"The secret to the perfect stuffing is definitely more sage than you think..."</p>
+<!-- Warmth Meter -->
+<div class="mt-md h-1.5 w-full bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-secondary to-primary-container w-[85%] rounded-full"></div>
+</div>
+</div>
+<!-- Nest Card 2 (Medium) -->
+<div class="bg-surface-container rounded-xl p-md shadow-[0px_4px_12px_rgba(141,110,99,0.08)] hover:shadow-[0px_8px_16px_rgba(141,110,99,0.12)] transition-all cursor-pointer">
+<div class="flex justify-between items-start mb-sm">
+<div class="flex items-center gap-sm">
+<div class="w-12 h-12 bg-tertiary-container rounded-lg flex items-center justify-center text-on-tertiary-container">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">forest</span>
+</div>
+<div>
+<h4 class="font-headline-md text-label-md text-on-surface">Foraging Tips</h4>
+<p class="text-label-sm text-on-surface-variant">4 active gobblers</p>
+</div>
+</div>
+<div class="flex flex-col items-end gap-xs">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-tertiary text-[16px]" style="font-variation-settings: 'FILL' 1;">thermometer</span>
+<span class="font-label-sm text-tertiary">Cozy</span>
+</div>
+<span class="text-label-sm text-outline">15m ago</span>
+</div>
+</div>
+<p class="text-body-md text-on-surface-variant line-clamp-1">"Found some amazing chanterelles near the old oak tree this morning!"</p>
+<div class="mt-md h-1.5 w-full bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-tertiary w-[45%] rounded-full"></div>
+</div>
+</div>
+<!-- Nest Card 3 (Quiet) -->
+<div class="bg-surface-container-low border border-surface-variant rounded-xl p-md opacity-80 hover:opacity-100 transition-all cursor-pointer">
+<div class="flex justify-between items-start mb-sm">
+<div class="flex items-center gap-sm">
+<div class="w-12 h-12 bg-surface-variant rounded-lg flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">ac_unit</span>
+</div>
+<div>
+<h4 class="font-headline-md text-label-md text-on-surface">Winter Prep</h4>
+<p class="text-label-sm text-on-surface-variant">Quiet nest</p>
+</div>
+</div>
+<div class="flex flex-col items-end gap-xs">
+<span class="text-label-sm text-outline">1h ago</span>
+</div>
+</div>
+<p class="text-body-md text-on-surface-variant line-clamp-1">"Has anyone checked the firewood stocks for the community center yet?"</p>
+</div>
+</section>
+<!-- Feather Divider -->
+<div class="my-xl flex items-center justify-center gap-md opacity-20 select-none pointer-events-none">
+<span class="material-symbols-outlined text-primary scale-x-[-1]">eco</span>
+<div class="h-[2px] flex-1 bg-gradient-to-r from-transparent via-primary to-transparent"></div>
+<span class="material-symbols-outlined text-primary">eco</span>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-gutter-mobile py-sm bg-surface shadow-[0px_-4px_12px_rgba(141,110,99,0.12)] rounded-t-lg">
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-md py-unit hover:bg-surface-variant/30 rounded-full transition-all active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-md py-unit transition-all active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="forum" style="font-variation-settings: 'FILL' 1;">forum</span>
+<span class="font-label-md text-label-md">Chat</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-md py-unit hover:bg-surface-variant/30 rounded-full transition-all active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="school">school</span>
+<span class="font-label-md text-label-md">Skills</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-md py-unit hover:bg-surface-variant/30 rounded-full transition-all active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="font-label-md text-label-md">Shop</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-md py-unit hover:bg-surface-variant/30 rounded-full transition-all active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-md text-label-md">Profile</span>
+</a>
+</nav>
+<!-- Micro-interaction Script -->
+<script>
+        document.querySelectorAll('.active\\:scale-90, .active\\:scale-95').forEach(button => {
+            button.addEventListener('touchstart', () => {
+                button.classList.add('opacity-80');
+            });
+            button.addEventListener('touchend', () => {
+                button.classList.remove('opacity-80');
+            });
+        });
+
+        // Simple parallax for the search bar focus
+        const searchInput = document.querySelector('input');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('scale-[1.02]');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('scale-[1.02]');
+        });
+    </script>
+</body></html>
+
+<!-- Chat -->
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GobbleGrounds | Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&amp;family=Nunito+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .feather-shadow {
+            box-shadow: 0px 4px 12px rgba(141, 110, 99, 0.12);
+        }
+        .button-press {
+            border-bottom: 2px solid rgba(0,0,0,0.1);
+        }
+        .button-press:active {
+            transform: translateY(2px);
+            border-bottom-width: 0;
+        }
+        body {
+            background-color: #fdf9f0;
+            color: #1c1c17;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1eee5;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #e3bfb2;
+            border-radius: 10px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "primary-fixed-dim": "#ffb59a",
+                        "on-background": "#1c1c17",
+                        "on-tertiary-fixed-variant": "#5b4137",
+                        "on-primary-container": "#fffbff",
+                        "on-secondary-container": "#6a4800",
+                        "surface-container": "#f1eee5",
+                        "surface-tint": "#a83900",
+                        "surface-variant": "#e6e2d9",
+                        "surface-container-low": "#f7f3ea",
+                        "on-primary-fixed": "#380d00",
+                        "secondary-container": "#feb300",
+                        "on-tertiary-fixed": "#2b160f",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed-variant": "#802a00",
+                        "surface-container-high": "#ece8df",
+                        "primary-container": "#cd4700",
+                        "on-tertiary-container": "#fffbff",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed": "#ffdeac",
+                        "primary-fixed": "#ffdbcf",
+                        "inverse-surface": "#31312b",
+                        "on-secondary-fixed-variant": "#604100",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed": "#ffdbce",
+                        "primary": "#a43700",
+                        "inverse-primary": "#ffb59a",
+                        "tertiary": "#72554b",
+                        "background": "#fdf9f0",
+                        "surface-dim": "#dddad1",
+                        "on-secondary-fixed": "#281900",
+                        "outline-variant": "#e3bfb2",
+                        "surface-bright": "#fdf9f0",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed-dim": "#e4beb2",
+                        "on-error-container": "#93000a",
+                        "outline": "#8f7066",
+                        "error": "#ba1a1a",
+                        "tertiary-container": "#8d6e63",
+                        "surface": "#fdf9f0",
+                        "on-surface-variant": "#5a4138",
+                        "secondary": "#7e5700",
+                        "on-surface": "#1c1c17",
+                        "surface-container-highest": "#e6e2d9",
+                        "inverse-on-surface": "#f4f0e8",
+                        "secondary-fixed-dim": "#ffba38"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "gutter-mobile": "12px",
+                        "unit": "4px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "xl": "40px",
+                        "margin-mobile": "20px",
+                        "xs": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Quicksand"],
+                        "headline-lg": ["Quicksand"],
+                        "body-lg": ["Nunito Sans"],
+                        "display-lg": ["Quicksand"],
+                        "label-md": ["Nunito Sans"],
+                        "body-md": ["Nunito Sans"],
+                        "headline-lg-mobile": ["Quicksand"],
+                        "label-sm": ["Nunito Sans"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "display-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="fixed top-0 z-50 w-full bg-surface-container-low flex justify-between items-center px-margin-mobile py-sm shadow-[0px_4px_12px_rgba(141,110,99,0.12)]">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary">
+<img alt="User Profile" data-alt="A charming, high-detail illustration of a stylized character avatar wearing a small, festive turkey hat. The art style is whimsical and friendly, featuring warm autumnal tones and soft, rounded vector shapes. The background is a clean, neutral cream, fitting the organic minimalism of a community-focused mobile application." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNPXc3Z-d850AWPqS1OOaSTBBRzbKKuOVreg28vaqy4QmzqhRPeOnlz_U7a5rQ48yYuSxQZGirnn1kCEjMGVw1UtgRoQV_WBWOqyutneJx3o7MTDsxD-ioEnjw17ZbequVATOS98Btf9OByO6pGYNay2nnpMZk89UuasHRayc52IG559Iqq3wrlkKM5OuFlcgjHB6EmnRvaO1wGOPizEgldxA8ltxJqN4H6AWMBMK8T3-dnGUk-JLWlrSpyRI0K_zd-L75Arf8tfY"/>
+</div>
+<span class="font-display-lg text-headline-lg text-primary tracking-tight">GobbleGrounds</span>
+</div>
+<div class="flex items-center bg-secondary-container px-md py-xs rounded-full cursor-pointer active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-on-secondary-container mr-xs" data-icon="eco">eco</span>
+<span class="font-label-md text-label-md text-on-secondary-container">1,250 Feathers</span>
+</div>
+</header>
+<main class="pt-24 px-margin-mobile max-w-4xl mx-auto space-y-xl">
+<!-- Daily Peck (Civic Discourse Challenge) -->
+<section>
+<div class="bg-primary-container rounded-xl p-lg relative overflow-hidden feather-shadow">
+<div class="absolute -right-8 -top-8 opacity-20 transform rotate-12">
+<span class="material-symbols-outlined text-[120px]" data-icon="restaurant_menu">restaurant_menu</span>
+</div>
+<div class="relative z-10">
+<div class="flex items-center gap-xs mb-sm">
+<span class="material-symbols-outlined text-on-primary-container" data-icon="star">star</span>
+<span class="font-label-md text-label-md text-on-primary-container uppercase tracking-widest">Daily Peck</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-primary-container mb-md">"How should the local park handle nesting season?"</h2>
+<p class="font-body-md text-body-md text-on-primary-container/90 mb-lg max-w-md">Practice empathetic listening by responding to three different community viewpoints on this week's harvest town hall topic.</p>
+<button class="bg-surface text-primary px-lg py-sm rounded-full font-label-md text-label-md button-press shadow-sm hover:bg-surface-bright transition-colors">
+                        Start Pecking
+                    </button>
+</div>
+</div>
+</section>
+<!-- Bento Grid: Progress & Skills -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-lg">
+<!-- Civic Skills Tracker -->
+<div class="md:col-span-2 bg-surface-container-high rounded-xl p-lg feather-shadow">
+<div class="flex justify-between items-center mb-lg">
+<h3 class="font-headline-md text-headline-md text-on-surface">Civic Skills</h3>
+<span class="material-symbols-outlined text-primary" data-icon="trending_up">trending_up</span>
+</div>
+<div class="space-y-md">
+<!-- Skill Item 1 -->
+<div class="space-y-xs">
+<div class="flex justify-between font-label-md text-label-md">
+<span>Diplomatic Debate</span>
+<span>Level 4</span>
+</div>
+<div class="w-full bg-surface-variant rounded-full h-3">
+<div class="bg-primary h-3 rounded-full" style="width: 75%"></div>
+</div>
+</div>
+<!-- Skill Item 2 -->
+<div class="space-y-xs">
+<div class="flex justify-between font-label-md text-label-md">
+<span>Community Outreach</span>
+<span>Level 2</span>
+</div>
+<div class="w-full bg-surface-variant rounded-full h-3">
+<div class="bg-secondary h-3 rounded-full" style="width: 40%"></div>
+</div>
+</div>
+<!-- Skill Item 3 -->
+<div class="space-y-xs">
+<div class="flex justify-between font-label-md text-label-md">
+<span>Policy Literacy</span>
+<span>Level 3</span>
+</div>
+<div class="w-full bg-surface-variant rounded-full h-3">
+<div class="bg-tertiary h-3 rounded-full" style="width: 60%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Small Stat Card -->
+<div class="bg-secondary-fixed rounded-xl p-lg flex flex-col justify-center items-center text-center feather-shadow border-2 border-secondary-container">
+<div class="w-16 h-16 bg-on-secondary-container rounded-full flex items-center justify-center mb-sm">
+<span class="material-symbols-outlined text-secondary-fixed text-3xl" data-icon="local_fire_department" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+</div>
+<span class="font-display-lg text-display-lg text-on-secondary-container">12</span>
+<span class="font-label-md text-label-md text-on-secondary-container">Day Streak</span>
+<p class="font-label-sm text-label-sm text-on-secondary-fixed-variant mt-sm">You're a rare bird!</p>
+</div>
+</section>
+<!-- Flock Activity Feed -->
+<section class="space-y-md">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-md text-headline-md">Flock Activity</h3>
+<button class="text-primary font-label-md text-label-md hover:underline">View All</button>
+</div>
+<div class="flex flex-col space-y-md">
+<!-- Activity Item 1 -->
+<div class="flex items-start gap-md p-md bg-surface-container-lowest rounded-xl feather-shadow border border-surface-variant/30">
+<img class="w-12 h-12 rounded-full bg-surface-variant" data-alt="A cheerful profile avatar of a young woman with warm autumn-toned clothing, styled in a minimalist vector aesthetic. The lighting is soft and natural, emphasizing a friendly community vibe. The image is clean and perfectly centered against a soft beige background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuByjWTgNrqv7-1oEJ-lJ_zgvfZKAbMG84iUAWJNSd93X_C4mHI97LUogS52nj3d7JNqj86DqpVGwX2jG1hp4mk6ctZQBtkKmyjaS1iOPQygTr1y4-kOGnn2eQ-qkENcUVYq934VW24Oo3XmX2u6Z8ol1bB2HQHFnRI3TUIqWI83JusqCy_yMZ6X8Yx0eETfF5lONik7CwA_fF9UcvPW5vgATPnHd37WeafU8CoXgNU2S8j_Ng41MU9j01MH259VZFBka_uYlqgF8PA"/>
+<div class="flex-1">
+<p class="font-body-md text-body-md">
+<span class="font-bold">Sarah</span> earned the <span class="text-secondary font-bold">Wise Owl</span> badge for resolving 5 debates.
+                        </p>
+<span class="text-on-surface-variant font-label-sm text-label-sm">2 hours ago</span>
+</div>
+<div class="flex flex-col gap-xs">
+<button class="material-symbols-outlined text-outline hover:text-primary transition-colors" data-icon="favorite">favorite</button>
+</div>
+</div>
+<!-- Activity Item 2 -->
+<div class="flex items-start gap-md p-md bg-surface-container-lowest rounded-xl feather-shadow border border-surface-variant/30">
+<img class="w-12 h-12 rounded-full bg-surface-variant" data-alt="A friendly male avatar illustration with a warm expression, wearing a cozy brown sweater. The design follows an organic minimalist style with clean lines and soft shadows. The overall mood is approachable and community-oriented, fitting for a social dashboard." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCoGyw37gsqKznPqr3CC3JW7uVdsPHdmUrqgNiSuQhFNrGtzTGbM8V5dWCDc3FFVjB845zrMOhjTp3aOntuH73ByYE0Otk2jl2w21Rc0CljN3GX2r18MmMJYry8QcBAXcdstiYSRWPlAN7qCVYf5ARrmT8u6ISqfYJJFsgJYnqXsmWNk7WsdR62R4eAiTAxyliyu9mc9AkUSTeqyOJGpflIr4iNH0SsGIhBpidXNPQ9QaeYqdMFJ8A0aLfsYMKqpBr-5i2rW_7Q6bI"/>
+<div class="flex-1">
+<p class="font-body-md text-body-md">
+<span class="font-bold">Tom</span> completed the <span class="italic text-primary">"Feathered Friends"</span> local voting quest.
+                        </p>
+<span class="text-on-surface-variant font-label-sm text-label-sm">5 hours ago</span>
+</div>
+<div class="flex flex-col gap-xs">
+<button class="material-symbols-outlined text-outline hover:text-primary transition-colors" data-icon="favorite" style="font-variation-settings: 'FILL' 1;">favorite</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Feather Divider -->
+<div class="flex justify-center py-sm overflow-hidden pointer-events-none">
+<div class="flex gap-md opacity-20">
+<span class="material-symbols-outlined text-primary" data-icon="eco">eco</span>
+<span class="material-symbols-outlined text-primary" data-icon="eco">eco</span>
+<span class="material-symbols-outlined text-primary" data-icon="eco">eco</span>
+<span class="material-symbols-outlined text-primary" data-icon="eco">eco</span>
+<span class="material-symbols-outlined text-primary" data-icon="eco">eco</span>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-surface dark:bg-surface-container flex justify-around items-center px-gutter-mobile py-sm shadow-[0px_-4px_12px_rgba(141,110,99,0.08)] rounded-t-lg">
+<!-- Home (Active) -->
+<a class="flex flex-col items-center justify-center bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary rounded-full px-md py-unit active:scale-90 transition-all duration-200 ease-out" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-label-md text-label-md">Home</span>
+</a>
+<!-- Chat -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-md py-unit hover:bg-surface-variant/30 rounded-full active:scale-90 transition-all duration-200 ease-out" href="#">
+<span class="material-symbols-outlined" data-icon="forum">forum</span>
+<span class="font-label-md text-label-md">Chat</span>
+</a>
+<!-- Skills -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-md py-unit hover:bg-surface-variant/30 rounded-full active:scale-90 transition-all duration-200 ease-out" href="#">
+<span class="material-symbols-outlined" data-icon="school">school</span>
+<span class="font-label-md text-label-md">Skills</span>
+</a>
+<!-- Shop -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-md py-unit hover:bg-surface-variant/30 rounded-full active:scale-90 transition-all duration-200 ease-out" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="font-label-md text-label-md">Shop</span>
+</a>
+<!-- Profile -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-md py-unit hover:bg-surface-variant/30 rounded-full active:scale-90 transition-all duration-200 ease-out" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-md text-label-md">Profile</span>
+</a>
+</nav>
+<!-- Contextual FAB (Only for Home Screen) -->
+<button class="fixed bottom-24 right-6 w-14 h-14 bg-primary text-white rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-transform hover:shadow-xl hover:-translate-y-1">
+<span class="material-symbols-outlined text-3xl" data-icon="add_comment">add_comment</span>
+</button>
+<script>
+        // Micro-interactions for skill bars
+        document.addEventListener('DOMContentLoaded', () => {
+            const progressBars = document.querySelectorAll('.bg-primary, .bg-secondary, .bg-tertiary');
+            progressBars.forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0%';
+                setTimeout(() => {
+                    bar.style.transition = 'width 1.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                    bar.style.width = width;
+                }, 300);
+            });
+
+            // Hover effect for activity items
+            const activityItems = document.querySelectorAll('.flex-col > .flex.items-start');
+            activityItems.forEach(item => {
+                item.addEventListener('mouseenter', () => {
+                    item.classList.add('scale-[1.01]');
+                    item.style.transition = 'transform 0.2s ease-out';
+                });
+                item.addEventListener('mouseleave', () => {
+                    item.classList.remove('scale-[1.01]');
+                });
+            });
+        });
+    </script>
+</body></html>
+
+<!-- Dashboard -->
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&amp;family=Nunito+Sans:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .feather-divider {
+            height: 8px;
+            background-image: radial-gradient(circle at 10px 0px, transparent 8px, #a43700 8px);
+            background-size: 20px 20px;
+            opacity: 0.15;
+        }
+        .organic-card-shadow {
+            box-shadow: 0px 4px 12px rgba(141, 110, 99, 0.12);
+        }
+        .squish-effect:active {
+            transform: scale(0.96);
+            box-shadow: 0px 2px 4px rgba(141, 110, 99, 0.1);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "primary-fixed-dim": "#ffb59a",
+                        "on-background": "#1c1c17",
+                        "on-tertiary-fixed-variant": "#5b4137",
+                        "on-primary-container": "#fffbff",
+                        "on-secondary-container": "#6a4800",
+                        "surface-container": "#f1eee5",
+                        "surface-tint": "#a83900",
+                        "surface-variant": "#e6e2d9",
+                        "surface-container-low": "#f7f3ea",
+                        "on-primary-fixed": "#380d00",
+                        "secondary-container": "#feb300",
+                        "on-tertiary-fixed": "#2b160f",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed-variant": "#802a00",
+                        "surface-container-high": "#ece8df",
+                        "primary-container": "#cd4700",
+                        "on-tertiary-container": "#fffbff",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed": "#ffdeac",
+                        "primary-fixed": "#ffdbcf",
+                        "inverse-surface": "#31312b",
+                        "on-secondary-fixed-variant": "#604100",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed": "#ffdbce",
+                        "primary": "#a43700",
+                        "inverse-primary": "#ffb59a",
+                        "tertiary": "#72554b",
+                        "background": "#fdf9f0",
+                        "surface-dim": "#dddad1",
+                        "on-secondary-fixed": "#281900",
+                        "outline-variant": "#e3bfb2",
+                        "surface-bright": "#fdf9f0",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed-dim": "#e4beb2",
+                        "on-error-container": "#93000a",
+                        "outline": "#8f7066",
+                        "error": "#ba1a1a",
+                        "tertiary-container": "#8d6e63",
+                        "surface": "#fdf9f0",
+                        "on-surface-variant": "#5a4138",
+                        "secondary": "#7e5700",
+                        "on-surface": "#1c1c17",
+                        "surface-container-highest": "#e6e2d9",
+                        "inverse-on-surface": "#f4f0e8",
+                        "secondary-fixed-dim": "#ffba38"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "gutter-mobile": "12px",
+                        "unit": "4px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "xl": "40px",
+                        "margin-mobile": "20px",
+                        "xs": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Quicksand"],
+                        "headline-lg": ["Quicksand"],
+                        "body-lg": ["Nunito Sans"],
+                        "display-lg": ["Quicksand"],
+                        "label-md": ["Nunito Sans"],
+                        "body-md": ["Nunito Sans"],
+                        "headline-lg-mobile": ["Quicksand"],
+                        "label-sm": ["Nunito Sans"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "display-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="bg-background dark:bg-background docked full-width top-0 z-50 shadow-[0px_4px_12px_rgba(141,110,99,0.12)]">
+<div class="flex justify-between items-center w-full px-margin-mobile py-sm">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center overflow-hidden border-2 border-primary-fixed-dim">
+<img alt="User" class="w-full h-full object-cover" data-alt="A whimsical close-up profile illustration of a friendly turkey character wearing a tiny, stylish knitted autumn hat. The artwork is rendered in a soft, tactile digital painting style with a warm palette of burnt orange, cream, and earthy brown. The lighting is gentle and golden, evoking a cozy harvest festival atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1uoI1vl8BkVnlVM8MkeFfBvU0DxQvqIAtQZ0IRE3muCVakb5jhCgLOaroPncwkDPK1wrbwARXuBhjVR2SwJSnp6wzpzXoaUjzTD6ERGLmffDoEGcGv0YeA327X8GZOmv9TWSwd3NHlaPhBkwaxtbkxvnz97EUNiF4UiXnZwVLfYryl0vQlh8vmGbMJrJC36fnH2jtfhEN6V_w4KQeDw2zpgGRkW0TEFebyhVqegWVq_usF4hUlwor-zTRIGkKA4Ns8t6l3iR_3C0"/>
+</div>
+<h1 class="font-display-lg text-headline-lg text-primary dark:text-primary-fixed-dim tracking-tight">GobbleGrounds</h1>
+</div>
+<div class="flex items-center gap-xs bg-surface-container-low px-sm py-xs rounded-full border border-outline-variant/30">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">eco</span>
+<span class="font-label-md text-label-md text-primary">1,250 Feathers</span>
+</div>
+</div>
+</header>
+<main class="px-margin-mobile pt-lg max-w-4xl mx-auto">
+<!-- Hero Section -->
+<section class="mb-xl">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-secondary mb-sm">Master the Flock</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Level up your social feathers with guided learning paths designed for the modern turkey.</p>
+</section>
+<!-- Featured Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-lg mb-xl">
+<!-- Active Module (Large) -->
+<div class="md:col-span-8 bg-surface-container-lowest rounded-xl p-lg organic-card-shadow border border-surface-variant/50 relative overflow-hidden group hover:shadow-lg transition-all">
+<div class="relative z-10">
+<div class="flex items-center gap-sm mb-md">
+<span class="bg-secondary-container text-on-secondary-container text-label-sm font-label-sm px-md py-xs rounded-full">In Progress</span>
+<span class="text-on-surface-variant font-label-sm text-label-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">signal_cellular_alt</span> Advanced
+                        </span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-sm">Feathering the Nest (Conflict Resolution)</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-lg">Learn the delicate art of resolving coop disputes without ruffling too many feathers. Essential for community leaders.</p>
+<div class="space-y-sm">
+<div class="flex justify-between items-center">
+<span class="font-label-md text-label-md text-on-surface">65% Complete</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">4/6 Lessons</span>
+</div>
+<div class="w-full bg-surface-container-high h-3 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full transition-all duration-1000" style="width: 65%"></div>
+</div>
+</div>
+<button class="mt-lg w-full md:w-auto bg-primary text-on-primary font-label-md text-label-md px-xl py-md rounded-full squish-effect flex items-center justify-center gap-sm shadow-[0px_4px_0px_#802a00]">
+                        Continue Learning
+                        <span class="material-symbols-outlined">play_arrow</span>
+</button>
+</div>
+<!-- Decorative Feather Background -->
+<span class="absolute -right-8 -bottom-8 material-symbols-outlined text-[160px] text-primary/5 rotate-45 select-none pointer-events-none">potted_plant</span>
+</div>
+<!-- Stats/Daily Challenge (Small) -->
+<div class="md:col-span-4 bg-tertiary-container text-on-tertiary-container rounded-xl p-lg organic-card-shadow flex flex-col justify-between">
+<div>
+<h4 class="font-label-md text-label-md uppercase tracking-wider mb-sm opacity-90">Daily Peck</h4>
+<p class="font-headline-md text-headline-md mb-md">Turkey Trivia: Social Cues</p>
+</div>
+<div class="bg-white/10 p-md rounded-lg backdrop-blur-sm border border-white/10">
+<p class="font-body-md text-body-md italic mb-sm">"How do you greet a new flock member?"</p>
+<div class="flex flex-col gap-xs">
+<button class="w-full text-left py-sm px-md rounded-md bg-white/20 hover:bg-white/30 transition-colors font-label-sm text-label-sm">A) The Low Gobble</button>
+<button class="w-full text-left py-sm px-md rounded-md bg-white/20 hover:bg-white/30 transition-colors font-label-sm text-label-sm">B) Wing Shrug</button>
+</div>
+</div>
+</div>
+</div>
+<div class="feather-divider mb-xl"></div>
+<!-- Module Grid -->
+<h3 class="font-headline-md text-headline-md text-secondary mb-lg">All Learning Paths</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+<!-- Module Card 1 -->
+<div class="bg-surface-container-low rounded-xl p-md border border-outline-variant/20 hover:border-primary/30 transition-all squish-effect cursor-pointer">
+<div class="flex gap-md">
+<div class="w-20 h-20 rounded-lg bg-secondary/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-secondary text-[40px]">hearing</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-xs">
+<h4 class="font-headline-md text-headline-md text-on-surface leading-tight">The Art of Listening</h4>
+<span class="text-label-sm font-label-sm text-primary">Beginner</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-md line-clamp-2">Master active listening skills to truly understand the chatter of the meadow.</p>
+<div class="flex items-center gap-sm">
+<div class="flex-1 h-2 bg-surface-container-high rounded-full overflow-hidden">
+<div class="bg-secondary h-full" style="width: 20%"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">20%</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Module Card 2 -->
+<div class="bg-surface-container-low rounded-xl p-md border border-outline-variant/20 hover:border-primary/30 transition-all squish-effect cursor-pointer">
+<div class="flex gap-md">
+<div class="w-20 h-20 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-[40px]">visibility</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-xs">
+<h4 class="font-headline-md text-headline-md text-on-surface leading-tight">Perspective Peeking</h4>
+<span class="text-label-sm font-label-sm text-primary">Intermediate</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-md line-clamp-2">Seeing the world through another bird's eyes. Empathy training for tough times.</p>
+<div class="flex items-center gap-sm">
+<div class="flex-1 h-2 bg-surface-container-high rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 0%"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">0%</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Module Card 3 -->
+<div class="bg-surface-container-low rounded-xl p-md border border-outline-variant/20 hover:border-primary/30 transition-all squish-effect cursor-pointer">
+<div class="flex gap-md">
+<div class="w-20 h-20 rounded-lg bg-tertiary/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-tertiary text-[40px]">groups</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-xs">
+<h4 class="font-headline-md text-headline-md text-on-surface leading-tight">Flock Dynamics 101</h4>
+<span class="text-label-sm font-label-sm text-primary">Beginner</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-md line-clamp-2">Understanding group hierarchy and healthy social structures in the wild.</p>
+<div class="flex items-center gap-sm">
+<div class="flex-1 h-2 bg-surface-container-high rounded-full overflow-hidden">
+<div class="bg-tertiary h-full" style="width: 90%"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">90%</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Module Card 4 -->
+<div class="bg-surface-container-low rounded-xl p-md border border-outline-variant/20 hover:border-primary/30 transition-all squish-effect cursor-pointer">
+<div class="flex gap-md">
+<div class="w-20 h-20 rounded-lg bg-secondary-container/20 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-secondary text-[40px]">psychology</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-xs">
+<h4 class="font-headline-md text-headline-md text-on-surface leading-tight">Mindful Foraging</h4>
+<span class="text-label-sm font-label-sm text-primary">Mastery</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-md line-clamp-2">Mindfulness techniques disguised as search patterns. Find inner peace and food.</p>
+<div class="flex items-center gap-sm">
+<div class="flex-1 h-2 bg-surface-container-high rounded-full overflow-hidden">
+<div class="bg-secondary h-full" style="width: 45%"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">45%</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Featured Illustrator Card -->
+<section class="mt-xl mb-lg">
+<div class="rounded-lg overflow-hidden relative h-48 flex items-end organic-card-shadow">
+<img alt="Classroom" class="absolute inset-0 w-full h-full object-cover" data-alt="An inviting, sun-drenched outdoor classroom set in a vibrant autumn orchard. Turkeys sit comfortably on rustic logs around a cozy central campfire. The scene is filled with warm morning light filtering through golden and red maple leaves. The art style is whimsical and tactile, with rich textures of wood, wool, and feathers." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZykw5o7BNXp7VAeYIzCe1yhLtiyAGAjlcZBsk5PvE8mLQ5x7vPS8i42DdhCVaJaxz0k0QqYDmb9balwcziFXhIQg9e4ZmWKBsTZFON9Zz4ySzO89nUjemYQukOcG3_OJEqH4dEgpU_iBBHB8Qjjkq1OHqT1JY9h6-HFGNXiVMhbutNapu4fUSrulHv_U3m5EkvywY7UJjnjnyPuAfB4pKN0i4b0DzS4qS8kg7agWLIFhKPFt8xzodUe63k-8LznDiGrx21QibPdA"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent"></div>
+<div class="relative p-lg w-full">
+<p class="font-label-sm text-label-sm text-on-primary/90 mb-unit">Live Workshop Starts in 2h</p>
+<h3 class="font-headline-md text-headline-md text-on-primary">The Migration Mindset</h3>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-gutter-mobile py-sm bg-surface dark:bg-surface-container-high shadow-[0px_-4px_12px_rgba(141,110,99,0.12)] rounded-t-lg">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-md py-unit hover:bg-surface-variant/30 rounded-full transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-md py-unit hover:bg-surface-variant/30 rounded-full transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">forum</span>
+<span class="font-label-md text-label-md">Chat</span>
+</a>
+<!-- Active Tab: Skills -->
+<a class="flex flex-col items-center justify-center bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary rounded-full px-md py-unit transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">school</span>
+<span class="font-label-md text-label-md">Skills</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-md py-unit hover:bg-surface-variant/30 rounded-full transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-md text-label-md">Shop</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-md py-unit hover:bg-surface-variant/30 rounded-full transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-md text-label-md">Profile</span>
+</a>
+</nav>
+<script>
+        // Simple micro-interaction for lesson progress simulation
+        document.querySelectorAll('.squish-effect').forEach(card => {
+            card.addEventListener('click', function() {
+                this.classList.add('scale-95');
+                setTimeout(() => this.classList.remove('scale-95'), 150);
+            });
+        });
+
+        // Atmospheric leaf animation (Optional)
+        function createLeaf() {
+            const leaf = document.createElement('div');
+            leaf.innerHTML = '<span class="material-symbols-outlined text-primary/10">eco</span>';
+            leaf.style.position = 'fixed';
+            leaf.style.left = Math.random() * 100 + 'vw';
+            leaf.style.top = '-20px';
+            leaf.style.zIndex = '0';
+            leaf.style.pointerEvents = 'none';
+            leaf.style.transform = `rotate(${Math.random() * 360}deg)`;
+            document.body.appendChild(leaf);
+
+            const duration = 5000 + Math.random() * 5000;
+            const animation = leaf.animate([
+                { transform: `translateY(0) rotate(0deg)`, opacity: 0.1 },
+                { transform: `translateY(100vh) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+            ], {
+                duration: duration,
+                easing: 'linear'
+            });
+
+            animation.onfinish = () => leaf.remove();
+        }
+
+        setInterval(createLeaf, 2000);
+    </script>
+</body></html>
+
+<!-- Skill Modules -->
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Profile | GobbleGrounds</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&amp;family=Nunito+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "primary-fixed-dim": "#ffb59a",
+                        "on-background": "#1c1c17",
+                        "on-tertiary-fixed-variant": "#5b4137",
+                        "on-primary-container": "#fffbff",
+                        "on-secondary-container": "#6a4800",
+                        "surface-container": "#f1eee5",
+                        "surface-tint": "#a83900",
+                        "surface-variant": "#e6e2d9",
+                        "surface-container-low": "#f7f3ea",
+                        "on-primary-fixed": "#380d00",
+                        "secondary-container": "#feb300",
+                        "on-tertiary-fixed": "#2b160f",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed-variant": "#802a00",
+                        "surface-container-high": "#ece8df",
+                        "primary-container": "#cd4700",
+                        "on-tertiary-container": "#fffbff",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed": "#ffdeac",
+                        "primary-fixed": "#ffdbcf",
+                        "inverse-surface": "#31312b",
+                        "on-secondary-fixed-variant": "#604100",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed": "#ffdbce",
+                        "primary": "#a43700",
+                        "inverse-primary": "#ffb59a",
+                        "tertiary": "#72554b",
+                        "background": "#fdf9f0",
+                        "surface-dim": "#dddad1",
+                        "on-secondary-fixed": "#281900",
+                        "outline-variant": "#e3bfb2",
+                        "surface-bright": "#fdf9f0",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed-dim": "#e4beb2",
+                        "on-error-container": "#93000a",
+                        "outline": "#8f7066",
+                        "error": "#ba1a1a",
+                        "tertiary-container": "#8d6e63",
+                        "surface": "#fdf9f0",
+                        "on-surface-variant": "#5a4138",
+                        "secondary": "#7e5700",
+                        "on-surface": "#1c1c17",
+                        "surface-container-highest": "#e6e2d9",
+                        "inverse-on-surface": "#f4f0e8",
+                        "secondary-fixed-dim": "#ffba38"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "gutter-mobile": "12px",
+                        "unit": "4px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "xl": "40px",
+                        "margin-mobile": "20px",
+                        "xs": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Quicksand"],
+                        "headline-lg": ["Quicksand"],
+                        "body-lg": ["Nunito Sans"],
+                        "display-lg": ["Quicksand"],
+                        "label-md": ["Nunito Sans"],
+                        "body-md": ["Nunito Sans"],
+                        "headline-lg-mobile": ["Quicksand"],
+                        "label-sm": ["Nunito Sans"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "display-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .feather-divider {
+            height: 8px;
+            background-image: radial-gradient(circle at 10px 10px, transparent 8px, #e3bfb2 8px, #e3bfb2 10px, transparent 10px);
+            background-size: 20px 20px;
+            width: 100%;
+            opacity: 0.3;
+        }
+        .turkey-avatar-glow {
+            filter: drop-shadow(0 0 15px rgba(168, 57, 0, 0.2));
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface-container-low dark:bg-surface-container-lowest shadow-[0px_4px_12px_rgba(141,110,99,0.12)] flex justify-between items-center px-margin-mobile py-sm">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center overflow-hidden border-2 border-primary">
+<img alt="User profile picture" class="w-full h-full object-cover" data-alt="A whimsical digital illustration of a cheerful cartoon turkey wearing a tiny, colorful knitted autumn hat. The background is a soft, blurred harvest field with warm orange and yellow tones. The turkey has large, friendly eyes and a gentle expression, perfectly fitting a cozy, playful community-focused app aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDllRa6l36ncneOtyRFdeGi1eK6gUynp7lFt5I9ZhfwsVEtHCe2j-giMWtQA_MUJlxfwN96e0BLFKQxXG69aXYOuBznyHA-mKDcHna11rwH8o8WpMz4AIfNct2qZlaxfwcW0niSTAVizV4sgpJIntR7kdJgEh9pTG7klwV7APuN21xMncvQ0XXFnNzwVQs2bszvYjdyV3Mf_XbEEf9O2w0jeVjR_t5a5rjFPFUcvVjSNbS9l7FLKrb43wRKlLk7B4Fv7b0A83mA_lk"/>
+</div>
+<h1 class="font-display-lg text-headline-lg text-primary dark:text-primary-fixed-dim tracking-tight">GobbleGrounds</h1>
+</div>
+<div class="flex items-center gap-xs bg-surface-container-high px-md py-xs rounded-full border border-outline-variant active:scale-95 transition-transform duration-200 cursor-pointer">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">eco</span>
+<span class="font-label-md text-label-md text-primary">1,250 Feathers</span>
+</div>
+</header>
+<main class="pt-[80px] pb-[100px] min-h-screen px-margin-mobile max-w-2xl mx-auto">
+<!-- Hero Profile Section -->
+<section class="mt-lg mb-xl text-center flex flex-col items-center">
+<div class="relative group">
+<div class="absolute -inset-1 bg-gradient-to-tr from-primary to-secondary rounded-xl blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+<div class="relative w-48 h-48 rounded-xl bg-surface-container-high border-2 border-primary/20 overflow-hidden turkey-avatar-glow">
+<img alt="Custom Turkey Avatar" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500" data-alt="A highly detailed 3D digital character of a stylized turkey standing in a cozy harvest meadow. The turkey wears a sophisticated 'Diplomatic Tom' outfit with a tiny harvest-themed bow tie. The lighting is soft golden hour sunlight, highlighting the soft textures of the feathers. The style is warm, organic minimalism with a playful twist." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAx5Q55UZiA9LwdRLOH6NIa1icbxD2z7pXtcpuhlMoXK7g--Bs4sj1JAYusvMlKJnqKI5RirjJeRuk-esLv9yoFPpvWATBnaG-R8ydWdphU-wfOA2M_TmL1528OZ29x4TXFcAnN-VVYtf8vbZ4FktR3JcYnohHsTHneugJWiwizby0Pfs0lg-7QdpypWmBgBL5X7RcHztki6Ha3b9S2s509IJ2BU9n63r2AcJgJTb52BcurMMl6fYC-CaHAh5qyf40IjQGdKtx8LNQ"/>
+</div>
+<button class="absolute -bottom-2 -right-2 bg-primary text-on-primary p-sm rounded-full shadow-lg hover:bg-surface-tint active:scale-90 transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">edit</span>
+</button>
+</div>
+<div class="mt-lg">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Autumn Adventurer</h2>
+<div class="inline-flex items-center gap-xs mt-xs px-md py-unit bg-secondary-container rounded-full">
+<span class="material-symbols-outlined text-on-secondary-container text-[18px]" style="font-variation-settings: 'FILL' 1;">gavel</span>
+<span class="font-label-md text-label-md text-on-secondary-container">Diplomatic Tom</span>
+</div>
+</div>
+</section>
+<div class="feather-divider my-lg"></div>
+<!-- Bento Stats Grid -->
+<section class="grid grid-cols-2 gap-md mb-xl">
+<div class="col-span-1 bg-surface-container-low p-lg rounded-xl shadow-[0px_4px_12px_rgba(141,110,99,0.06)] border border-outline-variant/30 flex flex-col justify-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Total Feathers</span>
+<span class="font-headline-md text-headline-md text-primary">1,250</span>
+</div>
+<div class="col-span-1 bg-surface-container-low p-lg rounded-xl shadow-[0px_4px_12px_rgba(141,110,99,0.06)] border border-outline-variant/30 flex flex-col justify-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Communities</span>
+<span class="font-headline-md text-headline-md text-secondary">14</span>
+</div>
+<div class="col-span-2 bg-primary-fixed p-lg rounded-xl flex items-center justify-between border-b-2 border-primary/20">
+<div>
+<span class="font-label-sm text-label-sm text-on-primary-fixed-variant uppercase tracking-wider">Next Rank Progress</span>
+<div class="w-full bg-on-primary/30 h-2 rounded-full mt-sm overflow-hidden">
+<div class="bg-primary h-full w-[72%] rounded-full shadow-sm"></div>
+</div>
+</div>
+<div class="text-right ml-lg">
+<span class="font-headline-md text-headline-md text-on-primary-fixed">72%</span>
+</div>
+</div>
+</section>
+<!-- Badges Section -->
+<section class="mb-xl">
+<div class="flex justify-between items-center mb-md">
+<h3 class="font-headline-md text-headline-md">Earned Medals</h3>
+<button class="text-primary font-label-md hover:underline">View All</button>
+</div>
+<div class="flex flex-wrap gap-md justify-start">
+<!-- Badge 1 -->
+<div class="w-20 flex flex-col items-center gap-xs">
+<div class="w-16 h-16 rounded-full bg-tertiary-container flex items-center justify-center shadow-md relative overflow-hidden group">
+<div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<span class="material-symbols-outlined text-white text-[32px]" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+</div>
+<span class="font-label-sm text-label-sm text-center">First Harvest</span>
+</div>
+<!-- Badge 2 -->
+<div class="w-20 flex flex-col items-center gap-xs">
+<div class="w-16 h-16 rounded-full bg-secondary flex items-center justify-center shadow-md relative overflow-hidden group">
+<div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<span class="material-symbols-outlined text-on-secondary text-[32px]" style="font-variation-settings: 'FILL' 1;">volunteer_activism</span>
+</div>
+<span class="font-label-sm text-label-sm text-center">Top Giver</span>
+</div>
+<!-- Badge 3 -->
+<div class="w-20 flex flex-col items-center gap-xs">
+<div class="w-16 h-16 rounded-full bg-primary flex items-center justify-center shadow-md relative overflow-hidden group">
+<div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<span class="material-symbols-outlined text-on-primary text-[32px]" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+</div>
+<span class="font-label-sm text-label-sm text-center">7 Day Streak</span>
+</div>
+<!-- Badge 4 (Locked) -->
+<div class="w-20 flex flex-col items-center gap-xs opacity-40">
+<div class="w-16 h-16 rounded-full bg-surface-variant flex items-center justify-center shadow-inner border-2 border-dashed border-outline">
+<span class="material-symbols-outlined text-outline text-[32px]">lock</span>
+</div>
+<span class="font-label-sm text-label-sm text-center">???</span>
+</div>
+</div>
+</section>
+<!-- Menu Links -->
+<section class="space-y-sm">
+<div class="p-md bg-surface-container-low rounded-lg flex items-center justify-between hover:bg-surface-variant/50 transition-colors cursor-pointer group">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-tertiary">settings</span>
+<span class="font-body-md">Account Settings</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:translate-x-1 transition-transform">chevron_right</span>
+</div>
+<div class="p-md bg-surface-container-low rounded-lg flex items-center justify-between hover:bg-surface-variant/50 transition-colors cursor-pointer group">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-tertiary">history</span>
+<span class="font-body-md">Activity History</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:translate-x-1 transition-transform">chevron_right</span>
+</div>
+<div class="p-md bg-surface-container-low rounded-lg flex items-center justify-between hover:bg-surface-variant/50 transition-colors cursor-pointer group">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-tertiary">shield</span>
+<span class="font-body-md">Privacy &amp; Safety</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:translate-x-1 transition-transform">chevron_right</span>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-gutter-mobile py-sm bg-surface dark:bg-surface-container-high shadow-[0px_-4px_12px_rgba(141,110,99,0.12)] rounded-t-lg">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-md py-unit hover:bg-surface-variant/30 rounded-full active:scale-90 transition-all duration-200 ease-out" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-md py-unit hover:bg-surface-variant/30 rounded-full active:scale-90 transition-all duration-200 ease-out" href="#">
+<span class="material-symbols-outlined">forum</span>
+<span class="font-label-md text-label-md">Chat</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-md py-unit hover:bg-surface-variant/30 rounded-full active:scale-90 transition-all duration-200 ease-out" href="#">
+<span class="material-symbols-outlined">school</span>
+<span class="font-label-md text-label-md">Skills</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-md py-unit hover:bg-surface-variant/30 rounded-full active:scale-90 transition-all duration-200 ease-out" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-md text-label-md">Shop</span>
+</a>
+<!-- Active Tab: Profile -->
+<a class="flex flex-col items-center justify-center bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary rounded-full px-md py-unit active:scale-90 transition-all duration-200 ease-out" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-label-md text-label-md">Profile</span>
+</a>
+</nav>
+<script>
+        // Simple micro-interaction for feather glow on scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 20) {
+                header.classList.add('shadow-lg');
+            } else {
+                header.classList.remove('shadow-lg');
+            }
+        });
+
+        // Add a subtle "squish" effect to cards on click
+        document.querySelectorAll('.rounded-xl').forEach(card => {
+            card.addEventListener('mousedown', () => {
+                card.style.transform = 'scale(0.98) translateY(2px)';
+                card.style.transition = 'all 0.1s ease-out';
+            });
+            card.addEventListener('mouseup', () => {
+                card.style.transform = 'scale(1) translateY(0)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'scale(1) translateY(0)';
+            });
+        });
+    </script>
+</body></html>
+
+<!-- Profile -->
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GobbleGrounds Shop</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&amp;family=Nunito+Sans:wght@300;400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "primary-fixed-dim": "#ffb59a",
+                        "on-background": "#1c1c17",
+                        "on-tertiary-fixed-variant": "#5b4137",
+                        "on-primary-container": "#fffbff",
+                        "on-secondary-container": "#6a4800",
+                        "surface-container": "#f1eee5",
+                        "surface-tint": "#a83900",
+                        "surface-variant": "#e6e2d9",
+                        "surface-container-low": "#f7f3ea",
+                        "on-primary-fixed": "#380d00",
+                        "secondary-container": "#feb300",
+                        "on-tertiary-fixed": "#2b160f",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed-variant": "#802a00",
+                        "surface-container-high": "#ece8df",
+                        "primary-container": "#cd4700",
+                        "on-tertiary-container": "#fffbff",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed": "#ffdeac",
+                        "primary-fixed": "#ffdbcf",
+                        "inverse-surface": "#31312b",
+                        "on-secondary-fixed-variant": "#604100",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed": "#ffdbce",
+                        "primary": "#a43700",
+                        "inverse-primary": "#ffb59a",
+                        "tertiary": "#72554b",
+                        "background": "#fdf9f0",
+                        "surface-dim": "#dddad1",
+                        "on-secondary-fixed": "#281900",
+                        "outline-variant": "#e3bfb2",
+                        "surface-bright": "#fdf9f0",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed-dim": "#e4beb2",
+                        "on-error-container": "#93000a",
+                        "outline": "#8f7066",
+                        "error": "#ba1a1a",
+                        "tertiary-container": "#8d6e63",
+                        "surface": "#fdf9f0",
+                        "on-surface-variant": "#5a4138",
+                        "secondary": "#7e5700",
+                        "on-surface": "#1c1c17",
+                        "surface-container-highest": "#e6e2d9",
+                        "inverse-on-surface": "#f4f0e8",
+                        "secondary-fixed-dim": "#ffba38"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "gutter-mobile": "12px",
+                        "unit": "4px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "xl": "40px",
+                        "margin-mobile": "20px",
+                        "xs": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Quicksand"],
+                        "headline-lg": ["Quicksand"],
+                        "body-lg": ["Nunito Sans"],
+                        "display-lg": ["Quicksand"],
+                        "label-md": ["Nunito Sans"],
+                        "body-md": ["Nunito Sans"],
+                        "headline-lg-mobile": ["Quicksand"],
+                        "label-sm": ["Nunito Sans"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "display-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .feather-divider {
+            height: 12px;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='12' viewBox='0 0 60 12' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 10C5 10 10 2 15 2C20 2 25 10 30 10C35 10 40 2 45 2C50 2 55 10 60 10' stroke='%23e3bfb2' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: repeat-x;
+        }
+        .squishy-press:active {
+            transform: scale(0.96);
+            filter: brightness(0.95);
+        }
+        .turkey-preview-shadow {
+            filter: drop-shadow(0px 10px 15px rgba(141, 110, 99, 0.2));
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface-container-low shadow-[0px_4px_12px_rgba(141,110,99,0.12)] flex justify-between items-center px-margin-mobile py-sm">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-primary-fixed border-2 border-primary">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="A close-up portrait of a cheerful person wearing a whimsical, tiny knitted turkey hat with colorful felt feathers. The lighting is warm and golden, reminiscent of a cozy autumn afternoon. The background is a soft, out-of-focus cream color, maintaining a clean and friendly aesthetic that matches the organic minimalism of the app." src="https://lh3.googleusercontent.com/aida-public/AB6AXuArE2SSJXMfOe89_VbTG7Y5YzPmUcDyXqlFiGM4CvJwJvCFdyMQ8fkaZiisb4C-YD5dWKPMvcddQYsdzuEcjLcM55tT_YY16rqabnl11T0JK6NAZrPmG77OSbig3fs9r6XhidmIEzL8ityh-BIqRZxNm0QeAE-5wd9PnbeWg4Vk9ZTKu6FO4mmotNWt0AHtVbsaSKpu24N5DoCX8FOeZkdAx8IFb7FmDBRUJn-WT2CnsQ_iLceXkc2yD61L1jz3QYuZ-k_oDOMBBl4"/>
+</div>
+<h1 class="font-display-lg text-headline-lg-mobile md:text-headline-lg text-primary tracking-tight">GobbleGrounds</h1>
+</div>
+<div class="flex items-center gap-xs bg-secondary-container px-md py-xs rounded-full squishy-press cursor-pointer">
+<span class="material-symbols-outlined text-on-secondary-container" style="font-variation-settings: 'FILL' 1;">eco</span>
+<span class="font-label-md text-on-secondary-container">1,250 Feathers</span>
+</div>
+</header>
+<main class="mt-20 px-margin-mobile max-w-5xl mx-auto">
+<!-- Turkey Avatar Preview Section -->
+<section class="mt-lg relative flex flex-col items-center">
+<div class="w-full bg-surface-container-high rounded-xl p-lg flex flex-col md:flex-row items-center justify-center gap-lg relative overflow-hidden">
+<!-- Atmospheric background element -->
+<div class="absolute -top-10 -right-10 w-40 h-40 bg-primary-fixed opacity-20 rounded-full blur-3xl"></div>
+<div class="absolute -bottom-10 -left-10 w-40 h-40 bg-secondary-fixed opacity-20 rounded-full blur-3xl"></div>
+<div class="relative turkey-preview-shadow group">
+<img alt="Turkey Avatar" class="w-56 h-56 md:w-72 md:h-72 object-contain transition-transform duration-500 group-hover:rotate-3" data-alt="A stylized, cute 3D turkey mascot standing in a soft-lit studio environment. The turkey has plush, velvet-like brown feathers and a friendly expression. It is wearing a small, jaunty top hat and sits within a cozy nest woven from golden straw. The overall style is whimsical and tactile, with soft shadows and a warm harvest palette of oranges and creams." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmRniesS2tjM_pymo6N9uLDIcQxjtBz1Zz9BaR7YGYaaD3dWb07vQv4_MhDHChZATtvavDbSTo9-JM30yFIGEZWuxgQSbtTnkzRT2yMQexmZo7dpCLX_04Hbi-aLt5plxim_Gc3ca5auABvtKXCUmtRrgXNrUgzysZEiP0P1grfSy0SzFX5zIrqzNR3NomALd9LQwKPHBPjrVMam7LAMe7GrIEwQfvMjacxyQ-lM2gu66DuJqxNrI-rNsBZdrcv6p60jWqgoYc7iE"/>
+<!-- Decorative Feather element -->
+<div class="absolute top-0 right-0 bg-primary-container p-2 rounded-full shadow-lg">
+<span class="material-symbols-outlined text-white">auto_fix_high</span>
+</div>
+</div>
+<div class="flex flex-col items-center md:items-start text-center md:text-left">
+<h2 class="font-headline-md text-headline-md text-on-surface">Your Gobbler</h2>
+<p class="font-body-md text-on-surface-variant mb-md">Looking sharp! Ready for more flair?</p>
+<div class="flex gap-sm">
+<span class="px-md py-sm bg-surface-variant/50 rounded-full font-label-sm text-on-surface-variant">Brown Feathers</span>
+<span class="px-md py-sm bg-surface-variant/50 rounded-full font-label-sm text-on-surface-variant">Top Hat</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Feather Divider -->
+<div class="feather-divider my-xl opacity-50"></div>
+<!-- Shop Categories Bento Grid -->
+<section>
+<div class="flex items-center justify-between mb-lg">
+<h3 class="font-headline-md text-headline-md text-on-surface">The Feather Market</h3>
+<div class="flex bg-surface-container-high rounded-full p-1">
+<button class="px-lg py-sm bg-primary text-on-primary rounded-full font-label-md transition-all">All</button>
+<button class="px-lg py-sm text-on-surface-variant hover:bg-surface-variant/30 rounded-full font-label-md transition-all">New</button>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-md">
+<!-- Category: Hats (Large) -->
+<div class="md:col-span-8 bg-surface-container rounded-xl p-lg flex flex-col shadow-[0px_4px_12px_rgba(141,110,99,0.08)]">
+<div class="flex justify-between items-center mb-md">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary">potted_plant</span>
+<h4 class="font-headline-md text-on-surface">Hats</h4>
+</div>
+<span class="font-label-md text-primary">View All</span>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-md">
+<!-- Item Card -->
+<div class="bg-white rounded-lg p-md flex flex-col items-center text-center squishy-press cursor-pointer border border-transparent hover:border-outline-variant transition-all">
+<img alt="Straw Hat" class="w-20 h-20 object-contain mb-sm" data-alt="A small, rustic straw hat designed for a toy bird. The hat features a thin ribbon of burnt orange fabric around the base. It is photographed in high-key, warm lighting against a pristine white background. The texture of the woven straw is sharp and tactile, fitting the whimsical harvest theme of the shop." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8eYmRLQKawkRPltHzRH9jZdQ4U7_Ux6ETVi2LWzd2ZkgQrLEhb-mP2Ic3lXse0YQJDfbvSS_5QqIJ2oDU2dPzH0nNCk6a-qOUI7CtlDrlqF2ggY11rpul8x5Sz61nUEdC1dFhy4owYowGkVtiePb5wACrampAxmSdUecdbAr048NZKQIbKMzSPuyAOLG2elVpFQLdO12j8QPpXVkp97CwKizmHTCaj_NEkUr3UirWP3A1x-rrM-tROJ1qY4IQkFCZAsipaRVwdSY"/>
+<p class="font-label-md text-on-surface">Straw Boater</p>
+<div class="flex items-center gap-1 mt-xs text-secondary">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">eco</span>
+<span class="font-label-sm">450</span>
+</div>
+</div>
+<!-- Item Card -->
+<div class="bg-white rounded-lg p-md flex flex-col items-center text-center squishy-press cursor-pointer border border-transparent hover:border-outline-variant transition-all">
+<img alt="Chef Hat" class="w-20 h-20 object-contain mb-sm" data-alt="A tiny, puffy white chef's hat, also known as a toque, tailored for a whimsical animal character. The fabric looks soft and starched. Set against a clean, warm-toned beige backdrop with soft ambient lighting. The design is simple, clean, and charming, following the organic minimalism aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOCihq___nje-e5rycv5HSZY7OrdpkCKSw9CtrR9ZY-u3RBMbq_-nkiT07aCDBOtwEOlSJZBXO9B9_kNZeuIlhCIOdyeX-6RDAvB1M5Sr95Sa0yzdNkTpnB5mP6cpkcKuLvgMElBm_mw5IdNqgO7Iwq5xjPlzQ4oOCJ-pKY9oYyRXZY4WheyRnv1IHJaQTASX6vDIxFeXvpTvnOXLLyFQUNfPoXZczSvpBY8WlxaZKEy8iFBTvefm4MRlSivT7gl3BRhDf3WE0TGI"/>
+<p class="font-label-md text-on-surface">Master Chef</p>
+<div class="flex items-center gap-1 mt-xs text-secondary">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">eco</span>
+<span class="font-label-sm">600</span>
+</div>
+</div>
+<!-- Item Card -->
+<div class="bg-white rounded-lg p-md flex flex-col items-center text-center squishy-press cursor-pointer border border-transparent hover:border-outline-variant transition-all">
+<img alt="Pumpkin Hat" class="w-20 h-20 object-contain mb-sm" data-alt="A playful, hand-knitted hat shaped like a bright orange pumpkin with a small green stem on top. The knitting is chunky and looks soft and warm. The lighting is cozy and autumnal, highlighting the yarn's texture. The image is framed as a product shot on a cream-colored surface, emphasizing a tactile, cozy feel." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBURRpalXce6z01cHiE3nJfvQP_uePqILSGeiBmjsD6_r3-JCqjwWSnV1XGuNUaceo1ZrBBI4RPlA6A4Cz5K7_ASeX0lQQXf8-nvWNnArd-scak5K1FNmZMl_xGCuh3l_eupgBtWKZ18efG-RqnFw5m9gxGaedYX__rq9R7SCX3vakReU7441tspwTo0hFYVZ-8rfDOQa2hzPd4VHlC_vgCniA3wgGoRbmaNdLPqZcVlu1JPs6izALVmGaWOorzxn-lZhM_HxtobxU"/>
+<p class="font-label-md text-on-surface">Pumpkin Cap</p>
+<div class="flex items-center gap-1 mt-xs text-secondary">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">eco</span>
+<span class="font-label-sm">850</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Category: Nests (Tall/Sidebar style) -->
+<div class="md:col-span-4 bg-tertiary-container text-on-tertiary-container rounded-xl p-lg flex flex-col shadow-[0px_4px_12px_rgba(141,110,99,0.08)] relative overflow-hidden">
+<div class="absolute top-0 right-0 p-lg opacity-10">
+<span class="material-symbols-outlined text-[80px]">home</span>
+</div>
+<div class="flex items-center gap-sm mb-lg">
+<span class="material-symbols-outlined">deck</span>
+<h4 class="font-headline-md">Nests</h4>
+</div>
+<div class="space-y-md">
+<div class="bg-white/10 p-md rounded-lg flex items-center gap-md hover:bg-white/20 transition-colors cursor-pointer border border-white/5">
+<div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined">grass</span>
+</div>
+<div class="flex-1">
+<p class="font-label-md">Fresh Hay</p>
+<p class="font-label-sm opacity-80">Simple &amp; Cozy</p>
+</div>
+<div class="text-right">
+<div class="flex items-center gap-1 text-secondary-fixed">
+<span class="material-symbols-outlined text-[14px]">eco</span>
+<span class="font-label-sm">200</span>
+</div>
+</div>
+</div>
+<div class="bg-white/10 p-md rounded-lg flex items-center gap-md hover:bg-white/20 transition-colors cursor-pointer border border-white/5">
+<div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined">forest</span>
+</div>
+<div class="flex-1">
+<p class="font-label-md">Pine Grove</p>
+<p class="font-label-sm opacity-80">Forest Fresh</p>
+</div>
+<div class="text-right">
+<div class="flex items-center gap-1 text-secondary-fixed">
+<span class="material-symbols-outlined text-[14px]">eco</span>
+<span class="font-label-sm">750</span>
+</div>
+</div>
+</div>
+</div>
+<button class="mt-auto w-full py-md bg-secondary text-on-secondary rounded-full font-label-md squishy-press">Browse More</button>
+</div>
+<!-- Category: Feather Colors (Wide Bottom) -->
+<div class="md:col-span-12 bg-surface-container-high rounded-xl p-lg">
+<div class="flex items-center gap-sm mb-md">
+<span class="material-symbols-outlined text-primary">palette</span>
+<h4 class="font-headline-md text-on-surface">Feather Colors</h4>
+</div>
+<div class="flex flex-wrap gap-md justify-between">
+<!-- Swatch Item -->
+<div class="flex flex-col items-center gap-xs">
+<div class="w-14 h-14 rounded-full bg-[#CD4700] ring-offset-4 ring-2 ring-primary cursor-pointer hover:scale-110 transition-transform"></div>
+<span class="font-label-sm text-on-surface">Autumn Red</span>
+</div>
+<!-- Swatch Item -->
+<div class="flex flex-col items-center gap-xs">
+<div class="w-14 h-14 rounded-full bg-[#7E5700] ring-offset-4 ring-transparent hover:ring-outline-variant cursor-pointer hover:scale-110 transition-transform"></div>
+<span class="font-label-sm text-on-surface">Oak Gold</span>
+</div>
+<!-- Swatch Item -->
+<div class="flex flex-col items-center gap-xs">
+<div class="w-14 h-14 rounded-full bg-[#5B4137] ring-offset-4 ring-transparent hover:ring-outline-variant cursor-pointer hover:scale-110 transition-transform"></div>
+<span class="font-label-sm text-on-surface">Deep Bark</span>
+</div>
+<!-- Swatch Item -->
+<div class="flex flex-col items-center gap-xs">
+<div class="w-14 h-14 rounded-full bg-[#E6E2D9] ring-offset-4 ring-transparent hover:ring-outline-variant cursor-pointer hover:scale-110 transition-transform"></div>
+<span class="font-label-sm text-on-surface">Snowy Crest</span>
+</div>
+<!-- Swatch Item -->
+<div class="flex flex-col items-center gap-xs">
+<div class="w-14 h-14 rounded-full bg-[#72554B] ring-offset-4 ring-transparent hover:ring-outline-variant cursor-pointer hover:scale-110 transition-transform"></div>
+<span class="font-label-sm text-on-surface">Walnut</span>
+</div>
+<!-- Swatch Item -->
+<div class="flex flex-col items-center gap-xs opacity-50 grayscale">
+<div class="w-14 h-14 rounded-full bg-gradient-to-tr from-purple-500 to-pink-500 flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-[20px]">lock</span>
+</div>
+<span class="font-label-sm text-on-surface">Midnight Blue</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-surface dark:bg-surface-container-high shadow-[0px_-4px_12px_rgba(141,110,99,0.12)] flex justify-around items-center px-gutter-mobile py-sm rounded-t-lg">
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-md py-unit hover:bg-surface-variant/30 rounded-full transition-all active:scale-90 duration-200 ease-out" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-md py-unit hover:bg-surface-variant/30 rounded-full transition-all active:scale-90 duration-200 ease-out" href="#">
+<span class="material-symbols-outlined">forum</span>
+<span class="font-label-md text-label-md">Chat</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-md py-unit hover:bg-surface-variant/30 rounded-full transition-all active:scale-90 duration-200 ease-out" href="#">
+<span class="material-symbols-outlined">school</span>
+<span class="font-label-md text-label-md">Skills</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-md py-unit transition-all active:scale-90 duration-200 ease-out" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">payments</span>
+<span class="font-label-md text-label-md">Shop</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-md py-unit hover:bg-surface-variant/30 rounded-full transition-all active:scale-90 duration-200 ease-out" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-md text-label-md">Profile</span>
+</a>
+</nav>
+<script>
+        // Micro-interactions for the "Shop" active state and hover effects
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                // Simplified active state toggle for demo
+                if (e.currentTarget.textContent.includes('Shop')) return;
+                
+                // Clear other active states
+                document.querySelectorAll('nav a').forEach(l => {
+                    l.classList.remove('bg-secondary-container', 'text-on-secondary-container');
+                    l.classList.add('text-on-surface-variant');
+                    const icon = l.querySelector('.material-symbols-outlined');
+                    if (icon) icon.style.fontVariationSettings = "'FILL' 0";
+                });
+
+                // Set this as active
+                e.currentTarget.classList.add('bg-secondary-container', 'text-on-secondary-container');
+                e.currentTarget.classList.remove('text-on-surface-variant');
+                const icon = e.currentTarget.querySelector('.material-symbols-outlined');
+                if (icon) icon.style.fontVariationSettings = "'FILL' 1";
+            });
+        });
+
+        // Add a gentle floating animation to the turkey preview
+        const turkeyImg = document.querySelector('.turkey-preview-shadow img');
+        let floatY = 0;
+        let direction = 1;
+        
+        function animateTurkey() {
+            floatY += 0.05 * direction;
+            if (Math.abs(floatY) > 5) direction *= -1;
+            turkeyImg.style.transform = `translateY(${floatY}px)`;
+            requestAnimationFrame(animateTurkey);
+        }
+        animateTurkey();
+    </script>
+</body></html>
