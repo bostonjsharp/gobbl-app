@@ -41,9 +41,18 @@ export const SURVEY_QUESTIONS: SurveyQuestion[] = [
   },
   {
     key: "top_issue",
-    type: "short-text",
+    type: "single-choice",
     prompt: "What issue matters most to you right now?",
-    maxLength: 120,
+    options: [
+      { value: "civil_rights",        label: "Civil rights" },
+      { value: "climate_environment", label: "Climate & environment" },
+      { value: "crime_safety",        label: "Crime & public safety" },
+      { value: "economy_jobs",        label: "Economy & jobs" },
+      { value: "education",           label: "Education" },
+      { value: "foreign_policy",      label: "Foreign policy" },
+      { value: "healthcare",          label: "Healthcare" },
+      { value: "immigration",         label: "Immigration" },
+    ],
   },
 ];
 
