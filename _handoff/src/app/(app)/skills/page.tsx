@@ -5,11 +5,11 @@ import { FlatTurkey } from "@/components/gamification/FlatTurkey";
 // Five canonical civility-skill paths. Wire `progress` / `level` to real data
 // once a /api/skills endpoint exists; today the values are static placeholders.
 const PATHS = [
-  { num: "01", title: "Active Listening",     sub: "Hear what they actually said.",        progress: 100, level: "Mastered",  tone: "forest",  locked: false },
-  { num: "02", title: "Evidence & Sources",   sub: "Cite, don't guess.",                   progress: 80,  level: "Lv. 4 of 5", tone: "primary", locked: false },
-  { num: "03", title: "Constructive Framing", sub: "Build, don't blame.",                  progress: 40,  level: "Lv. 2 of 5", tone: "ochre",   locked: false },
-  { num: "04", title: "Empathy Drills",       sub: "Sit with the other side.",             progress: 20,  level: "Lv. 1 of 5", tone: "rust",    locked: false },
-  { num: "05", title: "Holding Your Ground",  sub: "Disagree without raising heat.",       progress: 0,   level: "Locked",     tone: "muted",   locked: true  },
+  { num: "01", title: "Active Listening",     sub: "Hear what they actually said.",        progress: 100, level: "Mastered",  tone: "forest" },
+  { num: "02", title: "Evidence & Sources",   sub: "Cite, don't guess.",                   progress: 80,  level: "Lv. 4 of 5", tone: "primary" },
+  { num: "03", title: "Constructive Framing", sub: "Build, don't blame.",                  progress: 40,  level: "Lv. 2 of 5", tone: "ochre" },
+  { num: "04", title: "Empathy Drills",       sub: "Sit with the other side.",             progress: 20,  level: "Lv. 1 of 5", tone: "rust" },
+  { num: "05", title: "Holding Your Ground",  sub: "Disagree without raising heat.",       progress: 0,   level: "Locked",     tone: "muted", locked: true },
 ] as const;
 
 const TONE_BG: Record<string, string> = {
