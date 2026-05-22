@@ -28,7 +28,27 @@
       "Bash(tasklist)",
       "Bash(findstr node *)",
       "Bash(npx eslint *)",
-      "PowerShell(cd \"D:\\\\dev\\\\bost\\\\New folder\\\\civicspark\"; npx tsc --noEmit; Write-Host \"Exit code: $LASTEXITCODE\")"
+      "PowerShell(cd \"D:\\\\dev\\\\bost\\\\New folder\\\\civicspark\"; npx tsc --noEmit; Write-Host \"Exit code: $LASTEXITCODE\")",
+      "Bash(echo \"EXIT=$?\")",
+      "Bash(curl -sS -o /tmp/dash.html -w \"HTTP %{http_code} size=%{size_download}\\\\n\" http://localhost:3001/dashboard)",
+      "Bash(curl -sS -o /tmp/home.html -w \"HTTP %{http_code} size=%{size_download}\\\\n\" http://localhost:3001/)",
+      "Bash(curl -sS http://localhost:3000/ -o /tmp/p3000.html -w \"HTTP %{http_code}\\\\n\")",
+      "Bash(curl -sS http://localhost:3001/ -o /tmp/p3001.html -w \"PORT 3001 / -> HTTP %{http_code}\\\\n\")",
+      "PowerShell(Get-NetTCPConnection *)",
+      "PowerShell(Stop-Process *)",
+      "Bash(curl -sS http://localhost:3000/_next/static/css/app/layout.css -o /tmp/live3000.css -w \"HTTP %{http_code} size=%{size_download}\\\\n\")",
+      "Bash(curl -sI http://localhost:3000/_next/static/css/app/layout.css)",
+      "Bash(cp -v _handoff/tailwind.config.ts ./tailwind.config.ts)",
+      "Bash(cp -v _handoff/src/app/layout.tsx src/app/layout.tsx)",
+      "Bash(cp -v _handoff/src/app/globals.css src/app/globals.css)",
+      "Bash(cp -v _handoff/src/components/ui/Button.tsx src/components/ui/Button.tsx)",
+      "Bash(cp -v _handoff/src/components/ui/Card.tsx src/components/ui/Card.tsx)",
+      "Bash(grep -E \"^src[/\\\\\\\\\\\\\\\\]\")",
+      "Bash(set -e)",
+      "Bash(cp -v _handoff/src/components/layout/BottomNav.tsx src/components/layout/BottomNav.tsx)",
+      "Bash(cp -v _handoff/src/components/layout/TopAppBar.tsx src/components/layout/TopAppBar.tsx)",
+      "Bash(cp -v _handoff/src/components/gamification/XPBar.tsx src/components/gamification/XPBar.tsx)",
+      "Bash(cp -v _handoff/src/components/gamification/StreakCounter.tsx src/components/gamification/StreakCounter.tsx)"
     ]
   }
 }
