@@ -17,6 +17,7 @@ interface DebateData {
   difficulty: string;
   category: string;
   beliefKey: string;
+  personaInitials: string | null;
   completed: boolean;
   overallScore: number | null;
   messages: { id: string; role: string; content: string; civilityScore: number | null }[];
@@ -97,7 +98,7 @@ export default function DebatePage() {
         </div>
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-1.5">
-            <span className="font-body text-sm font-bold">Robert</span>
+            <span className="font-body text-sm font-bold">{debate.personaInitials ?? "Robert"}</span>
             <span className="h-1 w-1 rounded-full bg-ink-muted" />
             <span className="font-mono text-[10px] uppercase tracking-[0.06em] text-ink-muted">
               {ideologyLabel}
