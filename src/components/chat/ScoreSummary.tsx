@@ -8,8 +8,10 @@ import { Button } from "../ui/Button";
 import { TurkeyAvatar } from "../gamification/TurkeyAvatar";
 import Link from "next/link";
 
+// [persona-rating: temporary] — debateId is only needed for the rating card.
 interface ScoreSummaryProps {
   result: FinishResult;
+  debateId?: string;
 }
 
 function LevelUpOverlay({
@@ -108,7 +110,76 @@ function LevelUpOverlay({
   );
 }
 
-export function ScoreSummary({ result }: ScoreSummaryProps) {
+// [persona-rating: temporary] — entire component is part of the removable rating system.
+function PersonaRatingCard({ debateId }: { debateId: string }) {
+  const [submitted, setSubmitted] = useState<number | null>(null);
+  const [dismissed, setDismissed] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  if (dismissed) return null;
+
+  if (submitted != null) {
+    return (
+      <div className="rounded-2xl border border-line bg-surface p-4 text-center">
+        <p className="font-body text-sm text-ink-soft">
+          Thanks — rated <strong className="text-ink">{submitted}/10</strong>.
+        </p>
+      </div>
+    );
+  }
+
+  const submit = async (rating: number) => {
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/persona-rating", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ debateId, rating }),
+      });
+      if (res.ok) {
+        setSubmitted(rating);
+      }
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="rounded-2xl border border-line bg-surface p-4">
+      <div className="mb-1 font-mono text-[10px] uppercase tracking-[0.12em] text-ink-muted">
+        Testing feedback
+      </div>
+      <h3 className="font-display text-base font-bold tracking-[-0.01em] text-ink">
+        How did this persona feel?
+      </h3>
+      <p className="mt-1 font-body text-xs text-ink-soft">
+        1 = trivially easy &nbsp;·&nbsp; 10 = brutally hard
+      </p>
+      <div className="mt-3 grid grid-cols-5 gap-1.5 sm:grid-cols-10">
+        {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => (
+          <button
+            key={n}
+            type="button"
+            disabled={submitting}
+            onClick={() => submit(n)}
+            className="flex h-10 items-center justify-center rounded-xl border border-line bg-surface font-mono text-sm font-semibold text-ink hover:border-ink-muted disabled:opacity-50"
+          >
+            {n}
+          </button>
+        ))}
+      </div>
+      <button
+        type="button"
+        onClick={() => setDismissed(true)}
+        className="mt-3 font-body text-xs font-semibold text-ink-muted hover:text-ink"
+      >
+        Skip
+      </button>
+    </div>
+  );
+}
+
+export function ScoreSummary({ result, debateId }: ScoreSummaryProps) {
   const isGreat = result.overallScore >= 7;
   const didLevelUp = result.previousLevel !== undefined && result.newLevel > result.previousLevel;
   const [showLevelUp, setShowLevelUp] = useState(didLevelUp);
@@ -291,6 +362,9 @@ export function ScoreSummary({ result }: ScoreSummaryProps) {
           </div>
         </div>
       )}
+
+      {/* [persona-rating: temporary] */}
+      {debateId && <PersonaRatingCard debateId={debateId} />}
 
       <div className="flex justify-center gap-3 pt-2">
         <Link href="/chat">
