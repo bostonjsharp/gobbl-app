@@ -56,7 +56,7 @@ export default function DebatePage() {
   if (result) {
     return (
       <div className="flex flex-col gap-5">
-        <ScoreSummary result={result} />
+        <ScoreSummary result={result} debateId={debate.id} /* [persona-rating: temporary] */ />
       </div>
     );
   }
