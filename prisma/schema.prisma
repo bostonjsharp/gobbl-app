@@ -54,7 +54,7 @@ model Debate {
   completedAt  DateTime?
   user         User      @relation(fields: [userId], references: [id])
   messages     Message[]
-  personaRatings PersonaRating[]
+  personaRatings PersonaRating[] // [persona-rating: temporary]
 }
 
 model Message {
