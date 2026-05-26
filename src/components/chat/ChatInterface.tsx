@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Button } from "../ui/Button";
-import { Chip } from "../ui/Chip";
 import { MessageBubble } from "./MessageBubble";
 
 export interface ChatMsg {
@@ -29,7 +28,6 @@ interface ChatInterfaceProps {
   onFinish: (result: FinishResult) => void;
 }
 
-const COACH_HINTS = ["Be specific", "Ask a question", "Acknowledge first", "Cite source"];
 const TEXTAREA_MAX_HEIGHT_PX = 200;
 
 /**
@@ -41,7 +39,6 @@ const TEXTAREA_MAX_HEIGHT_PX = 200;
  * This component owns:
  *  - Scroll region of MessageBubbles
  *  - Typing indicator (3 dots, no emoji)
- *  - Smart-reply coach chips above the input
  *  - Rounded-pill text input with an ink "send" button
  */
 export function ChatInterface({ debateId, initialMessages, maxTurns, onFinish }: ChatInterfaceProps) {
@@ -175,55 +172,38 @@ export function ChatInterface({ debateId, initialMessages, maxTurns, onFinish }:
             </Button>
           </div>
         ) : (
-          <>
-            {/* Smart-reply coach chips */}
-            <div className="flex gap-1.5 overflow-x-auto pb-2">
-              {COACH_HINTS.map((c, i) => (
-                <Chip
-                  key={c}
-                  selected={i === 0}
-                  tone={i === 0 ? "ochre" : "neutral"}
-                  onClick={() => setInput((prev) => (prev ? `${prev} ` : "") + c.toLowerCase() + ": ")}
-                  className="shrink-0"
-                >
-                  {i === 0 && <span aria-hidden>✦</span>}
-                  {c}
-                </Chip>
-              ))}
-            </div>
-            <form
-              onSubmit={(e) => { e.preventDefault(); void sendMessage(); }}
-              className="flex items-end gap-2 rounded-full border border-line bg-surface py-1.5 pl-4 pr-1.5 focus-within:border-primary"
+          <form
+            onSubmit={(e) => { e.preventDefault(); void sendMessage(); }}
+            className="flex items-end gap-2 rounded-full border border-line bg-surface py-1.5 pl-4 pr-1.5 focus-within:border-primary"
+          >
+            <textarea
+              ref={textareaRef}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  if (input.trim() && !loading) void sendMessage();
+                }
+              }}
+              rows={1}
+              placeholder="Your reply…"
+              aria-label="Your message"
+              disabled={loading}
+              className="min-h-[28px] flex-1 resize-none overflow-x-hidden bg-transparent py-2 font-body text-sm text-ink placeholder:text-ink-muted focus:outline-none"
+            />
+            <button
+              type="submit"
+              disabled={loading || !input.trim()}
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-ink text-bg transition-opacity disabled:opacity-30"
+              aria-label="Send"
             >
-              <textarea
-                ref={textareaRef}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && !e.shiftKey) {
-                    e.preventDefault();
-                    if (input.trim() && !loading) void sendMessage();
-                  }
-                }}
-                rows={1}
-                placeholder="Your reply…"
-                aria-label="Your message"
-                disabled={loading}
-                className="min-h-[28px] flex-1 resize-none overflow-x-hidden bg-transparent py-2 font-body text-sm text-ink placeholder:text-ink-muted focus:outline-none"
-              />
-              <button
-                type="submit"
-                disabled={loading || !input.trim()}
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-ink text-bg transition-opacity disabled:opacity-30"
-                aria-label="Send"
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                  <path d="M5 12h14M13 6l6 6-6 6"
-                    stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </button>
-            </form>
-          </>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M5 12h14M13 6l6 6-6 6"
+                  stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+          </form>
         )}
       </div>
     </div>

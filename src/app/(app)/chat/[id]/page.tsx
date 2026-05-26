@@ -108,14 +108,6 @@ export default function DebatePage() {
             ● {debate.difficulty}
           </div>
         </div>
-        {!debate.completed && (
-          <Link
-            href="/chat"
-            className="rounded-full bg-primary-soft px-3 py-1.5 font-body text-[11px] font-bold text-primary"
-          >
-            End
-          </Link>
-        )}
       </div>
 
       {/* Topic pill */}

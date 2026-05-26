@@ -12,7 +12,15 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <MobileFrame>
       {!isDebateView && <TopAppBar />}
-      <main className="flex-1 px-margin-mobile py-lg">{children}</main>
+      <main
+        className={
+          isDebateView
+            ? "flex-1 min-h-0 overflow-hidden"
+            : "flex-1 px-margin-mobile py-lg"
+        }
+      >
+        {children}
+      </main>
       {!isDebateView && <BottomNav />}
     </MobileFrame>
   );
