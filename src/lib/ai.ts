@@ -2,7 +2,7 @@ import OpenAI from "openai";
 import { CivilityDimensions, CivilityResult, averageDimensions } from "./civility";
 import { CIVILITY_HOLISTIC_SYSTEM, CIVILITY_MESSAGE_SYSTEM } from "./prompts/civility-rubric";
 import { buildSystemPrompt } from "./prompts/builder";
-import type { BeliefKey } from "./prompts/beliefs";
+import type { Persona } from "@/lib/personas/pool";
 
 const MOCK_MODE = !process.env.GROK_API_KEY;
 
@@ -53,22 +53,18 @@ function buildOpeningUserContent(topic: string): string {
 
 export async function getAIOpening(
   topic: string,
-  difficulty: string,
-  beliefKey: BeliefKey
+  persona: Persona
 ): Promise<string> {
   if (MOCK_MODE) return NO_GROK_KEY;
 
   const client = getClient()!;
-  const systemPrompt = buildSystemPrompt(difficulty, beliefKey);
+  const systemPrompt = buildSystemPrompt(persona);
 
   const completion = await client.chat.completions.create({
     model: GROK_MODEL,
     messages: [
       { role: "system", content: systemPrompt },
-      {
-        role: "user",
-        content: buildOpeningUserContent(topic),
-      },
+      { role: "user", content: buildOpeningUserContent(topic) },
     ],
     max_tokens: 400,
     temperature: 0.92,
@@ -80,13 +76,12 @@ export async function getAIOpening(
 export async function getAIResponse(
   messages: ChatMessage[],
   topic: string,
-  difficulty: string,
-  beliefKey: BeliefKey
+  persona: Persona
 ): Promise<string> {
   if (MOCK_MODE) return NO_GROK_KEY;
 
   const client = getClient()!;
-  const systemPrompt = buildSystemPrompt(difficulty, beliefKey);
+  const systemPrompt = buildSystemPrompt(persona);
 
   const completion = await client.chat.completions.create({
     model: GROK_MODEL,

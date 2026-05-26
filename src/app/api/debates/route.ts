@@ -5,6 +5,7 @@ import { prisma } from "@/lib/db";
 import { getAIOpening } from "@/lib/ai";
 import { flipBelief } from "@/lib/prompts/flipBelief";
 import { getUserBelief } from "@/lib/prompts/userBelief";
+import { pickPersona, getPersonaById, isTier } from "@/lib/personas/pool";
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
@@ -15,10 +16,15 @@ export async function POST(req: Request) {
   const userId = (session.user as { id: string }).id;
   const { topic, category, difficulty, isDaily } = await req.json();
 
+  const tier = isTier(difficulty) ? difficulty : "Friendly Cluck";
+  const persona = pickPersona(tier);
+
   const user = await prisma.user.findUnique({
     where: { id: userId },
     select: { surveyResponses: true },
   });
+  // Keep flipBelief on the user's onboarding belief — this is what the chat-setup card surfaces.
+  // The persona's own beliefKey is what the system prompt uses, so the two live independently for now.
   const beliefKey = flipBelief(getUserBelief(user?.surveyResponses));
 
   const debate = await prisma.debate.create({
@@ -27,16 +33,13 @@ export async function POST(req: Request) {
       topic,
       category: category || "General",
       beliefKey,
-      difficulty: difficulty || "Friendly",
+      difficulty: tier,
+      personaId: persona.id,
       isDaily: isDaily || false,
     },
   });
 
-  const aiOpening = await getAIOpening(
-    topic,
-    difficulty || "Friendly",
-    beliefKey
-  );
+  const aiOpening = await getAIOpening(topic, persona);
 
   await prisma.message.create({
     data: {
@@ -50,6 +53,7 @@ export async function POST(req: Request) {
     id: debate.id,
     topic: debate.topic,
     difficulty: debate.difficulty,
+    personaInitials: persona.initials,
     openingMessage: aiOpening,
   });
 }
@@ -72,7 +76,11 @@ export async function GET(req: Request) {
     if (!debate) {
       return NextResponse.json({ error: "Debate not found" }, { status: 404 });
     }
-    return NextResponse.json(debate);
+    const persona = getPersonaById(debate.personaId);
+    return NextResponse.json({
+      ...debate,
+      personaInitials: persona?.initials ?? null,
+    });
   }
 
   const debates = await prisma.debate.findMany({
