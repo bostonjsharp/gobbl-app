@@ -49,6 +49,7 @@ function SetupContent() {
   );
   const [userBelief, setUserBelief] = useState<BeliefKey | null>(null);
   const [loading, setLoading] = useState(false);
+  const [topicDropdownOpen, setTopicDropdownOpen] = useState(false);
 
   const topic: Topic | null = (() => {
     if (isDaily) return getDailyTopic();
@@ -72,9 +73,6 @@ function SetupContent() {
       </div>
     );
   }
-
-  // Top 4 topics to surface as quick picks (rotate weekly if you want).
-  const featuredTopics = TOPICS.slice(0, 4);
 
   const startDebate = async () => {
     if (!topic) return;
@@ -100,23 +98,9 @@ function SetupContent() {
   };
 
   return (
-    <div className="flex flex-col gap-5 pb-24">
-      {/* Header row */}
-      <div className="flex items-center justify-between">
-        <button
-          type="button"
-          onClick={() => router.back()}
-          className="flex h-9 w-9 items-center justify-center rounded-full border border-line bg-surface"
-          aria-label="Back"
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-            <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-          </svg>
-        </button>
-        <div className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted">
-          {isDaily ? "Daily Gobble" : "New debate"}
-        </div>
-        <div className="h-9 w-9" />
+    <div className="flex flex-col gap-5 pb-8">
+      <div className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted">
+        {isDaily ? "Daily Gobble" : "New debate"}
       </div>
 
       <div>
@@ -130,52 +114,96 @@ function SetupContent() {
 
       {/* 01 Topic */}
       <section>
-        <div className="mb-2.5 flex items-baseline justify-between">
-          <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-muted">
-            01 — Topic
-          </div>
-          <span className="font-body text-xs font-semibold text-primary">
-            Browse all {TOPICS.length} →
-          </span>
+        <div className="mb-2.5 font-mono text-[10px] uppercase tracking-[0.12em] text-ink-muted">
+          01 — Topic
         </div>
 
-        {topic ? (
+        {isDaily && topic ? (
           <div className="relative rounded-2xl border-2 border-primary bg-surface p-4">
             <div className="font-mono text-[9px] uppercase tracking-[0.1em] text-primary">
-              {topic.category} {isDaily && "· Daily"}
+              {topic.category} · Daily
             </div>
             <div className="mt-1.5 font-display text-[20px] font-bold tracking-[-0.02em]">
               {topic.title}
             </div>
             <div className="mt-1 font-body text-xs text-ink-soft">
-              {isDaily ? "+50 feathers · daily bonus" : topic.description}
-            </div>
-            <div className="absolute right-3.5 top-3.5 flex h-6 w-6 items-center justify-center rounded-full bg-primary text-white">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                <path d="M5 13l4 4 10-10" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
-              </svg>
+              +50 feathers · daily bonus
             </div>
           </div>
-        ) : null}
-
-        {!isDaily && (
-          <div className="mt-2 flex flex-col gap-1.5">
-            {featuredTopics.map((t) => (
-              <button
-                key={t.id}
-                type="button"
-                onClick={() => setSelectedTopicId(t.id)}
-                className={`flex items-center justify-between rounded-xl border bg-surface px-3.5 py-3 transition-colors ${
-                  selectedTopicId === t.id
-                    ? "border-primary"
-                    : "border-line hover:border-ink-muted"
-                }`}
+        ) : (
+          <>
+            <button
+              type="button"
+              onClick={() => setTopicDropdownOpen((open) => !open)}
+              aria-expanded={topicDropdownOpen}
+              className={`flex w-full items-center justify-between gap-3 rounded-2xl border-2 bg-surface p-4 text-left transition-colors ${
+                topic ? "border-primary" : "border-line hover:border-ink-muted"
+              }`}
+            >
+              <div className="min-w-0 flex-1">
+                {topic ? (
+                  <>
+                    <div className="font-mono text-[9px] uppercase tracking-[0.1em] text-primary">
+                      {topic.category}
+                    </div>
+                    <div className="mt-1.5 truncate font-display text-[18px] font-bold tracking-[-0.02em]">
+                      {topic.title}
+                    </div>
+                    <div className="mt-1 line-clamp-2 font-body text-xs text-ink-soft">
+                      {topic.description}
+                    </div>
+                  </>
+                ) : (
+                  <span className="font-body text-sm text-ink-muted">Choose a topic…</span>
+                )}
+              </div>
+              <svg
+                className={`shrink-0 transition-transform ${topicDropdownOpen ? "rotate-180" : ""}`}
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
               >
-                <span className="font-body text-[13px] font-medium">{t.title}</span>
-                <span className="font-mono text-[10px] text-ink-muted">→</span>
-              </button>
-            ))}
-          </div>
+                <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+
+            {topicDropdownOpen && (
+              <div className="mt-2 max-h-72 overflow-y-auto rounded-2xl border border-line bg-surface">
+                {TOPICS.map((t, i) => {
+                  const selected = selectedTopicId === t.id;
+                  return (
+                    <button
+                      key={t.id}
+                      type="button"
+                      onClick={() => {
+                        setSelectedTopicId(t.id);
+                        setTopicDropdownOpen(false);
+                      }}
+                      className={`flex w-full items-center justify-between gap-3 px-3.5 py-3 text-left transition-colors ${
+                        i < TOPICS.length - 1 ? "border-b border-line" : ""
+                      } ${selected ? "bg-primary-soft" : "hover:bg-bg"}`}
+                    >
+                      <div className="min-w-0 flex-1">
+                        <div className="truncate font-body text-[13px] font-medium text-ink">
+                          {t.title}
+                        </div>
+                        <div className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.1em] text-ink-muted">
+                          {t.category}
+                        </div>
+                      </div>
+                      {selected && (
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                          <path d="M5 13l4 4 10-10" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-primary" />
+                        </svg>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </>
         )}
       </section>
 
@@ -241,20 +269,15 @@ function SetupContent() {
         </div>
       </section>
 
-      {/* Sticky CTA */}
-      <div className="fixed inset-x-0 bottom-20 z-20 px-5 pb-3 pt-2">
-        <div className="mx-auto max-w-md">
-          <Button
-            size="lg"
-            className="w-full shadow-lift"
-            onClick={startDebate}
-            disabled={!topic || loading}
-            loading={loading}
-          >
-            {topic ? "Start the debate" : "Pick a topic to continue"}
-          </Button>
-        </div>
-      </div>
+      <Button
+        size="lg"
+        className="w-full shadow-lift"
+        onClick={startDebate}
+        disabled={!topic || loading}
+        loading={loading}
+      >
+        {topic ? "Start the debate" : "Pick a topic to continue"}
+      </Button>
     </div>
   );
 }
