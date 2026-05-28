@@ -12,7 +12,26 @@ export type ShortTextQuestion = {
   maxLength: number;
 };
 
-export type SurveyQuestion = SingleChoiceQuestion | ShortTextQuestion;
+export type RankedChoiceQuestion = {
+  key: string;
+  type: "ranked-choice";
+  prompt: string;
+  items: { value: string; label: string; sublabel?: string }[];
+};
+
+export type SurveyQuestion = SingleChoiceQuestion | ShortTextQuestion | RankedChoiceQuestion;
+
+export const POLITICIAN_RANKING_ITEMS: RankedChoiceQuestion["items"] = [
+  { value: "aoc",     label: "AOC",     sublabel: "Alexandria Ocasio-Cortez" },
+  { value: "bush",    label: "Bush",    sublabel: "George W. Bush" },
+  { value: "hillary", label: "Hillary", sublabel: "Hillary Clinton" },
+  { value: "trump",   label: "Trump",   sublabel: "Donald Trump" },
+  { value: "biden",   label: "Biden",   sublabel: "Joe Biden" },
+  { value: "harris",  label: "Harris",  sublabel: "Kamala Harris" },
+  { value: "vance",   label: "Vance",   sublabel: "J.D. Vance" },
+  { value: "schumer", label: "Schumer", sublabel: "Chuck Schumer" },
+  { value: "bernie",  label: "Bernie",  sublabel: "Bernie Sanders" },
+];
 
 export const SURVEY_QUESTIONS: SurveyQuestion[] = [
   {
@@ -54,12 +73,28 @@ export const SURVEY_QUESTIONS: SurveyQuestion[] = [
       { value: "immigration",         label: "Immigration" },
     ],
   },
+  {
+    key: "politician_ranking",
+    type: "ranked-choice",
+    prompt: "Rank these individuals by how much you'd like to talk to them.",
+    items: POLITICIAN_RANKING_ITEMS,
+  },
 ];
 
 export function isAnswerValid(question: SurveyQuestion, answer: string | undefined): boolean {
   if (!answer) return false;
   if (question.type === "single-choice") {
     return question.options.some((opt) => opt.value === answer);
+  }
+  if (question.type === "ranked-choice") {
+    try {
+      const ranked: unknown = JSON.parse(answer);
+      if (!Array.isArray(ranked)) return false;
+      const expected = new Set(question.items.map((i) => i.value));
+      return ranked.length === expected.size && ranked.every((v) => typeof v === "string" && expected.has(v));
+    } catch {
+      return false;
+    }
   }
   return answer.length > 0 && answer.length <= question.maxLength;
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { FlatTurkey } from "@/components/gamification/FlatTurkey";
 
 // Five canonical civility-skill paths. Wire `progress` / `level` to real data
@@ -53,31 +54,33 @@ export default function SkillsPage() {
       </div>
 
       {/* Active path */}
-      <div className="relative overflow-hidden rounded-3xl bg-ink p-5 text-bg">
-        <div className="pointer-events-none absolute -bottom-7 -right-7 opacity-15">
-          <FlatTurkey stage={6} size={160} />
-        </div>
-        <div className="relative">
-          <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-ochre">
-            Currently learning
+      <Link href="/skills/posting" className="block">
+        <div className="relative overflow-hidden rounded-3xl bg-ink p-5 text-bg">
+          <div className="pointer-events-none absolute -bottom-7 -right-7 opacity-15">
+            <FlatTurkey stage={6} size={160} />
           </div>
-          <div className="mt-1.5 font-display text-[22px] font-bold tracking-[-0.02em]">
-            Steelmanning
-          </div>
-          <div className="mt-1 font-body text-[13px] text-bg/70">
-            Make their argument stronger before you respond.
-          </div>
-          <div className="mt-3.5">
-            <div className="h-1.5 overflow-hidden rounded-full bg-white/15">
-              <div className="h-full w-[60%] rounded-full bg-ochre" />
+          <div className="relative">
+            <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-ochre">
+              Currently learning
             </div>
-            <div className="mt-1.5 flex justify-between">
-              <span className="font-mono text-[10px] text-bg/55">3 of 5 lessons</span>
-              <span className="font-mono text-[10px] text-ochre">Continue →</span>
+            <div className="mt-1.5 font-display text-[22px] font-bold tracking-[-0.02em]">
+              Posting
+            </div>
+            <div className="mt-1 font-body text-[13px] text-bg/70">
+              Write before and after breathing. See what changes.
+            </div>
+            <div className="mt-3.5">
+              <div className="h-1.5 overflow-hidden rounded-full bg-white/15">
+                <div className="h-full w-0 rounded-full bg-ochre" />
+              </div>
+              <div className="mt-1.5 flex justify-between">
+                <span className="font-mono text-[10px] text-bg/55">0 of 5 steps</span>
+                <span className="font-mono text-[10px] text-ochre">Start →</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </Link>
 
       {/* All paths */}
       <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-muted">

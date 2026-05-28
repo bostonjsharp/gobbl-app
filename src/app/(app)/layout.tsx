@@ -7,7 +7,9 @@ import { BottomNav } from "@/components/layout/BottomNav";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isDebateView = /^\/chat\/[^/]+$/.test(pathname) && pathname !== "/chat/setup";
+  const isDebateView =
+    (/^\/chat\/[^/]+$/.test(pathname) && pathname !== "/chat/setup") ||
+    /^\/skills\/[^/]+$/.test(pathname);
 
   return (
     <MobileFrame>

@@ -2,11 +2,29 @@
 
 import { useState } from "react";
 import { useSession } from "next-auth/react";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import { Button } from "@/components/ui/Button";
 import {
   SURVEY_QUESTIONS,
   isAnswerValid,
   type SurveyQuestion,
+  type RankedChoiceQuestion,
 } from "@/lib/survey/questions";
 
 export default function OnboardingSurveyPage() {
@@ -143,6 +161,11 @@ function QuestionInput({
       </div>
     );
   }
+
+  if (question.type === "ranked-choice") {
+    return <RankedChoiceInput question={question} value={value} onChange={onChange} />;
+  }
+
   return (
     <div className="flex flex-col gap-1">
       <textarea
@@ -156,6 +179,117 @@ function QuestionInput({
       <span className="text-right text-xs text-roost-400">
         {value.length}/{question.maxLength}
       </span>
+    </div>
+  );
+}
+
+function RankedChoiceInput({
+  question,
+  value,
+  onChange,
+}: {
+  question: RankedChoiceQuestion;
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  const defaultOrder = question.items.map((i) => i.value);
+  let currentOrder: string[];
+  try {
+    const parsed: unknown = JSON.parse(value);
+    currentOrder = Array.isArray(parsed) ? (parsed as string[]) : defaultOrder;
+  } catch {
+    currentOrder = defaultOrder;
+  }
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+  );
+
+  function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+    if (over && active.id !== over.id) {
+      const oldIndex = currentOrder.indexOf(active.id as string);
+      const newIndex = currentOrder.indexOf(over.id as string);
+      const next = arrayMove(currentOrder, oldIndex, newIndex);
+      onChange(JSON.stringify(next));
+    }
+  }
+
+  const itemMap = Object.fromEntries(question.items.map((i) => [i.value, i]));
+
+  // Emit the default order on first render so the answer is immediately valid
+  if (!value) {
+    onChange(JSON.stringify(defaultOrder));
+  }
+
+  return (
+    <div className="flex flex-col gap-1">
+      <p className="mb-2 text-xs text-roost-400">
+        Drag to reorder — #1 is who you&apos;d most like to talk to.
+      </p>
+      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+        <SortableContext items={currentOrder} strategy={verticalListSortingStrategy}>
+          {currentOrder.map((val, idx) => {
+            const item = itemMap[val];
+            return (
+              <SortableItem key={val} id={val} rank={idx + 1} label={item.label} sublabel={item.sublabel} />
+            );
+          })}
+        </SortableContext>
+      </DndContext>
+    </div>
+  );
+}
+
+function SortableItem({
+  id,
+  rank,
+  label,
+  sublabel,
+}: {
+  id: string;
+  rank: number;
+  label: string;
+  sublabel?: string;
+}) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
+    useSortable({ id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      className={`flex cursor-grab touch-none items-center gap-3 rounded-xl border-2 bg-white px-4 py-3 transition-shadow active:cursor-grabbing ${
+        isDragging
+          ? "border-gobbl-500 shadow-lg opacity-80"
+          : "border-roost-200 hover:border-gobbl-300"
+      }`}
+    >
+      <span className="w-5 shrink-0 text-center text-xs font-bold text-gobbl-500">
+        {rank}
+      </span>
+      <div className="flex-1 min-w-0">
+        <span className="text-sm font-semibold text-roost-700">{label}</span>
+        {sublabel && (
+          <span className="ml-2 text-xs text-roost-400">{sublabel}</span>
+        )}
+      </div>
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" className="shrink-0 text-roost-300">
+        <circle cx="5" cy="4" r="1.5" />
+        <circle cx="11" cy="4" r="1.5" />
+        <circle cx="5" cy="8" r="1.5" />
+        <circle cx="11" cy="8" r="1.5" />
+        <circle cx="5" cy="12" r="1.5" />
+        <circle cx="11" cy="12" r="1.5" />
+      </svg>
     </div>
   );
 }

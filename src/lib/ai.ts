@@ -182,6 +182,82 @@ export async function scoreConversationHolistic(transcript: string): Promise<Civ
   }
 }
 
+// ─── Skill: President statement generation ────────────────────────────────────
+
+const POLITICIAN_DISPLAY_NAMES: Record<string, string> = {
+  aoc:     "Alexandria Ocasio-Cortez",
+  bush:    "George W. Bush",
+  hillary: "Hillary Clinton",
+  trump:   "Donald Trump",
+  biden:   "Joe Biden",
+  harris:  "Kamala Harris",
+  vance:   "J.D. Vance",
+  schumer: "Chuck Schumer",
+  bernie:  "Bernie Sanders",
+};
+
+const TOPIC_DISPLAY_LABELS: Record<string, string> = {
+  civil_rights:        "civil rights",
+  climate_environment: "climate change and the environment",
+  crime_safety:        "crime and public safety",
+  economy_jobs:        "the economy and jobs",
+  education:           "education",
+  foreign_policy:      "foreign policy",
+  healthcare:          "healthcare",
+  immigration:         "immigration",
+};
+
+/**
+ * Generates a provocative political statement in a politician's authentic voice.
+ * Used in the Posting skill to provoke the user before/after box breathing.
+ */
+export async function generatePresidentStatement(
+  politicianKey: string,
+  topicKey: string,
+  statementNumber: 1 | 2,
+): Promise<string> {
+  if (MOCK_MODE) {
+    return statementNumber === 1
+      ? "The radical left wants to destroy everything our families have built. We won't let them."
+      : "These people are a complete and total disaster — frankly, the worst I've ever seen, and believe me, I've seen plenty.";
+  }
+
+  const client = getClient()!;
+  const name  = POLITICIAN_DISPLAY_NAMES[politicianKey] ?? politicianKey;
+  const topic = TOPIC_DISPLAY_LABELS[topicKey] ?? topicKey;
+
+  const intensityClause = statementNumber === 1
+    ? "Make it striking and provocative — bold, politically charged, and authentic to their known rhetoric. It should feel real and a bit shocking, like something that would make you stop scrolling."
+    : "Make it EVEN MORE inflammatory and extreme than statement #1. Push fully into their most divisive and heated rhetoric — something that feels like a viral rally moment or a statement that would trend for all the wrong reasons.";
+
+  const system = `You generate authentic political statements for an educational emotional-regulation app. Your role is to write a statement in the authentic voice of a real public figure as they might speak at a campaign rally or in a heated interview. This is for studying how people emotionally react to provocative political rhetoric.`;
+
+  const user_prompt = `Write a statement by ${name} about ${topic}.
+
+Rules:
+- First person, as ${name} would actually speak — their vocabulary, cadence, rhetorical style
+- Politically charged — reflect their known, documented positions
+- Do NOT be diplomatic, balanced, or softened in any way
+- No quotes around the statement, no attribution, no preamble — just the statement itself
+- 1–3 sentences maximum
+
+${intensityClause}`;
+
+  const completion = await client.chat.completions.create({
+    model: GROK_MODEL,
+    messages: [
+      { role: "system", content: system },
+      { role: "user",   content: user_prompt },
+    ],
+    max_tokens: 200,
+    temperature: 0.95,
+  });
+
+  return completion.choices[0]?.message?.content?.trim() ?? "No comment.";
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+
 function clamp(val: number): number {
   if (!Number.isFinite(val)) return 5;
   return Math.max(1, Math.min(10, Math.round(val)));
