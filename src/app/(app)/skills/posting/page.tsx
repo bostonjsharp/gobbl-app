@@ -147,36 +147,45 @@ export default function PostingSkillPage() {
   }
 
   async function submitFinalPost() {
+    if (!sessionId) return;
     setSubmitting(true);
 
-    // Score both posts
-    const [preRes, postRes] = await Promise.all([
-      fetch("/api/skills/score-post", {
-        method:  "POST",
-        headers: { "Content-Type": "application/json" },
-        body:    JSON.stringify({ text: prePostText, context: statement1 }),
-      }),
-      fetch("/api/skills/score-post", {
-        method:  "POST",
-        headers: { "Content-Type": "application/json" },
-        body:    JSON.stringify({ text: postPostText, context: statement2 }),
-      }),
-    ]);
-
-    const { civility: preCivility }  = await preRes.json();
-    const { civility: postCivility } = await postRes.json();
+    // Score both posts; fall back to 5 if scoring fails
+    let preCivility = 5;
+    let postCivility = 5;
+    try {
+      const [preRes, postRes] = await Promise.all([
+        fetch("/api/skills/score-post", {
+          method:  "POST",
+          headers: { "Content-Type": "application/json" },
+          body:    JSON.stringify({ text: prePostText, context: statement1 }),
+        }),
+        fetch("/api/skills/score-post", {
+          method:  "POST",
+          headers: { "Content-Type": "application/json" },
+          body:    JSON.stringify({ text: postPostText, context: statement2 }),
+        }),
+      ]);
+      if (preRes.ok)  { const d = await preRes.json();  preCivility  = d.civility  ?? 5; }
+      if (postRes.ok) { const d = await postRes.json(); postCivility = d.civility ?? 5; }
+    } catch { /* use defaults */ }
 
     await patch({ postPostText, preCivility, postCivility });
-
     setStage("completing");
 
-    const completeRes = await fetch(`/api/skills/sessions/${sessionId}/complete`, {
-      method:  "POST",
-      headers: { "Content-Type": "application/json" },
-      body:    JSON.stringify({ preCivility, postCivility }),
-    });
-    const reward = await completeRes.json();
-    setFeathersEarned(reward.feathersEarned ?? 40);
+    try {
+      const completeRes = await fetch(`/api/skills/sessions/${sessionId}/complete`, {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify({ preCivility, postCivility }),
+      });
+      const text = await completeRes.text();
+      const reward = text ? (JSON.parse(text) as { feathersEarned?: number }) : {};
+      setFeathersEarned(reward.feathersEarned ?? 40);
+    } catch {
+      setFeathersEarned(40);
+    }
+
     setSubmitting(false);
     setStage("reward");
   }

@@ -34,8 +34,8 @@ export async function POST(
 
   const now = new Date();
 
-  await prisma.$transaction([
-    prisma.skillSession.update({
+  try {
+    await prisma.skillSession.update({
       where: { id: params.id },
       data: {
         preCivility:   pre,
@@ -44,15 +44,18 @@ export async function POST(
         completedAt:   now,
         stage:         "reward",
       },
-    }),
-    prisma.user.update({
+    });
+    await prisma.user.update({
       where: { id: userId },
       data: {
         featherBalance: { increment: feathersEarned },
         pardonPoints:   { increment: PARDON_PER_SKILL },
       },
-    }),
-  ]);
+    });
+  } catch (err) {
+    console.error("[skills/complete] db error:", err);
+    return NextResponse.json({ error: "DB error", feathersEarned }, { status: 500 });
+  }
 
   return NextResponse.json({ feathersEarned, pardonPointsEarned: PARDON_PER_SKILL });
 }
