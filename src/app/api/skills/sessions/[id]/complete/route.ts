@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { getMobileSession } from "@/lib/mobileAuth";
+
+
 import { prisma } from "@/lib/db";
 
 const BASE_FEATHERS   = 40;
@@ -10,7 +11,7 @@ export async function POST(
   req: Request,
   { params }: { params: { id: string } },
 ) {
-  const session = await getServerSession(authOptions);
+  const session = await getMobileSession(req);
   const userId = (session?.user as { id?: string } | undefined)?.id;
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 

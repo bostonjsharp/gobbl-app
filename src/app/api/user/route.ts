@@ -1,13 +1,14 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { getMobileSession } from "@/lib/mobileAuth";
+
+
 import { prisma } from "@/lib/db";
 import { getLevelInfo } from "@/lib/gamification";
 import { parseEquippedCosmetics } from "@/lib/shop";
 import { getUserBelief } from "@/lib/prompts/userBelief";
 
-export async function GET() {
-  const session = await getServerSession(authOptions);
+export async function GET(req: Request) {
+  const session = await getMobileSession(req);
   if (!session?.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }

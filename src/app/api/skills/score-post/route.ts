@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { getMobileSession } from "@/lib/mobileAuth";
+
+
 import { scoreCivility } from "@/lib/ai";
 
 export async function POST(req: Request) {
-  const session = await getServerSession(authOptions);
+  const session = await getMobileSession(req);
   if (!(session?.user as { id?: string } | undefined)?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }

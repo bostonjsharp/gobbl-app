@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { getMobileSession } from "@/lib/mobileAuth";
+
+
 import { prisma } from "@/lib/db";
 import { getShopItem, isValidItemId } from "@/lib/shop";
 
 export async function POST(req: Request) {
-  const session = await getServerSession(authOptions);
+  const session = await getMobileSession(req);
   if (!session?.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }

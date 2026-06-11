@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { getMobileSession } from "@/lib/mobileAuth";
+
+
 import { prisma } from "@/lib/db";
 import { getAIResponse, scoreCivility, scoreConversationHolistic, ChatMessage } from "@/lib/ai";
 import { calculateXP, calculateFeathers, getLevelInfo, checkNewBadges } from "@/lib/gamification";
@@ -8,7 +9,7 @@ import { fallbackHolisticFromUserMessages, parseStoredDimensions } from "@/lib/c
 import { getPersonaById, pickPersona, isTier } from "@/lib/personas/pool";
 
 export async function POST(req: Request) {
-  const session = await getServerSession(authOptions);
+  const session = await getMobileSession(req);
   if (!session?.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }

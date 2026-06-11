@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { getMobileSession } from "@/lib/mobileAuth";
+
+
 import { prisma } from "@/lib/db";
 import { getAIOpening } from "@/lib/ai";
 import { flipBelief } from "@/lib/prompts/flipBelief";
@@ -8,7 +9,7 @@ import { getUserBelief } from "@/lib/prompts/userBelief";
 import { pickPersona, getPersonaById, isTier } from "@/lib/personas/pool";
 
 export async function POST(req: Request) {
-  const session = await getServerSession(authOptions);
+  const session = await getMobileSession(req);
   if (!session?.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
@@ -61,7 +62,7 @@ export async function POST(req: Request) {
 }
 
 export async function GET(req: Request) {
-  const session = await getServerSession(authOptions);
+  const session = await getMobileSession(req);
   if (!session?.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
