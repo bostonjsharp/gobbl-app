@@ -7,10 +7,11 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Chip } from "@/components/ui/Chip";
 import { FlatTurkey } from "@/components/gamification/FlatTurkey";
-import { TOPICS, getDailyTopic, formatTopicForDebate, type Topic } from "@/lib/topics";
+import { TOPICS, formatTopicForDebate, type Topic } from "@/lib/topics";
 import { DIFFICULTIES } from "@/lib/gamification";
 import { describeFlip, flipBelief } from "@/lib/prompts/flipBelief";
 import { parseBeliefKey, type BeliefKey } from "@/lib/prompts/beliefs";
+import type { NewsStory } from "@/lib/news";
 
 // Map difficulty key → stage avatar + tone for the picker.
 const DIFFICULTY_META: Record<string, { stage: number; tone: "forest" | "primary" | "rust"; xp: number }> = {
@@ -51,8 +52,13 @@ function SetupContent() {
   const [loading, setLoading] = useState(false);
   const [topicDropdownOpen, setTopicDropdownOpen] = useState(false);
 
+  // News story state (daily mode only)
+  const [newsStories, setNewsStories] = useState<NewsStory[]>([]);
+  const [newsLoading, setNewsLoading] = useState(false);
+  const [selectedStory, setSelectedStory] = useState<NewsStory | null>(null);
+
   const topic: Topic | null = (() => {
-    if (isDaily) return getDailyTopic();
+    if (isDaily) return null;
     if (!selectedTopicId) return null;
     return TOPICS.find((t) => t.id === selectedTopicId) ?? null;
   })();
@@ -66,6 +72,15 @@ function SetupContent() {
     }
   }, [status, router]);
 
+  useEffect(() => {
+    if (!isDaily) return;
+    setNewsLoading(true);
+    fetch("/api/news/daily")
+      .then((r) => r.json())
+      .then((data) => setNewsStories(data.stories ?? []))
+      .finally(() => setNewsLoading(false));
+  }, [isDaily]);
+
   if (status === "loading") {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
@@ -74,20 +89,34 @@ function SetupContent() {
     );
   }
 
+  const canStart = isDaily ? !!selectedStory : !!topic;
+
   const startDebate = async () => {
-    if (!topic) return;
+    if (!canStart) return;
     setLoading(true);
     try {
+      const body = isDaily && selectedStory
+        ? {
+            topic: selectedStory.title,
+            category: "News",
+            difficulty: selectedDifficulty,
+            beliefKey: flipBelief(userBelief),
+            isDaily,
+            newsStoryUrl: selectedStory.url,
+            newsStoryContent: selectedStory.content,
+          }
+        : {
+            topic: formatTopicForDebate(topic!),
+            category: topic!.category,
+            difficulty: selectedDifficulty,
+            beliefKey: flipBelief(userBelief),
+            isDaily,
+          };
+
       const res = await fetch("/api/debates", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          topic: formatTopicForDebate(topic),
-          category: topic.category,
-          difficulty: selectedDifficulty,
-          beliefKey: flipBelief(userBelief),  // ← auto-flipped from onboarding
-          isDaily,
-        }),
+        body: JSON.stringify(body),
       });
       if (!res.ok) throw new Error("Failed to start");
       const data = await res.json();
@@ -118,17 +147,70 @@ function SetupContent() {
           01 — Topic
         </div>
 
-        {isDaily && topic ? (
-          <div className="relative rounded-2xl border-2 border-primary bg-surface p-4">
-            <div className="font-mono text-[9px] uppercase tracking-[0.1em] text-primary">
-              {topic.category} · Daily
-            </div>
-            <div className="mt-1.5 font-display text-[20px] font-bold tracking-[-0.02em]">
-              {topic.title}
-            </div>
-            <div className="mt-1 font-body text-xs text-ink-soft">
-              +50 feathers · daily bonus
-            </div>
+        {isDaily ? (
+          <div className="flex flex-col gap-2.5">
+            {newsLoading && (
+              <div className="flex items-center justify-center rounded-2xl border border-line bg-surface py-8">
+                <FlatTurkey stage={1} size={40} animate />
+              </div>
+            )}
+            {!newsLoading && newsStories.length === 0 && (
+              <div className="rounded-2xl border border-line bg-surface p-4">
+                <p className="font-body text-sm text-ink-soft">Could not load today&apos;s stories. Try refreshing.</p>
+              </div>
+            )}
+            {newsStories.map((story) => {
+              const selected = selectedStory?.url === story.url;
+              return (
+                <button
+                  key={story.url}
+                  type="button"
+                  onClick={() => setSelectedStory(story)}
+                  className={`w-full rounded-2xl border-2 bg-surface p-4 text-left transition-colors ${
+                    selected ? "border-primary" : "border-line hover:border-ink-muted"
+                  }`}
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0 flex-1">
+                      <div className="font-mono text-[9px] uppercase tracking-[0.1em] text-ink-muted">
+                        {story.source}
+                        {story.publishedAt ? ` · ${new Date(story.publishedAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}` : ""}
+                      </div>
+                      <div className="mt-1 font-display text-[16px] font-bold leading-snug tracking-[-0.02em]">
+                        {story.title}
+                      </div>
+                      {story.description && (
+                        <div className="mt-1 line-clamp-2 font-body text-xs text-ink-soft">
+                          {story.description}
+                        </div>
+                      )}
+                    </div>
+                    {selected && (
+                      <svg className="mt-1 shrink-0 text-primary" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+                        <path d="M5 13l4 4 10-10" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    )}
+                  </div>
+                  <a
+                    href={story.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="mt-2.5 inline-flex items-center gap-1 font-mono text-[10px] text-primary underline underline-offset-2"
+                  >
+                    Read article
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" aria-hidden>
+                      <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </a>
+                </button>
+              );
+            })}
+            {selectedStory && (
+              <div className="font-mono text-[10px] text-ink-muted">
+                +50 feathers · daily bonus
+              </div>
+            )}
           </div>
         ) : (
           <>
@@ -273,10 +355,10 @@ function SetupContent() {
         size="lg"
         className="w-full shadow-lift"
         onClick={startDebate}
-        disabled={!topic || loading}
+        disabled={!canStart || loading}
         loading={loading}
       >
-        {topic ? "Start the debate" : "Pick a topic to continue"}
+        {canStart ? "Start the debate" : isDaily ? "Pick a story to continue" : "Pick a topic to continue"}
       </Button>
     </div>
   );

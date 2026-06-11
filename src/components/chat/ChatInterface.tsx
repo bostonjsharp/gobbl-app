@@ -48,10 +48,11 @@ export function ChatInterface({ debateId, initialMessages, maxTurns, onFinish }:
   const initialUserTurns = initialMessages.filter((m) => m.role === "user").length;
   const [turnNumber, setTurnNumber] = useState(initialUserTurns);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const bottomRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+    bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
   }, [messages, loading]);
 
   // Auto-grow textarea
@@ -158,6 +159,7 @@ export function ChatInterface({ debateId, initialMessages, maxTurns, onFinish }:
             </div>
           </div>
         )}
+        <div ref={bottomRef} />
       </div>
 
       {/* Input region */}

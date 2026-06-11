@@ -13,7 +13,6 @@ import { XPBar } from "@/components/gamification/XPBar";
 import { StatsCard } from "@/components/dashboard/StatsCard";
 import { DailyChallenge } from "@/components/dashboard/DailyChallenge";
 import { LevelUpModal } from "@/components/gamification/LevelUpModal";
-import { getDailyTopic } from "@/lib/topics";
 import { LEVELS } from "@/lib/gamification";
 import type { EquippedCosmetics } from "@/lib/shop";
 
@@ -83,8 +82,6 @@ export default function DashboardPage() {
       </div>
     );
   }
-
-  const dailyTopic = getDailyTopic();
 
   return (
     <div className="flex flex-col gap-5">
@@ -160,7 +157,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Daily Gobble */}
-      <DailyChallenge topic={dailyTopic} completed={userData.dailyCompleted} />
+      <DailyChallenge completed={false} />
 
       {/* Recent */}
       {userData.recentDebates.length > 0 && (

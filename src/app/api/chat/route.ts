@@ -51,7 +51,7 @@ export async function POST(req: Request) {
   const persona =
     getPersonaById(debate.personaId) ??
     pickPersona(isTier(debate.difficulty) ? debate.difficulty : "Friendly Cluck");
-  const aiResponse = await getAIResponse(conversationHistory, debate.topic, persona);
+  const aiResponse = await getAIResponse(conversationHistory, debate.topic, persona, debate.newsStoryContent ?? undefined);
 
   await prisma.message.create({
     data: {

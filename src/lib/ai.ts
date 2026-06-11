@@ -53,19 +53,26 @@ function buildOpeningUserContent(topic: string): string {
 
 export async function getAIOpening(
   topic: string,
-  persona: Persona
+  persona: Persona,
+  newsContext?: string
 ): Promise<string> {
   if (MOCK_MODE) return NO_GROK_KEY;
 
   const client = getClient()!;
   const systemPrompt = buildSystemPrompt(persona);
 
+  const messages: ChatMessage[] = [{ role: "system", content: systemPrompt }];
+  if (newsContext) {
+    messages.push({
+      role: "system",
+      content: `NEWS CONTEXT: The following article is the subject of today's conversation. Both you and the user have read it. Ground your perspective and arguments in this specific story.\n\n${newsContext}`,
+    });
+  }
+  messages.push({ role: "user", content: buildOpeningUserContent(topic) });
+
   const completion = await client.chat.completions.create({
     model: GROK_MODEL,
-    messages: [
-      { role: "system", content: systemPrompt },
-      { role: "user", content: buildOpeningUserContent(topic) },
-    ],
+    messages,
     max_tokens: 400,
     temperature: 0.92,
   });
@@ -76,19 +83,25 @@ export async function getAIOpening(
 export async function getAIResponse(
   messages: ChatMessage[],
   topic: string,
-  persona: Persona
+  persona: Persona,
+  newsContext?: string
 ): Promise<string> {
   if (MOCK_MODE) return NO_GROK_KEY;
 
   const client = getClient()!;
   const systemPrompt = buildSystemPrompt(persona);
 
+  const systemMessages: ChatMessage[] = [{ role: "system", content: systemPrompt }];
+  if (newsContext) {
+    systemMessages.push({
+      role: "system",
+      content: `NEWS CONTEXT: The following article is the subject of today's conversation. Both you and the user have read it. Ground your perspective and arguments in this specific story.\n\n${newsContext}`,
+    });
+  }
+
   const completion = await client.chat.completions.create({
     model: GROK_MODEL,
-    messages: [
-      { role: "system", content: systemPrompt },
-      ...messages,
-    ],
+    messages: [...systemMessages, ...messages],
     max_tokens: 400,
     temperature: 0.8,
   });

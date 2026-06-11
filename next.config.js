@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  serverExternalPackages: ["@extractus/article-extractor"],
   async redirects() {
     return [
       {

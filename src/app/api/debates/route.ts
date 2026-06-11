@@ -14,7 +14,7 @@ export async function POST(req: Request) {
   }
 
   const userId = (session.user as { id: string }).id;
-  const { topic, category, difficulty, isDaily } = await req.json();
+  const { topic, category, difficulty, isDaily, newsStoryUrl, newsStoryContent } = await req.json();
 
   const tier = isTier(difficulty) ? difficulty : "Friendly Cluck";
   const persona = pickPersona(tier);
@@ -36,10 +36,12 @@ export async function POST(req: Request) {
       difficulty: tier,
       personaId: persona.id,
       isDaily: isDaily || false,
+      newsStoryUrl: newsStoryUrl || null,
+      newsStoryContent: newsStoryContent || null,
     },
   });
 
-  const aiOpening = await getAIOpening(topic, persona);
+  const aiOpening = await getAIOpening(topic, persona, newsStoryContent || undefined);
 
   await prisma.message.create({
     data: {

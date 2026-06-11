@@ -4,23 +4,10 @@ import Link from "next/link";
 import { FlatTurkey } from "@/components/gamification/FlatTurkey";
 
 interface DailyChallengeProps {
-  topic: {
-    id: string;
-    title: string;
-    description: string;
-    category: string;
-  };
   completed?: boolean;
 }
 
-/**
- * Daily Gobble card — Harvest direction.
- * Inverted (ink-on-bg → bg-on-ink) hero card with a background turkey silhouette
- * and ochre CTA. Difficulty chips show what Robert's running today.
- *
- * Edit the chips/CTA to your own difficulty preset once the user picks one.
- */
-export function DailyChallenge({ topic, completed = false }: DailyChallengeProps) {
+export function DailyChallenge({ completed = false }: DailyChallengeProps) {
   return (
     <div className="relative overflow-hidden rounded-3xl bg-ink p-6 text-bg shadow-soft">
       {/* Background turkey silhouette */}
@@ -31,7 +18,7 @@ export function DailyChallenge({ topic, completed = false }: DailyChallengeProps
       <div className="relative">
         <div className="flex items-center justify-between gap-2">
           <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-ochre">
-            {completed ? "Completed today" : `Today's Gobble · ${topic.category}`}
+            {completed ? "Completed today" : "Today's Gobble · Live News"}
           </span>
           <span className="font-mono text-[10px] text-bg/60">
             {completed ? "✓" : "6h left"}
@@ -39,11 +26,15 @@ export function DailyChallenge({ topic, completed = false }: DailyChallengeProps
         </div>
 
         <h2 className="mt-2 max-w-[78%] font-display text-[22px] font-semibold leading-[1.15] tracking-[-0.02em]">
-          {topic.title}
+          {completed ? "Nice gobble." : "Pick today's story."}
         </h2>
 
         {!completed && (
           <>
+            <p className="mt-2 max-w-[80%] font-body text-sm text-bg/70">
+              3 real news stories to choose from — debate what&apos;s happening now.
+            </p>
+
             <div className="mt-3.5 flex gap-1.5">
               {["Friendly Cluck", "Spirited Strut", "Full Gobble"].map((d, i) => (
                 <span
@@ -58,10 +49,10 @@ export function DailyChallenge({ topic, completed = false }: DailyChallengeProps
             </div>
 
             <Link
-              href={`/chat/setup?daily=true&topic=${topic.id}`}
+              href="/chat?daily=true"
               className="mt-4 inline-flex items-center gap-2 rounded-full bg-ochre px-5 py-3 font-body text-sm font-bold text-ink transition-transform active:scale-[0.98]"
             >
-              Start practice
+              Choose a story
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
                 <path d="M5 12h14M13 6l6 6-6 6"
                   stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -73,7 +64,7 @@ export function DailyChallenge({ topic, completed = false }: DailyChallengeProps
 
         {completed && (
           <p className="mt-3 max-w-[80%] font-body text-sm text-bg/70">
-            Nice gobble. Come back tomorrow for a fresh topic.
+            Nice gobble. Come back tomorrow for fresh stories.
           </p>
         )}
       </div>

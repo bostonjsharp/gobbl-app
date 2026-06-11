@@ -50,8 +50,10 @@ model Debate {
   overallScore Float?
   xpEarned     Int       @default(0)
   feathersEarned Int     @default(0)
-  isDaily      Boolean   @default(false)
-  completed    Boolean   @default(false)
+  isDaily          Boolean   @default(false)
+  completed        Boolean   @default(false)
+  newsStoryUrl     String?
+  newsStoryContent String?
   createdAt    DateTime  @default(now())
   completedAt  DateTime?
   user         User      @relation(fields: [userId], references: [id])
