@@ -15,6 +15,21 @@ const BBC_RSS = "http://feeds.bbci.co.uk/news/rss.xml";
 const AP_HUB = "https://apnews.com/hub/ap-top-news";
 const CONTENT_CAP = 8000;
 
+// AP article URL slugs that indicate sports content — skip these for debate topics
+const SPORTS_SLUG_TERMS = [
+  "nba", "nfl", "mlb", "nhl", "mls", "ufc",
+  "world-cup", "fifa", "super-bowl", "nba-finals", "nfl-playoffs",
+  "nascar", "formula-1", "olympics", "paralympics",
+  "-golf-", "-tennis-", "-hockey-", "-soccer-", "-basketball-", "-baseball-",
+  "patrick-mahomes", "chiefs-", "-chiefs-", "knicks", "spurs", "lakers",
+  "infantino", "anunoby", "wbc-pitch",
+];
+
+function isSportsUrl(url: string): boolean {
+  const lower = url.toLowerCase();
+  return SPORTS_SLUG_TERMS.some((term) => lower.includes(term));
+}
+
 const FETCH_HEADERS = {
   "User-Agent":
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
@@ -108,7 +123,8 @@ async function fetchApStories(count: number): Promise<NewsStory[]> {
   const urlPattern = /"url":"(https:\/\/apnews\.com\/article\/[^"]+)"/g;
   let m: RegExpExecArray | null;
   while ((m = urlPattern.exec(html)) !== null) {
-    if (!articleUrls.includes(m[1])) articleUrls.push(m[1]);
+    const url = m[1];
+    if (!articleUrls.includes(url) && !isSportsUrl(url)) articleUrls.push(url);
     if (articleUrls.length >= count + 5) break; // gather extras in case some fail
   }
 

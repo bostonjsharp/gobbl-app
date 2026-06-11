@@ -12,7 +12,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     /^\/skills\/[^/]+$/.test(pathname);
 
   return (
-    <MobileFrame>
+    <MobileFrame fixedHeight={isDebateView}>
       {!isDebateView && <TopAppBar />}
       <main
         className={
