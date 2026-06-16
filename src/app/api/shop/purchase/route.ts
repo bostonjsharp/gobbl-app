@@ -41,13 +41,13 @@ export async function POST(req: Request) {
         return { alreadyOwned: true as const, featherBalance: user.featherBalance };
       }
 
-      if (user.featherBalance < catalogItem.price) {
+      if (user.featherBalance < catalogItem.cost) {
         return { insufficient: true as const, featherBalance: user.featherBalance };
       }
 
       await tx.user.update({
         where: { id: userId },
-        data: { featherBalance: { decrement: catalogItem.price } },
+        data: { featherBalance: { decrement: catalogItem.cost } },
       });
 
       await tx.userInventory.create({
