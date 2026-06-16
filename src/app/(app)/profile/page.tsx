@@ -8,6 +8,7 @@ import Link from "next/link";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { FlatTurkey, TURKEY_STAGE_LABELS } from "@/components/gamification/FlatTurkey";
+import { AvatarWithItems } from "@/components/gamification/AvatarWithItems";
 import { StreakCounter } from "@/components/gamification/StreakCounter";
 import { LEVELS, BADGES } from "@/lib/gamification";
 import type { EquippedCosmetics } from "@/lib/shop";
@@ -84,7 +85,7 @@ export default function ProfilePage() {
             Joined {new Date(userData.createdAt).toLocaleDateString()} · {userData.featherBalance.toLocaleString()} feathers
           </p>
           <div className="mt-3 flex justify-center">
-            <FlatTurkey stage={userData.level} size={180} animate />
+            <AvatarWithItems stage={userData.level} size={180} equipped={userData.equippedCosmetics} animate />
           </div>
           <div className="mt-3 flex justify-center gap-1.5">
             <MiniStat k="Civility" v={userData.civilityScore > 0 ? Math.round(userData.civilityScore * 10) : "—"} />
