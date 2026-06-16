@@ -41,16 +41,6 @@ const SLOT_LABEL: Record<ShopSlot, string> = {
   cape: "Cape",
 };
 
-// Soft chip backgrounds per category — Harvest palette
-const SLOT_ACCENT: Record<ShopSlot, string> = {
-  background: "bg-forest-100",
-  hat:        "bg-ochre-soft",
-  face:       "bg-primary-soft",
-  neck:       "bg-plume-100",
-  chest:      "bg-ochre-soft",
-  cape:       "bg-primary-soft",
-};
-
 type Filter = "all" | ShopSlot;
 
 export default function ShopPage() {
