@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Button } from "../ui/Button";
 import { MessageBubble } from "./MessageBubble";
+import type { EquippedCosmetics } from "@/lib/shop";
 
 export interface ChatMsg {
   role: "user" | "assistant";
@@ -19,6 +20,7 @@ export interface FinishResult {
   newLevel: number;
   newBadges: string[];
   streak: number;
+  equippedCosmetics?: EquippedCosmetics;
 }
 
 interface ChatInterfaceProps {

@@ -5,7 +5,8 @@ import { DIMENSION_LABELS } from "@/lib/civility";
 import { BADGES, LEVELS } from "@/lib/gamification";
 import { FinishResult } from "./ChatInterface";
 import { Button } from "../ui/Button";
-import { TurkeyAvatar } from "../gamification/TurkeyAvatar";
+import { AvatarWithItems } from "../gamification/AvatarWithItems";
+import type { EquippedCosmetics } from "@/lib/shop";
 import Link from "next/link";
 
 // [persona-rating: temporary] — debateId is only needed for the rating card.
@@ -17,10 +18,12 @@ interface ScoreSummaryProps {
 function LevelUpOverlay({
   previousLevel,
   newLevel,
+  equippedCosmetics,
   onDismiss,
 }: {
   previousLevel: number;
   newLevel: number;
+  equippedCosmetics?: EquippedCosmetics;
   onDismiss: () => void;
 }) {
   const [phase, setPhase] = useState<"old" | "morphing" | "new">("old");
@@ -62,7 +65,7 @@ function LevelUpOverlay({
         <div className="relative mx-auto mb-4 flex items-center justify-center gap-4">
           {phase === "old" && (
             <div className="animate-scale-in">
-              <TurkeyAvatar level={previousLevel} size="lg" animate={false} />
+              <AvatarWithItems stage={previousLevel} size="lg" animate={false} />
               <div className="mt-2 text-sm font-semibold text-roost-500">
                 {oldStage?.name}
               </div>
@@ -75,7 +78,7 @@ function LevelUpOverlay({
               style={{ animation: "levelUpGlow 1.2s ease-out forwards" }}
             >
               <div style={{ animation: "levelUpPulse 1.2s ease-in-out" }}>
-                <TurkeyAvatar level={previousLevel} size="lg" animate={false} />
+                <AvatarWithItems stage={previousLevel} size="lg" animate={false} />
               </div>
             </div>
           )}
@@ -83,7 +86,7 @@ function LevelUpOverlay({
           {phase === "new" && (
             <div>
               <div style={{ animation: "morphIn 0.8s cubic-bezier(0.34,1.56,0.64,1) forwards" }}>
-                <TurkeyAvatar level={newLevel} size="xl" />
+                <AvatarWithItems stage={newLevel} size="xl" equipped={equippedCosmetics ?? {}} />
               </div>
               <div className="mt-3 text-xl font-extrabold text-gradient-gobbl">
                 {newStage?.name}
@@ -196,6 +199,7 @@ export function ScoreSummary({ result, debateId }: ScoreSummaryProps) {
       <LevelUpOverlay
         previousLevel={result.previousLevel}
         newLevel={result.newLevel}
+        equippedCosmetics={result.equippedCosmetics}
         onDismiss={() => setShowLevelUp(false)}
       />
     );
@@ -205,7 +209,7 @@ export function ScoreSummary({ result, debateId }: ScoreSummaryProps) {
     <div className="animate-fade-in space-y-6 p-6">
       <div className="text-center">
         <div className="mb-4 relative inline-block">
-          <TurkeyAvatar level={result.newLevel} size="lg" />
+          <AvatarWithItems stage={result.newLevel} size="lg" equipped={result.equippedCosmetics ?? {}} />
           {isGreat && (
             <div className="absolute -top-2 -right-2 animate-bounce-in">
               <span className="text-2xl">✨</span>
