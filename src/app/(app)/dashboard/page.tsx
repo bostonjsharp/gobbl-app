@@ -9,6 +9,7 @@ import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { FlatTurkey } from "@/components/gamification/FlatTurkey";
 import { FlatTurkeyGlyph } from "@/components/gamification/FlatTurkey";
+import { AvatarWithItems } from "@/components/gamification/AvatarWithItems";
 import { XPBar } from "@/components/gamification/XPBar";
 import { StatsCard } from "@/components/dashboard/StatsCard";
 import { DailyChallenge } from "@/components/dashboard/DailyChallenge";
@@ -104,7 +105,7 @@ export default function DashboardPage() {
       <Card className="overflow-hidden">
         <div className="pointer-events-none absolute -right-10 -top-10 h-48 w-48 rounded-full bg-ochre-soft/60" />
         <div className="relative flex items-center gap-4">
-          <FlatTurkey stage={userData.level} size={120} animate />
+          <AvatarWithItems stage={userData.level} size={120} equipped={userData.equippedCosmetics} animate />
           <div className="flex-1">
             <div className="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-muted">
               Level {userData.level} · {userData.levelInfo.name}
