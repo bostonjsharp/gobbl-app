@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { Chip } from "@/components/ui/Chip";
 import { Badge } from "@/components/ui/Badge";
 import { FlatTurkey } from "@/components/gamification/FlatTurkey";
+import { AvatarWithItems, ItemProductShot } from "@/components/gamification/AvatarWithItems";
 import type { EquippedCosmetics, ShopSlot } from "@/lib/shop";
 import { SHOP_SLOTS } from "@/lib/shop";
 
@@ -15,9 +16,11 @@ interface ShopItemRow {
   id: string;
   name: string;
   slot: ShopSlot;
-  price: number;
-  emoji: string;
-  zIndex: number;
+  cost: number;
+  accent: string;
+  accentBg: string;
+  isNew?: boolean;
+  unlockAt?: number;
   owned: boolean;
   canAfford: boolean;
 }
@@ -33,7 +36,9 @@ const SLOT_LABEL: Record<ShopSlot, string> = {
   background: "Backgrounds",
   hat: "Hats",
   face: "Faces",
-  accessory: "Looks",
+  neck: "Neck",
+  chest: "Chest",
+  cape: "Cape",
 };
 
 // Soft chip backgrounds per category — Harvest palette
@@ -41,7 +46,9 @@ const SLOT_ACCENT: Record<ShopSlot, string> = {
   background: "bg-forest-100",
   hat:        "bg-ochre-soft",
   face:       "bg-primary-soft",
-  accessory:  "bg-plume-100",
+  neck:       "bg-plume-100",
+  chest:      "bg-ochre-soft",
+  cape:       "bg-primary-soft",
 };
 
 type Filter = "all" | ShopSlot;
@@ -143,7 +150,7 @@ export default function ShopPage() {
         <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-ochre-soft/60" />
         <div className="pointer-events-none absolute -bottom-12 -left-12 h-36 w-36 rounded-full bg-primary-soft/55" />
         <div className="relative flex items-center gap-4">
-          <FlatTurkey stage={data.level} size={140} />
+          <AvatarWithItems stage={data.level} size={140} equipped={data.equipped} />
           <div className="min-w-0 flex-1">
             <div className="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-muted">
               Your look · Lv. {data.level}
@@ -163,7 +170,7 @@ export default function ShopPage() {
                   className="inline-flex items-center gap-1 rounded-full border border-line bg-bg px-2 py-1 font-body text-[10px] font-semibold transition-colors hover:border-ink-muted"
                   title={`Unequip ${it.name}`}
                 >
-                  <span aria-hidden>{it.emoji}</span> {it.name} ×
+                  {it.name} ×
                 </button>
               ))}
             </div>
@@ -215,27 +222,22 @@ function ShopItemCard({
   onUnequip: () => void;
   busy: boolean;
 }) {
-  const accent = {
-    background: "bg-forest-100",
-    hat:        "bg-ochre-soft",
-    face:       "bg-primary-soft",
-    accessory:  "bg-plume-100",
-  }[item.slot];
-
   return (
     <div
       className={`overflow-hidden rounded-2xl border bg-surface p-2.5 transition-colors ${
         equippedHere ? "border-forest-500" : "border-line"
       }`}
     >
-      <div className={`relative flex aspect-square items-center justify-center overflow-hidden rounded-xl ${accent}`}>
+      <div
+        className="relative flex aspect-square items-center justify-center overflow-hidden rounded-xl"
+        style={{ background: item.accentBg }}
+      >
         <div className="pointer-events-none absolute inset-2 rounded-xl border border-dashed border-white/45" />
-        <span
-          className="text-[46px] leading-none"
+        <div
           style={!item.owned && !item.canAfford ? { filter: "grayscale(0.6) opacity(0.7)" } : undefined}
         >
-          {item.emoji}
-        </span>
+          <ItemProductShot itemId={item.id} size={90} />
+        </div>
         <Badge tone="dark" size="sm" variant="solid" className="absolute left-2 top-2">
           {item.slot}
         </Badge>
@@ -263,7 +265,7 @@ function ShopItemCard({
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" aria-hidden>
                 <path d="M21 3c-7 0-11 5-12 9-1 4 0 8 0 9h2c0-3 1-7 3-10s5-5 7-8z" fill="rgb(228 165 71)" />
               </svg>
-              {item.price.toLocaleString()}
+              {item.cost.toLocaleString()}
             </span>
           )}
           {!item.owned && (
