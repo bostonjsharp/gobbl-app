@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { getAIResponse, scoreCivility, scoreConversationHolistic, ChatMessage } from "@/lib/ai";
 import { calculateXP, calculateFeathers, getLevelInfo, checkNewBadges } from "@/lib/gamification";
+import { parseEquippedCosmetics } from "@/lib/shop";
 import { fallbackHolisticFromUserMessages, parseStoredDimensions } from "@/lib/civility";
 import { getPersonaById, pickPersona, isTier } from "@/lib/personas/pool";
 
@@ -214,5 +215,6 @@ async function finishDebate(userId: string, debateId: string, lastScore: number)
     newBadges,
     streak: newStreak,
     civilityScore: newCivility,
+    equippedCosmetics: parseEquippedCosmetics(user.equippedCosmetics),
   });
 }
