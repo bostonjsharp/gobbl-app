@@ -1,7 +1,7 @@
 "use client";
 
 import type { EquippedCosmetics } from "@/lib/shop";
-import { TurkeyAvatar } from "../gamification/TurkeyAvatar";
+import { AvatarWithItems } from "../gamification/AvatarWithItems";
 
 export interface RankEntry {
   rank: number;
@@ -70,11 +70,12 @@ export function RankingTable({ data, sortBy }: RankingTableProps) {
               </td>
               <td className="px-3 py-3">
                 <div className="flex items-center gap-2">
-                  <TurkeyAvatar
-                    level={entry.level}
+                  <AvatarWithItems
+                    stage={entry.level}
                     size="xs"
+                    equipped={entry.equippedCosmetics ?? {}}
                     animate={false}
-                    equipped={entry.equippedCosmetics}
+                    showShadow={false}
                   />
                   <span className={`font-medium ${entry.isCurrentUser ? "text-gobbl-600 dark:text-gobbl-400" : ""}`}>
                     {entry.username}
