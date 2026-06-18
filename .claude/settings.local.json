@@ -48,7 +48,24 @@
       "Bash(cp -v _handoff/src/components/layout/BottomNav.tsx src/components/layout/BottomNav.tsx)",
       "Bash(cp -v _handoff/src/components/layout/TopAppBar.tsx src/components/layout/TopAppBar.tsx)",
       "Bash(cp -v _handoff/src/components/gamification/XPBar.tsx src/components/gamification/XPBar.tsx)",
-      "Bash(cp -v _handoff/src/components/gamification/StreakCounter.tsx src/components/gamification/StreakCounter.tsx)"
+      "Bash(cp -v _handoff/src/components/gamification/StreakCounter.tsx src/components/gamification/StreakCounter.tsx)",
+      "PowerShell(cd \"D:\\\\dev\\\\bost\\\\New folder\\\\civicspark\"; $content = Get-Content src/lib/shop.ts -Raw; $itemCount = \\($content | Select-String '{ id:' | Measure-Object -Line\\).Lines; Write-Host \"Total items in catalog: $itemCount\")",
+      "PowerShell(cd \"D:\\\\dev\\\\bost\\\\New folder\\\\civicspark\"; $lines = Get-Content src/lib/shop.ts | Select-String '{ id:'; Write-Host \"Number of items: $\\($lines.Count\\)\"; $lines)",
+      "Bash(python -c \"import sys,json; p=json.load\\(sys.stdin\\); print\\(json.dumps\\({k:p[k] for k in ['scripts','devDependencies'] if k in p}, indent=2\\)\\)\")",
+      "Bash(bash *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3001/shop)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3001/dashboard)",
+      "Bash(npx --yes chromium-cli --version)",
+      "Bash(npx playwright *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3001/avatar-test)",
+      "Bash(curl -s http://localhost:3001/dashboard)",
+      "Bash(curl -s http://localhost:3001/)",
+      "Bash(npx --yes playwright@1.61.0 --version)",
+      "Read(//c/Users/bosto/AppData/Local/npm-cache/_npx/**)",
+      "Bash(node *)",
+      "Bash(pkill -f \"next dev\")",
+      "Bash(netstat -ano)"
     ]
   }
 }
