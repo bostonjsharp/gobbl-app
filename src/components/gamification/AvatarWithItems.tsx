@@ -5,6 +5,7 @@ import { FlatTurkey, type FlatTurkeyPalette } from "./FlatTurkey";
 import { ItemLayer, ITEM_RENDERERS } from "./ItemLayers";
 import { getShopItem } from "@/lib/shop";
 import type { EquippedCosmetics } from "@/lib/shop";
+import { getSlotOffset } from "@/lib/avatarAnchors";
 
 const SIZE_PX: Record<string, number> = { xs: 40, sm: 64, md: 96, lg: 160, xl: 220 };
 
@@ -56,19 +57,19 @@ export function AvatarWithItems({
         </svg>
       )}
       {/* Cape (behind turkey) */}
-      {equipped.cape && <ItemLayer id={equipped.cape} />}
+      {equipped.cape && <ItemLayer id={equipped.cape} translate={getSlotOffset(stage, "cape")} />}
       {/* Turkey */}
       <div style={{ position: "absolute", inset: 0 }}>
         <FlatTurkey stage={stage} size={px} palette={palette} animate={animate} />
       </div>
       {/* Hat */}
-      {equipped.hat && <ItemLayer id={equipped.hat} />}
+      {equipped.hat && <ItemLayer id={equipped.hat} translate={getSlotOffset(stage, "hat")} />}
       {/* Face */}
-      {equipped.face && <ItemLayer id={equipped.face} />}
+      {equipped.face && <ItemLayer id={equipped.face} translate={getSlotOffset(stage, "face")} />}
       {/* Neck */}
-      {equipped.neck && <ItemLayer id={equipped.neck} />}
+      {equipped.neck && <ItemLayer id={equipped.neck} translate={getSlotOffset(stage, "neck")} />}
       {/* Chest */}
-      {equipped.chest && <ItemLayer id={equipped.chest} />}
+      {equipped.chest && <ItemLayer id={equipped.chest} translate={getSlotOffset(stage, "chest")} />}
     </div>
   );
 }
