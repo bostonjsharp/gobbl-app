@@ -21,10 +21,12 @@ model User {
   equippedCosmetics  Json?
   surveyResponses    Json?
   onboardingCompletedAt DateTime?
+  pardonPoints       Int             @default(0)
   createdAt          DateTime        @default(now())
   debates            Debate[]
   badges             UserBadge[]
   inventory          UserInventory[]
+  skillSessions      SkillSession[]
 }
 
 model UserInventory {
@@ -48,8 +50,10 @@ model Debate {
   overallScore Float?
   xpEarned     Int       @default(0)
   feathersEarned Int     @default(0)
-  isDaily      Boolean   @default(false)
-  completed    Boolean   @default(false)
+  isDaily          Boolean   @default(false)
+  completed        Boolean   @default(false)
+  newsStoryUrl     String?
+  newsStoryContent String?
   createdAt    DateTime  @default(now())
   completedAt  DateTime?
   user         User      @relation(fields: [userId], references: [id])
@@ -76,6 +80,27 @@ model UserBadge {
   user     User     @relation(fields: [userId], references: [id])
 
   @@unique([userId, badgeKey])
+}
+
+model SkillSession {
+  id               String    @id @default(cuid())
+  userId           String
+  skillKey         String
+  stage            String    @default("storyline")
+  preStressRating  Int?
+  postStressRating Int?
+  preDebateId      String?
+  postDebateId     String?
+  preCivility      Float?
+  postCivility     Float?
+  prePostText      String?
+  postPostText     String?
+  statement1       String?
+  statement2       String?
+  feathersEarned   Int?
+  completedAt      DateTime?
+  createdAt        DateTime  @default(now())
+  user             User      @relation(fields: [userId], references: [id])
 }
 
 // [persona-rating: temporary] — entire model is part of the removable rating system.
