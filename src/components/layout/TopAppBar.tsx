@@ -43,7 +43,9 @@ export function TopAppBar() {
       .catch(() => {});
   }, [status]);
 
-  const day = DAY_LABELS[new Date().getDay()];
+  const [day, setDay] = useState<string>("");
+  useEffect(() => { setDay(DAY_LABELS[new Date().getDay()]); }, []);
+
   const initial = (user?.username ?? session?.user?.name ?? "S")[0]?.toUpperCase() ?? "S";
 
   return (
