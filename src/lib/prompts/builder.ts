@@ -1,7 +1,7 @@
 import { MASTER_TEMPLATE } from "./template";
-import { BELIEFS, BeliefKey } from "./beliefs";
+import { BELIEFS } from "./beliefs";
 import { PARAMETERS, ParameterName } from "./parameters";
-import { getPresetForDifficulty } from "./presets";
+import type { Persona } from "@/lib/personas/pool";
 
 const PLACEHOLDER_MAP: Record<string, ParameterName> = {
   "{participation}": "participation",
@@ -15,27 +15,27 @@ const PLACEHOLDER_MAP: Record<string, ParameterName> = {
 };
 
 /**
- * Assembles the full SAIL Lab system prompt by combining:
- * 1. The difficulty preset → 8 parameter values
- * 2. Each parameter value → its full prompt text
- * 3. User-chosen belief set (ideology)
- * 4. Everything interpolated into the master template
+ * Assembles the full system prompt from a Persona:
+ * - {name} ← persona.initials
+ * - {backstory} ← persona.backstory
+ * - {beliefs} ← BELIEFS[persona.beliefKey]
+ * - 8 parameter placeholders ← PARAMETERS[name][persona.params[name]]
  *
- * Mirrors generate_full_prompt() from sail.py.
+ * Adds the Full Gobble addendum when persona.tier === "Full Gobble".
  */
-export function buildSystemPrompt(difficulty: string, beliefKey: BeliefKey): string {
-  const preset = getPresetForDifficulty(difficulty);
-  const beliefText = BELIEFS[beliefKey];
-
-  let prompt = MASTER_TEMPLATE.replace("{beliefs}", beliefText);
+export function buildSystemPrompt(persona: Persona): string {
+  let prompt = MASTER_TEMPLATE
+    .replaceAll("{name}", persona.initials)
+    .replace("{backstory}", persona.backstory)
+    .replace("{beliefs}", BELIEFS[persona.beliefKey]);
 
   for (const [placeholder, paramName] of Object.entries(PLACEHOLDER_MAP)) {
-    const level = preset[paramName];
+    const level = persona.params[paramName];
     const paramText = PARAMETERS[paramName][level];
     prompt = prompt.replace(placeholder, paramText);
   }
 
-  if (difficulty === "Full Gobble") {
+  if (persona.tier === "Full Gobble") {
     prompt += `
 
 GOBBL — FULL GOBBLE MODE (mandatory):

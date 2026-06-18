@@ -19,6 +19,8 @@ model User {
   longestStreak      Int             @default(0)
   lastActiveDate     DateTime?
   equippedCosmetics  Json?
+  surveyResponses    Json?
+  onboardingCompletedAt DateTime?
   createdAt          DateTime        @default(now())
   debates            Debate[]
   badges             UserBadge[]
@@ -42,6 +44,7 @@ model Debate {
   category     String    @default("General")
   beliefKey    String    @default("lean-right")
   difficulty   String    @default("Friendly")
+  personaId    String?
   overallScore Float?
   xpEarned     Int       @default(0)
   feathersEarned Int     @default(0)
@@ -51,6 +54,7 @@ model Debate {
   completedAt  DateTime?
   user         User      @relation(fields: [userId], references: [id])
   messages     Message[]
+  personaRatings PersonaRating[] // [persona-rating: temporary]
 }
 
 model Message {
@@ -72,4 +76,17 @@ model UserBadge {
   user     User     @relation(fields: [userId], references: [id])
 
   @@unique([userId, badgeKey])
+}
+
+// [persona-rating: temporary] — entire model is part of the removable rating system.
+model PersonaRating {
+  id         String   @id @default(cuid())
+  userId     String
+  debateId   String
+  personaId  String
+  rating     Int
+  createdAt  DateTime @default(now())
+  debate     Debate   @relation(fields: [debateId], references: [id])
+
+  @@unique([userId, debateId])
 }

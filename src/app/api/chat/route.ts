@@ -3,9 +3,10 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { getAIResponse, scoreCivility, scoreConversationHolistic, ChatMessage } from "@/lib/ai";
-import { parseBeliefKey } from "@/lib/prompts/beliefs";
 import { calculateXP, calculateFeathers, getLevelInfo, checkNewBadges } from "@/lib/gamification";
+import { parseEquippedCosmetics } from "@/lib/shop";
 import { fallbackHolisticFromUserMessages, parseStoredDimensions } from "@/lib/civility";
+import { getPersonaById, pickPersona, isTier } from "@/lib/personas/pool";
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
@@ -48,8 +49,10 @@ export async function POST(req: Request) {
     return await finishDebate(userId, debateId, civilityResult.overall);
   }
 
-  const beliefKey = parseBeliefKey(debate.beliefKey) ?? "lean-right";
-  const aiResponse = await getAIResponse(conversationHistory, debate.topic, debate.difficulty, beliefKey);
+  const persona =
+    getPersonaById(debate.personaId) ??
+    pickPersona(isTier(debate.difficulty) ? debate.difficulty : "Friendly Cluck");
+  const aiResponse = await getAIResponse(conversationHistory, debate.topic, persona);
 
   await prisma.message.create({
     data: {
@@ -212,5 +215,6 @@ async function finishDebate(userId: string, debateId: string, lastScore: number)
     newBadges,
     streak: newStreak,
     civilityScore: newCivility,
+    equippedCosmetics: parseEquippedCosmetics(user.equippedCosmetics),
   });
 }

@@ -28,8 +28,19 @@ export const authOptions: NextAuthOptions = {
   ],
   session: { strategy: "jwt" },
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) token.id = user.id;
+    async jwt({ token, user, trigger, session }) {
+      if (user) {
+        token.id = user.id;
+        const dbUser = await prisma.user.findUnique({
+          where: { id: user.id },
+          select: { onboardingCompletedAt: true },
+        });
+        token.onboardingCompletedAt = dbUser?.onboardingCompletedAt?.toISOString() ?? null;
+      }
+      if (trigger === "update" && session && typeof session === "object") {
+        const next = (session as { onboardingCompletedAt?: string }).onboardingCompletedAt;
+        if (next) token.onboardingCompletedAt = next;
+      }
       return token;
     },
     async session({ session, token }) {

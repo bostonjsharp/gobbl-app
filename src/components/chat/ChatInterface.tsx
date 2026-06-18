@@ -1,20 +1,14 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { MessageBubble } from "./MessageBubble";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "../ui/Button";
+import { MessageBubble } from "./MessageBubble";
+import type { EquippedCosmetics } from "@/lib/shop";
 
 export interface ChatMsg {
   role: "user" | "assistant";
   content: string;
   civilityScore?: number | null;
-}
-
-interface ChatInterfaceProps {
-  debateId: string;
-  initialMessages: ChatMsg[];
-  maxTurns: number;
-  onFinish: (result: FinishResult) => void;
 }
 
 export interface FinishResult {
@@ -26,10 +20,30 @@ export interface FinishResult {
   newLevel: number;
   newBadges: string[];
   streak: number;
+  equippedCosmetics?: EquippedCosmetics;
+}
+
+interface ChatInterfaceProps {
+  debateId: string;
+  initialMessages: ChatMsg[];
+  maxTurns: number;
+  onFinish: (result: FinishResult) => void;
 }
 
 const TEXTAREA_MAX_HEIGHT_PX = 200;
+const MAX_CHARS = 500;
 
+/**
+ * Debate arena interface — Harvest direction.
+ *
+ * Top region (provided by parent page): app-bar-style header with Robert's
+ * politics + difficulty + live civility meter.
+ *
+ * This component owns:
+ *  - Scroll region of MessageBubbles
+ *  - Typing indicator (3 dots, no emoji)
+ *  - Rounded-pill text input with an ink "send" button
+ */
 export function ChatInterface({ debateId, initialMessages, maxTurns, onFinish }: ChatInterfaceProps) {
   const [messages, setMessages] = useState<ChatMsg[]>(initialMessages);
   const [input, setInput] = useState("");
@@ -41,16 +55,16 @@ export function ChatInterface({ debateId, initialMessages, maxTurns, onFinish }:
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
-  }, [messages]);
+  }, [messages, loading]);
 
+  // Auto-grow textarea
   useEffect(() => {
     const el = textareaRef.current;
     if (!el) return;
     el.style.height = "auto";
-    const fullHeight = el.scrollHeight;
-    const nextHeight = Math.min(fullHeight, TEXTAREA_MAX_HEIGHT_PX);
-    el.style.height = `${nextHeight}px`;
-    el.style.overflowY = fullHeight > TEXTAREA_MAX_HEIGHT_PX ? "auto" : "hidden";
+    const next = Math.min(el.scrollHeight, TEXTAREA_MAX_HEIGHT_PX);
+    el.style.height = `${next}px`;
+    el.style.overflowY = el.scrollHeight > TEXTAREA_MAX_HEIGHT_PX ? "auto" : "hidden";
   }, [input]);
 
   const sendMessage = async (finish = false) => {
@@ -58,10 +72,7 @@ export function ChatInterface({ debateId, initialMessages, maxTurns, onFinish }:
     const userMsg = input.trim();
     setInput("");
     setLoading(true);
-
-    if (userMsg) {
-      setMessages((prev) => [...prev, { role: "user", content: userMsg }]);
-    }
+    if (userMsg) setMessages((prev) => [...prev, { role: "user", content: userMsg }]);
 
     try {
       const res = await fetch("/api/chat", {
@@ -70,15 +81,10 @@ export function ChatInterface({ debateId, initialMessages, maxTurns, onFinish }:
         body: JSON.stringify({ debateId, message: userMsg, finish }),
       });
       const data = await res.json();
-
-      if (data.finished) {
-        onFinish(data);
-        return;
-      }
-
+      if (data.finished) { onFinish(data); return; }
       setMessages((prev) => {
         const updated = [...prev];
-        if (updated.length > 0 && updated[updated.length - 1].role === "user") {
+        if (updated.length && updated[updated.length - 1].role === "user") {
           updated[updated.length - 1].civilityScore = data.civility?.overall;
         }
         updated.push({ role: "assistant", content: data.aiResponse });
@@ -105,89 +111,108 @@ export function ChatInterface({ debateId, initialMessages, maxTurns, onFinish }:
       });
       const data = await res.json();
       if (data.finished) onFinish(data);
-    } catch {
-      // ignore
-    } finally {
-      setLoading(false);
-    }
+    } finally { setLoading(false); }
   };
 
   const atMaxTurns = turnNumber >= maxTurns;
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex items-center justify-between border-b border-roost-200 px-4 py-2 dark:border-roost-800">
-        <span className="text-sm text-roost-500 flex items-center gap-1">
+      {/* Turn progress bar */}
+      <div className="flex items-center gap-3 border-b border-line px-4 py-2">
+        <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-muted">
           Round {turnNumber}/{maxTurns}
         </span>
-        <div className="h-2.5 flex-1 mx-4 rounded-full bg-roost-200 dark:bg-roost-700 overflow-hidden">
+        <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-bg">
           <div
-            className="h-full rounded-full bg-gradient-to-r from-gobbl-400 to-golden-500 transition-all duration-500"
+            className="h-full rounded-full bg-gradient-to-r from-primary to-ochre transition-[width] duration-500"
             style={{ width: `${(turnNumber / maxTurns) * 100}%` }}
           />
         </div>
         {turnNumber >= 2 && (
-          <Button variant="secondary" size="sm" onClick={handleFinish} disabled={loading}>
-            Wrap Up
+          <Button variant="outline" size="sm" onClick={handleFinish} disabled={loading}>
+            Wrap up
           </Button>
         )}
       </div>
 
-      <div ref={scrollRef} className="flex-1 space-y-4 overflow-y-auto p-4">
-        {messages.map((msg, i) => (
-          <MessageBubble key={i} role={msg.role} content={msg.content} civilityScore={msg.civilityScore} />
+      {/* Scroll region */}
+      <div ref={scrollRef} className="flex-1 space-y-3.5 overflow-y-auto px-4 py-4">
+        {messages.map((m, i) => (
+          <MessageBubble
+            key={i}
+            role={m.role}
+            content={m.content}
+            civilityScore={m.civilityScore}
+          />
         ))}
         {loading && (
-          <div className="flex justify-start">
-            <div className="flex items-center gap-2 ml-10">
-              <div className="rounded-2xl bg-roost-100 px-5 py-3 dark:bg-roost-800">
-                <div className="flex items-center gap-2">
-                  <span className="text-lg animate-wiggle inline-block">🥚</span>
-                  <span className="text-xs text-roost-500">Gobbl is thinking...</span>
-                </div>
-              </div>
+          <div className="flex gap-2">
+            <div className="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary-soft">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                <path d="M21 3c-7 0-11 5-12 9-1 4 0 8 0 9h2c0-3 1-7 3-10s5-5 7-8z"
+                  fill="rgb(228 165 71)" />
+              </svg>
+            </div>
+            <div className="flex items-center gap-1 rounded-2xl rounded-bl-md border border-line bg-surface px-4 py-3">
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-ink-muted" />
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-ink-muted opacity-60" style={{ animationDelay: "150ms" }} />
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-ink-muted opacity-30" style={{ animationDelay: "300ms" }} />
             </div>
           </div>
         )}
       </div>
 
-      <div className="border-t border-roost-200 p-4 dark:border-roost-800">
+      {/* Input region */}
+      <div className="border-t border-line bg-bg px-3.5 py-2.5 pb-4">
         {atMaxTurns ? (
           <div className="text-center">
-            <p className="mb-3 text-sm text-roost-600 dark:text-roost-400">
-              All rounds complete! Let&apos;s see how you did.
+            <p className="mb-3 font-body text-sm text-ink-soft">
+              All rounds complete. Let&apos;s see how you did.
             </p>
-            <Button onClick={handleFinish} disabled={loading}>
+            <Button onClick={handleFinish} disabled={loading} loading={loading}>
               See results
             </Button>
           </div>
         ) : (
           <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              sendMessage();
-            }}
-            className="flex gap-2 items-end"
+            onSubmit={(e) => { e.preventDefault(); void sendMessage(); }}
+            className="flex items-end gap-2 rounded-2xl border border-line bg-surface py-1.5 pl-4 pr-1.5 focus-within:border-primary"
           >
-            <textarea
-              ref={textareaRef}
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault();
-                  if (input.trim() && !loading) void sendMessage();
-                }
-              }}
-              rows={1}
-              placeholder="Strut your stuff... share your perspective"
-              className="min-h-[2.5rem] max-h-[200px] flex-1 resize-none overflow-x-hidden rounded-xl border border-roost-300 bg-white px-4 py-2.5 text-sm text-roost-900 placeholder:text-roost-400 focus:border-gobbl-500 focus:outline-none focus:ring-2 focus:ring-gobbl-500/20 dark:border-roost-700 dark:bg-roost-800 dark:text-roost-100 transition-all"
-              disabled={loading}
-              aria-label="Your message"
-            />
-            <Button type="submit" disabled={loading || !input.trim()}>
-              Send
-            </Button>
+            <div className="flex min-w-0 flex-1 flex-col">
+              <textarea
+                ref={textareaRef}
+                value={input}
+                onChange={(e) => setInput(e.target.value.slice(0, MAX_CHARS))}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    if (input.trim() && !loading) void sendMessage();
+                  }
+                }}
+                rows={1}
+                placeholder="Your reply…"
+                aria-label="Your message"
+                disabled={loading}
+                className="min-h-[28px] w-full resize-none bg-transparent py-2 font-body text-sm text-ink placeholder:text-ink-muted focus:outline-none"
+              />
+              {input.length > MAX_CHARS * 0.8 && (
+                <span className={`mb-1 self-end font-mono text-[10px] ${input.length >= MAX_CHARS ? "text-red-500" : "text-ink-muted"}`}>
+                  {input.length}/{MAX_CHARS}
+                </span>
+              )}
+            </div>
+            <button
+              type="submit"
+              disabled={loading || !input.trim()}
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-ink text-bg transition-opacity disabled:opacity-30"
+              aria-label="Send"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M5 12h14M13 6l6 6-6 6"
+                  stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
           </form>
         )}
       </div>

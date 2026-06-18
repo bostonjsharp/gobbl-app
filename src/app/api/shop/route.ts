@@ -27,7 +27,7 @@ export async function GET() {
   const items = SHOP_CATALOG.map((item) => ({
     ...item,
     owned: ownedIds.has(item.id),
-    canAfford: user.featherBalance >= item.price,
+    canAfford: user.featherBalance >= item.cost,
   }));
 
   return NextResponse.json({
