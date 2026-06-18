@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import type { SlotOffset } from "@/lib/avatarAnchors";
 
 // ─── Hat items ────────────────────────────────────────────────────────────────
 
@@ -405,7 +406,7 @@ export const ITEM_RENDERERS: Record<string, React.FC> = {
 
 // ─── ItemLayer ────────────────────────────────────────────────────────────────
 
-export function ItemLayer({ id }: { id: string }) {
+export function ItemLayer({ id, translate }: { id: string; translate?: SlotOffset }) {
   const Render = ITEM_RENDERERS[id];
   if (!Render) return null;
   return (
@@ -415,7 +416,9 @@ export function ItemLayer({ id }: { id: string }) {
       height="100%"
       style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "visible" }}
     >
-      <Render />
+      <g transform={translate ? `translate(${translate.x} ${translate.y})` : undefined}>
+        <Render />
+      </g>
     </svg>
   );
 }
