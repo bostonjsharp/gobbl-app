@@ -8,16 +8,16 @@ export type StageAnchors = Partial<Record<ShopSlot, SlotOffset>>;
 export const STAGE_SLOT_OFFSETS: Record<number, StageAnchors> = {
   3: {
     hat:   { x: -28, y: -10 },
-    face:  { x: -30, y: -10 },
+    face:  { x: -38, y:  -6 },
     neck:  { x: -20, y:  -5 },
-    chest: { x: -10, y: -10 },
+    chest: { x: -10, y:  -8 },
     cape:  { x: -10, y:   0 },
   },
   4: {
     hat:   { x: -26, y:  -8 },
-    face:  { x: -28, y:  -8 },
+    face:  { x: -36, y:  -4 },
     neck:  { x: -18, y:  -4 },
-    chest: { x:  -8, y:  -8 },
+    chest: { x:  -8, y:  -6 },
     cape:  { x:  -8, y:   0 },
   },
 };
