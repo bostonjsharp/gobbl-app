@@ -31,6 +31,7 @@ interface ChatInterfaceProps {
 }
 
 const TEXTAREA_MAX_HEIGHT_PX = 200;
+const MAX_CHARS = 500;
 
 /**
  * Debate arena interface — Harvest direction.
@@ -176,24 +177,31 @@ export function ChatInterface({ debateId, initialMessages, maxTurns, onFinish }:
         ) : (
           <form
             onSubmit={(e) => { e.preventDefault(); void sendMessage(); }}
-            className="flex items-end gap-2 rounded-full border border-line bg-surface py-1.5 pl-4 pr-1.5 focus-within:border-primary"
+            className="flex items-end gap-2 rounded-2xl border border-line bg-surface py-1.5 pl-4 pr-1.5 focus-within:border-primary"
           >
-            <textarea
-              ref={textareaRef}
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault();
-                  if (input.trim() && !loading) void sendMessage();
-                }
-              }}
-              rows={1}
-              placeholder="Your reply…"
-              aria-label="Your message"
-              disabled={loading}
-              className="min-h-[28px] flex-1 resize-none overflow-x-hidden bg-transparent py-2 font-body text-sm text-ink placeholder:text-ink-muted focus:outline-none"
-            />
+            <div className="flex min-w-0 flex-1 flex-col">
+              <textarea
+                ref={textareaRef}
+                value={input}
+                onChange={(e) => setInput(e.target.value.slice(0, MAX_CHARS))}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    if (input.trim() && !loading) void sendMessage();
+                  }
+                }}
+                rows={1}
+                placeholder="Your reply…"
+                aria-label="Your message"
+                disabled={loading}
+                className="min-h-[28px] w-full resize-none bg-transparent py-2 font-body text-sm text-ink placeholder:text-ink-muted focus:outline-none"
+              />
+              {input.length > MAX_CHARS * 0.8 && (
+                <span className={`mb-1 self-end font-mono text-[10px] ${input.length >= MAX_CHARS ? "text-red-500" : "text-ink-muted"}`}>
+                  {input.length}/{MAX_CHARS}
+                </span>
+              )}
+            </div>
             <button
               type="submit"
               disabled={loading || !input.trim()}
