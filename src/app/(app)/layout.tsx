@@ -16,7 +16,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         className={
           isDebateView
             ? "flex-1 min-h-0 overflow-hidden"
-            : "flex-1 px-margin-mobile py-lg"
+            : "flex-1 overflow-y-auto px-margin-mobile py-lg"
         }
       >
         {children}
