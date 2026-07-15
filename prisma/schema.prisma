@@ -56,6 +56,10 @@ model Debate {
   newsStoryContent String?
   createdAt    DateTime  @default(now())
   completedAt  DateTime?
+  isTraining          Boolean  @default(false)
+  systemPrompt        String?
+  trainingMode        String?
+  trainingSkillScores Json?
   user         User      @relation(fields: [userId], references: [id])
   messages     Message[]
   personaRatings PersonaRating[] // [persona-rating: temporary]
